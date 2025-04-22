@@ -107,7 +107,7 @@ const Index: React.FC = () => {
                   </Button>
                 </Link>
                 <Link to="/contact">
-                  <Button variant="outline" className="w-full sm:w-auto border-white text-white hover:bg-white/10 py-6 px-8 text-lg">
+                  <Button variant="outline" className="w-full sm:w-auto border-white hover:bg-white/10 py-6 px-8 text-lg text-black">
                     Nous contacter
                   </Button>
                 </Link>
