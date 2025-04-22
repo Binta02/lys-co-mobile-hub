@@ -13,6 +13,7 @@ import ResetPassword from "./pages/ResetPassword";
 import Domiciliation from "./pages/Domiciliation";
 import ServicesAdmin from "./pages/ServicesAdmin";
 import Communication from "./pages/Communication";
+import Contact from "./pages/Contact";
 
 const queryClient = new QueryClient();
 
