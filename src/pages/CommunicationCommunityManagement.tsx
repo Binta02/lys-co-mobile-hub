@@ -31,7 +31,7 @@ const CommunicationCommunityManagement = () => {
 
           <div className="mt-16 grid grid-cols-1 md:grid-cols-2 gap-8">
             <div className="bg-white border rounded-xl shadow p-6">
-              <h3 className="text-xl font-semibold text-gray-800 mb-2">Création de pages réseaux</h3>
+              <h3 className="text-xl font-semibold text-gray-800 mb-2 text-lysco-turquoise">Création de pages réseaux</h3>
               <p className="text-gray-600 mb-2">
                 Des pages attractives et personnalisées, conçues pour valoriser votre marque sur les réseaux sociaux les plus pertinents.
               </p>
@@ -39,7 +39,7 @@ const CommunicationCommunityManagement = () => {
             </div>
 
             <div className="bg-white border rounded-xl shadow p-6">
-              <h3 className="text-xl font-semibold text-gray-800 mb-2">Gestion de pages réseaux</h3>
+              <h3 className="text-xl font-semibold text-gray-800 mb-2 text-lysco-turquoise">Gestion de pages réseaux</h3>
               <p className="text-gray-600 mb-2">
                 Confiez-nous l’animation et la gestion quotidienne de vos comptes : on s’occupe de tout.
               </p>
@@ -47,7 +47,7 @@ const CommunicationCommunityManagement = () => {
             </div>
 
             <div className="bg-white border rounded-xl shadow p-6">
-              <h3 className="text-xl font-semibold text-gray-800 mb-2">Refonte de pages réseaux</h3>
+              <h3 className="text-xl font-semibold text-gray-800 mb-2 text-lysco-turquoise">Refonte de pages réseaux</h3>
               <p className="text-gray-600 mb-2">
                 Vos pages manquent d’impact ? Nous les modernisons pour qu’elles captivent à nouveau votre audience.
               </p>
@@ -55,7 +55,7 @@ const CommunicationCommunityManagement = () => {
             </div>
 
             <div className="bg-white border rounded-xl shadow p-6">
-              <h3 className="text-xl font-semibold text-gray-800 mb-2">Création de page Google</h3>
+              <h3 className="text-xl font-semibold text-gray-800 mb-2 text-lysco-turquoise">Création de page Google</h3>
               <p className="text-gray-600 mb-2">
                 Optimisez votre visibilité locale avec une fiche Google Business complète et bien référencée.
               </p>

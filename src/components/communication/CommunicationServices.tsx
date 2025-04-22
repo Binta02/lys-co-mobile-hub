@@ -95,7 +95,7 @@ const services = [
   {
     title: "Photos",
     description: "Shooting professionnel produit ou personnel.",
-    link: "/communication/photos",
+    link: "/communication/photo",
   },
   {
     title: "Media Training",
@@ -106,11 +106,6 @@ const services = [
     title: "Packs de Communication",
     description: "Formules complètes pour démarrer ou booster.",
     link: "/communication/packs",
-  },
-  {
-    title: "Photographie complet",
-    description: "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb.",
-    link: "/communication/photo",
   },
 ];
 
