@@ -31,6 +31,7 @@ const App = () => (
           <Route path="/domiciliation" element={<Domiciliation />} />
           <Route path="/services-admin" element={<ServicesAdmin />} />
           <Route path="/communication" element={<Communication />} />
+          <Route path="/contact" element={<Contact />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
