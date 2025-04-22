@@ -27,7 +27,7 @@ const CommunicationPhotos = () => {
             </p>
 
             <div className="border-l-4 border-lysco-pink pl-4">
-              <h2 className="text-2xl font-semibold mb-2">📸 Service de portraits</h2>
+              <h2 className="text-2xl font-semibold mb-2">Service de portraits</h2>
               <p>
                 Réalisés dans nos locaux ou chez vous, les portraits professionnels mettent en avant votre image avec
                 authenticité : parfaits pour vos réseaux sociaux, présentations ou cartes de visite.
@@ -35,7 +35,7 @@ const CommunicationPhotos = () => {
             </div>
 
             <div className="border-l-4 border-lysco-turquoise pl-4">
-              <h2 className="text-2xl font-semibold mb-2">🛍️ Photos de produits</h2>
+              <h2 className="text-2xl font-semibold mb-2">Photos de produits</h2>
               <p>
                 Pour susciter l’acte d’achat, rien de tel qu’une image percutante. Nous organisons des shootings
                 produits soignés, pour montrer la qualité et les atouts de vos articles.
@@ -43,7 +43,7 @@ const CommunicationPhotos = () => {
             </div>
 
             <div className="bg-white border border-gray-200 rounded-xl p-6 shadow-md">
-              <h2 className="text-xl font-semibold text-center text-gray-800 mb-2">💰 Tarifs</h2>
+              <h2 className="text-xl font-semibold text-center text-gray-800 mb-2">Tarifs</h2>
               <p className="text-center text-gray-700 mb-1">
                 <strong>Sur devis</strong>
               </p>

@@ -20,7 +20,13 @@ const CommunicationCreations = () => {
             <p className="text-gray-600 mb-6">
               Nous concevons des logos uniques et mémorables qui reflètent l'identité de votre entreprise.
             </p>
-            {/* Galerie (si images disponibles) */}
+            {/* Galerie (si images disponibles) */
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <img src="https://lys-and-co.com/wp-content/uploads/2025/03/Capture-decran-2025-03-04-105723.png" alt="Logo 1" className="w-full h-auto" />
+            <img src="https://lys-and-co.com/wp-content/uploads/2025/03/Capture-decran-2025-03-04-105730.png" alt="Logo 2" className="w-full h-auto" />
+            <img src="https://lys-and-co.com/wp-content/uploads/2025/03/Capture-decran-2025-03-04-105710.png" alt="Logo 3" className="w-full h-auto" />
+          </div>
+          }
           </section>
 
           {/* Sites Web */}
@@ -29,6 +35,13 @@ const CommunicationCreations = () => {
             <p className="text-gray-600 mb-4">
               Découvrez quelques-uns des sites que nous avons réalisés :
             </p>
+            {/* Galerie (si images disponibles) */
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <img src="https://lys-and-co.com/wp-content/uploads/2025/03/Capture-decran-2025-03-04-105810-1.png" alt="Logo 1" className="w-full h-auto" />
+            <img src="https://lys-and-co.com/wp-content/uploads/2025/03/Capture-decran-2025-03-04-105754-1.png" alt="Logo 2" className="w-full h-auto" />
+            <img src="https://lys-and-co.com/wp-content/uploads/2025/03/IMG_1221.jpg" alt="Logo 3" className="w-full h-auto" />
+          </div>
+          }
             <ul className="list-disc list-inside text-gray-700 space-y-2 mb-6">
               <li>
                 Praticienne : <a href="https://www.nid-hypnose.com" target="_blank" rel="noopener noreferrer" className="text-lysco-turquoise underline">www.nid-hypnose.com</a>

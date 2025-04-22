@@ -23,7 +23,7 @@ const CommunicationPacks = () => {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {/* Pack Starter */}
             <div className="border border-gray-200 rounded-2xl bg-white p-6 shadow hover:shadow-md transition">
-              <h2 className="text-2xl font-semibold text-center text-gray-800 mb-2">Pack Starter 🚀</h2>
+              <h2 className="text-2xl font-semibold text-center text-gray-800 mb-2">Pack Starter</h2>
               <p className="text-center text-lysco-pink font-medium mb-4">Lancez-vous</p>
               <ul className="list-disc list-inside text-gray-700 space-y-1 mb-4">
                 <li>Création de logo</li>
@@ -36,7 +36,7 @@ const CommunicationPacks = () => {
 
             {/* Pack Moyen */}
             <div className="border border-gray-200 rounded-2xl bg-white p-6 shadow hover:shadow-md transition">
-              <h2 className="text-2xl font-semibold text-center text-gray-800 mb-2">Pack Moyen 💼</h2>
+              <h2 className="text-2xl font-semibold text-center text-gray-800 mb-2">Pack Moyen</h2>
               <p className="text-center text-lysco-pink font-medium mb-4">Repensez votre image</p>
               <ul className="list-disc list-inside text-gray-700 space-y-1 mb-4">
                 <li>Création de logo</li>
@@ -51,7 +51,7 @@ const CommunicationPacks = () => {
 
             {/* Pack Pro */}
             <div className="border border-gray-200 rounded-2xl bg-white p-6 shadow hover:shadow-md transition">
-              <h2 className="text-2xl font-semibold text-center text-gray-800 mb-2">Pack Pro 🌟</h2>
+              <h2 className="text-2xl font-semibold text-center text-gray-800 mb-2">Pack Pro</h2>
               <p className="text-center text-lysco-pink font-medium mb-4">La solution pour performer</p>
               <ul className="list-disc list-inside text-gray-700 space-y-1 mb-4">
                 <li>Création de logo</li>
