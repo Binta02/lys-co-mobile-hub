@@ -1,14 +1,11 @@
-
 import React from 'react';
 import { Button } from '@/components/ui/button';
 import { Link } from 'react-router-dom';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import ServiceSection from '@/components/ServiceSection';
-
 const Index: React.FC = () => {
-  return (
-    <div className="flex flex-col min-h-screen">
+  return <div className="flex flex-col min-h-screen">
       <Navbar />
       
       <main className="flex-1">
@@ -19,17 +16,21 @@ const Index: React.FC = () => {
               <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-6 animate-fade-in">
                 Solutions de domiciliation et de communication pour votre entreprise
               </h1>
-              <p className="text-lg sm:text-xl mb-8 opacity-90 animate-fade-in" style={{ animationDelay: "0.2s" }}>
+              <p className="text-lg sm:text-xl mb-8 opacity-90 animate-fade-in" style={{
+              animationDelay: "0.2s"
+            }}>
                 Développez votre entreprise avec Lys&Co : domiciliation commerciale, services administratifs et solutions de communication 360°.
               </p>
-              <div className="flex flex-col sm:flex-row gap-4 justify-center animate-fade-in" style={{ animationDelay: "0.4s" }}>
+              <div className="flex flex-col sm:flex-row gap-4 justify-center animate-fade-in" style={{
+              animationDelay: "0.4s"
+            }}>
                 <Link to="/register">
                   <Button className="w-full sm:w-auto bg-white text-lysco-pink hover:bg-opacity-90 py-6 px-8 text-lg">
                     Commencer maintenant
                   </Button>
                 </Link>
                 <Link to="/contact">
-                  <Button variant="outline" className="w-full sm:w-auto border-white text-white hover:bg-white/10 py-6 px-8 text-lg">
+                  <Button variant="outline" className="w-full sm:w-auto border-white hover:bg-white/10 py-6 px-8 text-lg text-black">
                     Nous contacter
                   </Button>
                 </Link>
@@ -117,8 +118,6 @@ const Index: React.FC = () => {
       </main>
       
       <Footer />
-    </div>
-  );
+    </div>;
 };
-
 export default Index;
