@@ -33,7 +33,7 @@ const CommunicationSiteInternet = () => {
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {/* Site vitrine */}
-            <div className="bg-white border border-gray-200 rounded-2xl p-6 shadow-md hover:shadow-lg transition">
+            <div className="bg-white border border-gray-200 rounded-2xl p-6 shadow-md hover:shadow-lg transition duration-200">
               <h3 className="text-xl font-semibold mb-2 text-lysco-turquoise">Site Vitrine</h3>
               <p className="text-gray-600 mb-4">
                 Présentez vos services en ligne avec un site simple, élégant, et percutant.
