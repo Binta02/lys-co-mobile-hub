@@ -1,10 +1,10 @@
-
 import React from 'react';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { MessageSquare, Share2, BarChart, Megaphone } from 'lucide-react';
+import CommunicationFAQ from '@/components/communication/CommunicationFAQ';
 
 const Communication = () => {
   return (
@@ -89,10 +89,11 @@ const Communication = () => {
                   </p>
                 </div>
               </div>
-              {/* More strategy points... */}
             </div>
           </div>
         </section>
+
+        <CommunicationFAQ />
       </main>
       <Footer />
     </div>
