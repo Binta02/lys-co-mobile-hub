@@ -107,6 +107,11 @@ const services = [
     description: "Formules complètes pour démarrer ou booster.",
     link: "/communication/packs",
   },
+  {
+    title: "Photographie complet",
+    description: "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb.",
+    link: "/communication/photo",
+  },
 ];
 
 

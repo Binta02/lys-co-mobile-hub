@@ -9,7 +9,7 @@ import CommunicationCreationsPage from "./pages/CommunicationCreations";
 import CommunicationCommunityManagementPage from "./pages/CommunicationCommunityManagement";
 import CommunicationPrintPage from "./pages/CommunicationPrint";
 import CommunicationSiteInternetPage from "./pages/CommunicationSiteInternet";
-// import CommunicationPhotosPage from "./pages/CommunicationPhotos";
+import CommunicationPhotosPage from "./pages/CommunicationPhotos";
 import CommunicationMediaTrainingPage from "./pages/CommunicationMediaTraining";
 import CommunicationPacksPage from "./pages/CommunicationPacks";
 import Index from "./pages/Index";
@@ -43,6 +43,7 @@ const App = () => (
           <Route path="/communication/creations" element={<CommunicationCreationsPage />} />
           <Route path="/communication/community-management" element={<CommunicationCommunityManagementPage />} />
           <Route path="/communication/print" element={<CommunicationPrintPage />} />
+          <Route path="/communication/photo" element={<CommunicationPhotosPage />} />
           <Route path="/communication/site-internet" element={<CommunicationSiteInternetPage />} />
           <Route path="/communication/media-training" element={<CommunicationMediaTrainingPage />} />
           <Route path="/communication/packs" element={<CommunicationPacksPage />} />
