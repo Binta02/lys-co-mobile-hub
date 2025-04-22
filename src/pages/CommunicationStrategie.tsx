@@ -1,11 +1,15 @@
 import React from 'react';
 import { Button } from '@/components/ui/button';
 import { Link } from 'react-router-dom';
+import Navbar from '@/components/Navbar';
+import Footer from '@/components/Footer';
 
 const CommunicationStrategie = () => {
   return (
-    <section className="py-16 px-4 bg-white">
-      <div className="container mx-auto max-w-4xl">
+    <div className="min-h-screen flex flex-col">
+    <Navbar />
+    <main className="flex-1 py-16 px-4 bg-white">
+      <div className="container mx-auto max-w-5xl">
         <h1 className="text-3xl md:text-4xl font-bold text-center mb-12">Stratégie</h1>
 
         <div className="space-y-6 text-gray-700">
@@ -61,7 +65,9 @@ const CommunicationStrategie = () => {
           </Link>
         </div>
       </div>
-    </section>
+      </main>
+      <Footer />
+    </div>
   );
 };
 

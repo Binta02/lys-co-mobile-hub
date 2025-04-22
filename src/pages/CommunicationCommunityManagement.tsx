@@ -1,13 +1,16 @@
 import React from 'react';
+import Navbar from '@/components/Navbar';
+import Footer from '@/components/Footer';
 import { Button } from '@/components/ui/button';
 import { Link } from 'react-router-dom';
 
 const CommunicationCommunityManagement = () => {
   return (
-    <section className="py-16 px-4 bg-white">
-      <div className="container mx-auto max-w-4xl">
-        <h1 className="text-3xl md:text-4xl font-bold text-center mb-12">Community Management</h1>
-
+      <div className="min-h-screen flex flex-col">
+      <Navbar />
+      <main className="flex-1 py-16 px-4 bg-white">
+        <div className="container mx-auto max-w-4xl">
+          <h1 className="text-3xl md:text-4xl font-bold text-center mb-12">Community Management</h1>
         <div className="space-y-6 text-gray-700">
           <p>
             Notre agence de communication 360° vous aidera à gérer au mieux votre présence sur les réseaux sociaux ! Elle vous aidera à bâtir et à fédérer une communauté autour de votre image de marque.
@@ -72,7 +75,9 @@ const CommunicationCommunityManagement = () => {
           </Link>
         </div>
       </div>
-    </section>
+      </main>
+      <Footer />
+    </div>
   );
 };
 
