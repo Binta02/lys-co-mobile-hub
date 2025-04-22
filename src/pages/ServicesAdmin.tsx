@@ -2,94 +2,124 @@
 import React from 'react';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import PriceCard from '@/components/services/PriceCard';
 import { Button } from '@/components/ui/button';
-import { FileText, ClipboardCheck, Calculator, Clock } from 'lucide-react';
+import { FileText, ClipboardCheck } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
 const ServicesAdmin = () => {
   return (
     <div className="min-h-screen flex flex-col">
       <Navbar />
       <main className="flex-1">
-        {/* Hero Section */}
-        <section className="bg-gradient-to-r from-lysco-pink/10 to-lysco-turquoise/10 py-16">
+        {/* Hero Section - Formalités Entreprises */}
+        <section className="bg-gradient-to-r from-lysco-turquoise/10 to-lysco-pink/10 py-16">
           <div className="container mx-auto px-4">
             <div className="max-w-3xl mx-auto text-center">
-              <h1 className="text-4xl md:text-5xl font-bold mb-6">Services Administratifs</h1>
+              <h1 className="text-4xl md:text-5xl font-bold mb-6">
+                FORMALITES ENTREPRISES – ADMINISTRATIF
+              </h1>
               <p className="text-xl text-gray-600 mb-8">
-                Externalisez vos tâches administratives et concentrez-vous sur votre cœur de métier
+                Si vous êtes en pleine création d'entreprise, envisagez de changer votre siège social 
+                ou devez gérer d'autres modifications importantes, mais que le temps ou les connaissances 
+                vous manquent pour aborder les démarches administratives, sachez que vous n'êtes pas seul. 
+                Notre partenaire, un expert-comptable qualifié, est prêt à vous épauler à chaque étape du processus.
               </p>
-              <Button className="bg-lysco-pink hover:bg-lysco-pink/90 text-white">
-                Découvrir nos offres
-              </Button>
             </div>
           </div>
         </section>
 
-        {/* Services Grid */}
-        <section className="py-16">
+        {/* Tarifs Section */}
+        <section className="py-16 bg-white">
           <div className="container mx-auto px-4">
+            <h2 className="text-3xl font-bold text-center mb-12">Nos Tarifs</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              <Card>
-                <CardHeader>
-                  <div className="w-12 h-12 rounded-full bg-lysco-pink/10 flex items-center justify-center mb-4">
-                    <FileText className="h-6 w-6 text-lysco-pink" />
-                  </div>
-                  <CardTitle>Gestion Administrative</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <CardDescription>
-                    Traitement du courrier, classement et archivage de documents, suivi des échéances administratives.
-                  </CardDescription>
-                </CardContent>
-              </Card>
-
-              <Card>
-                <CardHeader>
-                  <div className="w-12 h-12 rounded-full bg-lysco-turquoise/10 flex items-center justify-center mb-4">
-                    <ClipboardCheck className="h-6 w-6 text-lysco-turquoise" />
-                  </div>
-                  <CardTitle>Conformité Réglementaire</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <CardDescription>
-                    Veille juridique, mise en conformité RGPD, suivi des obligations légales et réglementaires.
-                  </CardDescription>
-                </CardContent>
-              </Card>
-
-              <Card>
-                <CardHeader>
-                  <div className="w-12 h-12 rounded-full bg-lysco-pink/10 flex items-center justify-center mb-4">
-                    <Calculator className="h-6 w-6 text-lysco-pink" />
-                  </div>
-                  <CardTitle>Gestion Comptable</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <CardDescription>
-                    Saisie comptable, rapprochements bancaires, préparation des documents comptables.
-                  </CardDescription>
-                </CardContent>
-              </Card>
+              <PriceCard 
+                service="Aide à l'inscription auto entreprise" 
+                price="150 €" 
+              />
+              <PriceCard 
+                service="Aide à l'inscription entreprise individuelle" 
+                price="150 €" 
+              />
+              <PriceCard 
+                service="Aide à la rédaction de formalités de création" 
+                price="600 €" 
+                note="*hors coûts organismes" 
+              />
+              <PriceCard 
+                service="Vtc – Driel (registre des transports)" 
+                price="900 €" 
+                note="*hors coûts organismes" 
+              />
+              <PriceCard 
+                service="Modification société" 
+                price="900 €" 
+                note="*hors coûts organismes" 
+              />
+              <PriceCard 
+                service="Dépôt des comptes annuels" 
+                price="300 €" 
+                note="*hors coûts organismes" 
+              />
+              <PriceCard 
+                service="Cession de part" 
+                price="200 €" 
+              />
+              <PriceCard 
+                service="Accompagnement ouverture compte en ligne" 
+                price="150 €" 
+                note="hors frais" 
+              />
             </div>
           </div>
         </section>
 
-        {/* Benefits Section */}
-        <section className="bg-gray-50 py-16">
+        {/* Assistanat Section */}
+        <section className="py-16 bg-gray-50">
           <div className="container mx-auto px-4">
-            <h2 className="text-3xl font-bold text-center mb-12">Les avantages de nos services administratifs</h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-              <div className="flex gap-4">
-                <Clock className="h-6 w-6 text-lysco-pink flex-shrink-0" />
-                <div>
-                  <h3 className="text-xl font-semibold mb-2">Gain de temps</h3>
-                  <p className="text-gray-600">
-                    Libérez du temps pour vous concentrer sur le développement de votre activité.
-                  </p>
-                </div>
+            <div className="max-w-3xl mx-auto">
+              <h2 className="text-3xl font-bold text-center mb-8">ASSISTANAT</h2>
+              <p className="text-lg text-gray-600 mb-12">
+                Imaginez déléguer toute la gestion administrative, comptable et commerciale à des 
+                assistants experts, vous permettant ainsi de vous recentrer sur l'essentiel de votre 
+                activité. Nos partenaires secrétaires prennent en charge toutes vos obligations, 
+                de la paperasserie quotidienne à la comptabilité, en passant par le suivi commercial.
+              </p>
+              
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
+                <PriceCard service="Service d'assistanat" price="30 € /heure" />
+                <PriceCard service="Création de devis" price="15 € /page" />
+                <PriceCard service="Création des factures" price="15 € /page" />
+                <PriceCard service="Annonces commerciales" price="10 € /annonce" />
               </div>
-              {/* More benefits... */}
+
+              <div className="text-center">
+                <Link to="/contact">
+                  <Button className="bg-lysco-turquoise hover:bg-lysco-turquoise/90 text-white">
+                    Contactez-nous
+                  </Button>
+                </Link>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Call to Action */}
+        <section className="py-16 bg-white">
+          <div className="container mx-auto px-4">
+            <div className="max-w-3xl mx-auto text-center">
+              <p className="text-lg text-gray-600 mb-8">
+                Chez Lys&Co, notre priorité est de vous offrir des solutions sur mesure, répondant 
+                avec précision à vos exigences professionnelles. Nous sommes dédiés à la qualité 
+                et à l'efficacité, veillant à ce que chaque service proposé soit en parfaite 
+                adéquation avec vos objectifs.
+              </p>
+              <Link to="/contact">
+                <Button variant="outline" className="border-lysco-turquoise text-lysco-turquoise hover:bg-lysco-turquoise hover:text-white">
+                  Discuter de votre projet
+                </Button>
+              </Link>
             </div>
           </div>
         </section>
