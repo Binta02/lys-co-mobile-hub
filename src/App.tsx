@@ -4,6 +4,14 @@ import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import CommunicationStrategiePage from "./pages/CommunicationStrategie";
+import CommunicationCreationsPage from "./pages/CommunicationCreations";
+import CommunicationCommunityManagementPage from "./pages/CommunicationCommunityManagement";
+import CommunicationPrintPage from "./pages/CommunicationPrint";
+import CommunicationSiteInternetPage from "./pages/CommunicationSiteInternet";
+// import CommunicationPhotosPage from "./pages/CommunicationPhotos";
+import CommunicationMediaTrainingPage from "./pages/CommunicationMediaTraining";
+import CommunicationPacksPage from "./pages/CommunicationPacks";
 import Index from "./pages/Index";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
@@ -31,6 +39,13 @@ const App = () => (
           <Route path="/register" element={<Register />} />
           <Route path="/reset-password" element={<ResetPassword />} />
           <Route path="/contact" element={<Contact />} />
+          <Route path="/communication/strategie" element={<CommunicationStrategiePage />} />
+          <Route path="/communication/creations" element={<CommunicationCreationsPage />} />
+          <Route path="/communication/community-management" element={<CommunicationCommunityManagementPage />} />
+          <Route path="/communication/print" element={<CommunicationPrintPage />} />
+          <Route path="/communication/site-internet" element={<CommunicationSiteInternetPage />} />
+          <Route path="/communication/media-training" element={<CommunicationMediaTrainingPage />} />
+          <Route path="/communication/packs" element={<CommunicationPacksPage />} />
 
           {/* Protected routes */}
           <Route path="/dashboard" element={

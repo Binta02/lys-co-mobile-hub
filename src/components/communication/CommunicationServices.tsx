@@ -70,44 +70,45 @@ const services = [
   {
     title: "Stratégie",
     description: "Audit et accompagnement stratégique pour optimiser votre communication.",
-    anchor: "#strategie",
+    link: "/communication/strategie",
   },
   {
     title: "Community Management",
-    description: "Gestion et animation de vos réseaux sociaux pour fédérer votre communauté.",
-    anchor: "#community-management",
+    description: "Gestion et animation de vos réseaux sociaux.",
+    link: "/communication/community-management",
   },
   {
     title: "Créations",
-    description: "Conception de supports visuels sur mesure pour valoriser votre image de marque.",
-    anchor: "#creations",
+    description: "Supports visuels sur mesure pour votre image.",
+    link: "/communication/creations",
   },
   {
     title: "Communication Print",
-    description: "Réalisation de supports imprimés : flyers, brochures, cartes de visite, etc.",
-    anchor: "#print",
+    description: "Cartes de visites, flyers, brochures, etc.",
+    link: "/communication/print",
   },
   {
     title: "Site Internet",
-    description: "Conception et développement de sites web adaptés à vos besoins.",
-    anchor: "#site-internet",
+    description: "Conception et refonte de votre site web.",
+    link: "/communication/site-internet",
   },
   {
     title: "Photos",
-    description: "Services photographiques professionnels pour mettre en valeur vos produits et services.",
-    anchor: "#photos",
+    description: "Shooting professionnel produit ou personnel.",
+    link: "/communication/photos",
   },
   {
     title: "Media Training",
-    description: "Formation à la prise de parole en public et aux relations médias.",
-    anchor: "#media-training",
+    description: "Formations à la prise de parole en public.",
+    link: "/communication/media-training",
   },
   {
     title: "Packs de Communication",
-    description: "Offres packagées pour une communication complète et cohérente.",
-    anchor: "#packs",
+    description: "Formules complètes pour démarrer ou booster.",
+    link: "/communication/packs",
   },
 ];
+
 
 const CommunicationServices = () => {
   return (
@@ -122,10 +123,10 @@ const CommunicationServices = () => {
               </CardHeader>
               <CardContent>
                 <p className="text-gray-600 mb-4">{service.description}</p>
-                <a href={service.anchor}>
-                  <Button variant="ghost" className="text-lysco-turquoise hover:text-lysco-turquoise/90">
-                    En savoir plus <ArrowRight className="ml-2 h-4 w-4" />
-                  </Button>
+                <a href={service.link}>
+                <Button variant="ghost" className="text-lysco-turquoise hover:text-lysco-turquoise/90">
+                  En savoir plus <ArrowRight className="ml-2 h-4 w-4" />
+                </Button>
                 </a>
               </CardContent>
             </Card>
