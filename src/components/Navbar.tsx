@@ -1,15 +1,36 @@
 
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Menu, X } from 'lucide-react';
 import MobileMenu from './MobileMenu';
+import { supabase } from '@/integrations/supabase/client';
+import { toast } from '@/components/ui/sonner';
 
 const Navbar = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const navigate = useNavigate();
 
   const toggleMobileMenu = () => {
     setIsMobileMenuOpen(!isMobileMenuOpen);
+  };
+
+  const handleLogout = async () => {
+    try {
+      const { error } = await supabase.auth.signOut();
+      if (error) {
+        toast.error('Erreur lors de la déconnexion', {
+          description: error.message
+        });
+        return;
+      }
+      
+      toast.success('Déconnexion réussie');
+      navigate('/login');
+    } catch (error) {
+      console.error('Logout error:', error);
+      toast.error('Une erreur inattendue est survenue');
+    }
   };
 
   return (
@@ -42,6 +63,13 @@ const Navbar = () => {
               Inscription
             </Button>
           </Link>
+          <Button 
+            variant="ghost" 
+            onClick={handleLogout}
+            className="text-gray-700 hover:text-lysco-turquoise"
+          >
+            Déconnexion
+          </Button>
         </div>
 
         {/* Mobile Menu Button */}

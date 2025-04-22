@@ -1,13 +1,38 @@
+
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
+import { supabase } from '@/integrations/supabase/client';
+import { toast } from '@/components/ui/sonner';
+
 interface MobileMenuProps {
   onClose: () => void;
 }
-const MobileMenu: React.FC<MobileMenuProps> = ({
-  onClose
-}) => {
-  return <div className="md:hidden fixed inset-0 z-50 bg-white animate-fade-in" onClick={onClose}>
+
+const MobileMenu: React.FC<MobileMenuProps> = ({ onClose }) => {
+  const navigate = useNavigate();
+
+  const handleLogout = async () => {
+    try {
+      const { error } = await supabase.auth.signOut();
+      if (error) {
+        toast.error('Erreur lors de la déconnexion', {
+          description: error.message
+        });
+        return;
+      }
+      
+      toast.success('Déconnexion réussie');
+      navigate('/login');
+      onClose();
+    } catch (error) {
+      console.error('Logout error:', error);
+      toast.error('Une erreur inattendue est survenue');
+    }
+  };
+
+  return (
+    <div className="md:hidden fixed inset-0 z-50 bg-white animate-fade-in" onClick={onClose}>
       <div className="container mx-auto px-4 py-6 flex flex-col space-y-6 bg-white">
         <Link to="/" className="text-lg font-medium text-gray-700 hover:text-lysco-turquoise py-2" onClick={onClose}>
           Accueil
@@ -29,8 +54,17 @@ const MobileMenu: React.FC<MobileMenuProps> = ({
               Inscription
             </Button>
           </Link>
+          <Button 
+            variant="ghost" 
+            onClick={handleLogout}
+            className="w-full text-gray-700 hover:text-lysco-turquoise"
+          >
+            Déconnexion
+          </Button>
         </div>
       </div>
-    </div>;
+    </div>
+  );
 };
+
 export default MobileMenu;
