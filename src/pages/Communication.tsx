@@ -45,13 +45,13 @@ const Communication = () => {
       <main className="flex-1">
         <CommunicationHero />
         <CommunicationServices />
-        <div id="creations"><CommunicationCreations /></div>
+        {/* <div id="creations"><CommunicationCreations /></div>
         <div id="community-management"><CommunicationCommunityManagement /></div>
         <div id="strategie"><CommunicationStrategie /></div>
         <div id="print"><CommunicationPrint /></div>
         <div id="site-internet"><CommunicationSiteInternet /></div>
-        {/* <div id="photos"><CommunicationPhotos /></div> */}
-        {/* <div id="media-training"><CommunicationMediaTraining /></div>
+        <div id="photos"><CommunicationPhotos /></div>
+        <div id="media-training"><CommunicationMediaTraining /></div>
         <div id="packs"><CommunicationPacks /></div> */}
         <CommunicationFAQ />
       </main>
