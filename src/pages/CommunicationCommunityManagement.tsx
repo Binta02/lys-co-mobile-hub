@@ -6,75 +6,71 @@ import { Link } from 'react-router-dom';
 
 const CommunicationCommunityManagement = () => {
   return (
-      <div className="min-h-screen flex flex-col">
+    <div className="min-h-screen flex flex-col bg-gradient-to-b from-white to-gray-50">
       <Navbar />
-      <main className="flex-1 py-16 px-4 bg-white">
-        <div className="container mx-auto max-w-4xl">
-          <h1 className="text-3xl md:text-4xl font-bold text-center mb-12">Community Management</h1>
-        <div className="space-y-6 text-gray-700">
-          <p>
-            Notre agence de communication 360° vous aidera à gérer au mieux votre présence sur les réseaux sociaux ! Elle vous aidera à bâtir et à fédérer une communauté autour de votre image de marque.
-          </p>
+      <main className="flex-1 py-20 px-6">
+        <div className="container mx-auto max-w-5xl">
+          <h1 className="text-4xl md:text-5xl font-bold text-center text-lysco-turquoise mb-12">
+            Community Management
+          </h1>
 
-          <p>
-            En quelques mots : votre communauté est vivante ! Elle se construit dans le temps ! Les Community manager tisseront des liens avec vos followers, encourageront des discussions. Aussi, Lys Conseil connaît toutes les ficelles pour créer du contenu engageant, répondre aux commentaires et aux messages des internautes. Vous bénéficierez donc d’une présence active sur Facebook, Instagram et autres plateformes de réseaux sociaux.
-          </p>
+          <div className="space-y-6 text-gray-700 text-lg leading-relaxed">
+            <p>
+              Notre agence de communication 360° vous aide à bâtir et à fédérer une communauté engagée autour de votre marque. Votre présence sur les réseaux sociaux devient un véritable levier de fidélisation.
+            </p>
+            <p>
+              Notre équipe de community managers tisse des liens solides avec votre audience. Nous créons du contenu pertinent et engageant, répondons aux commentaires et messages, et gérons les échanges sur toutes vos plateformes.
+            </p>
+            <p>
+              Nous assurons une veille concurrentielle constante pour vous proposer des actions pertinentes, des campagnes créatives et une gestion de crise en cas de besoin.
+            </p>
+            <p>
+              Vos campagnes sont analysées avec des outils puissants afin de mesurer les performances et ajuster les actions pour des résultats toujours meilleurs.
+            </p>
+          </div>
 
-          <p>
-            La réputation de votre entreprise est notre priorité ! Nous veillerons à ce que votre image de marque ne soit pas ternie par des commentaires négatifs ou à cause d’un problème potentiel. Notre but est la communication et l’engagement de votre communauté à travers de nombreux événements en ligne, la promotion de vos produits et bien plus encore. Nous serons bien sûr à l’affût des dernières tendances du moment ! Pour ce faire, nous opérerons une veille concurrentielle.
-          </p>
+          <div className="mt-16 grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div className="bg-white border rounded-xl shadow p-6">
+              <h3 className="text-xl font-semibold text-gray-800 mb-2">Création de pages réseaux</h3>
+              <p className="text-gray-600 mb-2">
+                Des pages attractives et personnalisées, conçues pour valoriser votre marque sur les réseaux sociaux les plus pertinents.
+              </p>
+              <p className="text-gray-800 font-bold">À partir de 99 €</p>
+            </div>
 
-          <p>
-            Pour finir, vos campagnes seront examinées au millimètre avec des outils d’analyse puissants qui ont prouvé leur efficacité.
-          </p>
+            <div className="bg-white border rounded-xl shadow p-6">
+              <h3 className="text-xl font-semibold text-gray-800 mb-2">Gestion de pages réseaux</h3>
+              <p className="text-gray-600 mb-2">
+                Confiez-nous l’animation et la gestion quotidienne de vos comptes : on s’occupe de tout.
+              </p>
+              <p className="text-gray-800 font-bold">Sur devis</p>
+            </div>
+
+            <div className="bg-white border rounded-xl shadow p-6">
+              <h3 className="text-xl font-semibold text-gray-800 mb-2">Refonte de pages réseaux</h3>
+              <p className="text-gray-600 mb-2">
+                Vos pages manquent d’impact ? Nous les modernisons pour qu’elles captivent à nouveau votre audience.
+              </p>
+              <p className="text-gray-800 font-bold">À partir de 99 €</p>
+            </div>
+
+            <div className="bg-white border rounded-xl shadow p-6">
+              <h3 className="text-xl font-semibold text-gray-800 mb-2">Création de page Google</h3>
+              <p className="text-gray-600 mb-2">
+                Optimisez votre visibilité locale avec une fiche Google Business complète et bien référencée.
+              </p>
+              <p className="text-gray-800 font-bold">À partir de 99 €</p>
+            </div>
+          </div>
+
+          <div className="text-center mt-16">
+            <Link to="/contact">
+              <Button className="bg-lysco-turquoise text-white px-8 py-4 text-lg hover:bg-lysco-turquoise/90 rounded-xl shadow">
+                Contactez-nous
+              </Button>
+            </Link>
+          </div>
         </div>
-
-        <div className="mt-12 grid grid-cols-1 md:grid-cols-2 gap-8">
-          {/* Création de pages réseaux */}
-          <div className="border rounded-lg p-6 shadow-sm">
-            <h3 className="text-xl font-semibold mb-2">Création de pages réseaux</h3>
-            <p className="text-gray-600 mb-2">
-              Création de pages de vos réseaux sociaux. Nous verrons ensemble les réseaux les plus adéquats pour vous. Des pages vendeuses à vos images. Des pages pensées pour vous.
-            </p>
-            <p className="text-gray-600 font-medium">À partir de 99 euros la page</p>
-          </div>
-
-          {/* Gestion des pages réseaux */}
-          <div className="border rounded-lg p-6 shadow-sm">
-            <h3 className="text-xl font-semibold mb-2">Gestion des pages réseaux</h3>
-            <p className="text-gray-600 mb-2">
-              Vos pages sont déjà créées, vous n’avez pas le temps ou l’envie de gérer vos pages. Vous ne savez pas comment fédérer une communauté. On s’en occupe.
-            </p>
-            <p className="text-gray-600 font-medium">Sur devis</p>
-          </div>
-
-          {/* Refonte des pages réseaux */}
-          <div className="border rounded-lg p-6 shadow-sm">
-            <h3 className="text-xl font-semibold mb-2">Refonte des pages réseaux</h3>
-            <p className="text-gray-600 mb-2">
-              Vos pages sont déjà créées, mais ne sont pas regardées. Nous les retravaillons pour changer cela.
-            </p>
-            <p className="text-gray-600 font-medium">À partir de 99 euros la page</p>
-          </div>
-
-          {/* Création de page Google */}
-          <div className="border rounded-lg p-6 shadow-sm">
-            <h3 className="text-xl font-semibold mb-2">Création de page Google</h3>
-            <p className="text-gray-600 mb-2">
-              Google Business notre chouchou. C’est un incontournable pour votre visibilité. On vous crée votre page pour être bien visible et donner envie de vous joindre.
-            </p>
-            <p className="text-gray-600 font-medium">À partir de 99 euros la page</p>
-          </div>
-        </div>
-
-        <div className="text-center mt-12">
-          <Link to="/contact">
-            <Button className="bg-lysco-turquoise hover:bg-lysco-turquoise/90">
-              Contactez-nous
-            </Button>
-          </Link>
-        </div>
-      </div>
       </main>
       <Footer />
     </div>

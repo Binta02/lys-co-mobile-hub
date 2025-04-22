@@ -6,49 +6,52 @@ import Footer from '@/components/Footer';
 
 const CommunicationPrint = () => {
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="min-h-screen flex flex-col bg-gradient-to-b from-white to-gray-50">
       <Navbar />
-      <main className="flex-1 py-16 px-4 bg-white">
+      <main className="flex-1 py-20 px-6">
         <div className="container mx-auto max-w-5xl">
-        <h1 className="text-3xl md:text-4xl font-bold text-center mb-12">Communication Print</h1>
+          <h1 className="text-4xl md:text-5xl font-bold text-center mb-12 text-lysco-turquoise">
+            Communication Print
+          </h1>
 
-        <div className="space-y-6 text-gray-700">
-          <p>
-            Faites de la communication print une alliée ! Elle vous permettra de vous démarquer de vos concurrents et d’attirer ou de fidéliser votre clientèle. Nous créons tous vos supports print sous tout type de format.
-          </p>
+          <div className="space-y-6 text-gray-700 text-lg leading-relaxed">
+            <p>
+              Faites de la communication print une alliée ! Elle vous permettra de vous démarquer de vos concurrents
+              et d’attirer ou de fidéliser votre clientèle. <strong>Lys Conseil</strong> conçoit pour vous tous types
+              de supports imprimés, pensés sur mesure selon votre image et vos objectifs.
+            </p>
 
-          <p>
-            Nous réalisons pour vous :
-          </p>
+            <p>Voici une sélection de ce que nous réalisons :</p>
 
-          <ul className="list-disc list-inside text-gray-700">
-            <li>Cartes de visite</li>
-            <li>Flyers</li>
-            <li>Affiches</li>
-            <li>Brochures</li>
-            <li>Dépliants</li>
-            <li>Catalogues</li>
-            <li>Menus</li>
-            <li>Stickers</li>
-            <li>Packaging</li>
-            <li>Signalétique</li>
-            <li>Roll-up</li>
-            <li>PLV (Publicité sur le Lieu de Vente)</li>
-          </ul>
+            <div className="grid grid-cols-2 md:grid-cols-3 gap-4 text-gray-600 text-base pl-4">
+              <span className="before:content-['•'] before:mr-2">Cartes de visite</span>
+              <span className="before:content-['•'] before:mr-2">Flyers</span>
+              <span className="before:content-['•'] before:mr-2">Affiches</span>
+              <span className="before:content-['•'] before:mr-2">Brochures</span>
+              <span className="before:content-['•'] before:mr-2">Dépliants</span>
+              <span className="before:content-['•'] before:mr-2">Catalogues</span>
+              <span className="before:content-['•'] before:mr-2">Menus</span>
+              <span className="before:content-['•'] before:mr-2">Stickers</span>
+              <span className="before:content-['•'] before:mr-2">Packaging</span>
+              <span className="before:content-['•'] before:mr-2">Signalétique</span>
+              <span className="before:content-['•'] before:mr-2">Roll-up</span>
+              <span className="before:content-['•'] before:mr-2">PLV (Publicité sur le Lieu de Vente)</span>
+            </div>
 
-          <p>
-            Chaque support est conçu sur mesure pour refléter l'identité de votre marque et répondre à vos objectifs de communication.
-          </p>
+            <p>
+              Chaque support est travaillé avec soin, tant sur le plan graphique que stratégique, pour garantir un
+              rendu professionnel qui vous distingue.
+            </p>
+          </div>
+
+          <div className="text-center mt-16">
+            <Link to="/contact">
+              <Button size="lg" className="bg-lysco-turquoise hover:bg-lysco-turquoise/90 text-white text-lg px-8 py-4 rounded-xl shadow-md">
+                Contactez-nous
+              </Button>
+            </Link>
+          </div>
         </div>
-
-        <div className="text-center mt-12">
-          <Link to="/contact">
-            <Button className="bg-lysco-turquoise hover:bg-lysco-turquoise/90">
-              Contactez-nous
-            </Button>
-          </Link>
-        </div>
-      </div>
       </main>
       <Footer />
     </div>

@@ -6,42 +6,61 @@ import Footer from '@/components/Footer';
 
 const CommunicationPhotos = () => {
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="min-h-screen flex flex-col bg-gradient-to-b from-white to-gray-50">
       <Navbar />
-      <main className="flex-1 py-16 px-4 bg-white">
+      <main className="flex-1 py-20 px-6">
         <div className="container mx-auto max-w-5xl">
-        <h1 className="text-3xl md:text-4xl font-bold text-center mb-12">Service Photos</h1>
+          <h1 className="text-4xl md:text-5xl font-bold text-center mb-12 text-lysco-turquoise">
+            Service de Photographie
+          </h1>
 
-        <div className="space-y-6 text-gray-700">
-          <p>
-            La satisfaction de ses clients est le leitmotiv de Lys Conseil. Être au plus proche de vos attentes et vous proposer des services de qualité au meilleur prix est l’une des devises phares de la société. Aussi, Lys Conseil souhaite vous proposer un service de photographie complet. Vous voulez soigner votre image au sens propre du terme ? Ou encore mettre en avant vos produits ? Alors faites confiance à Lys Conseil et son service photos. Vous pourrez vous mettre en valeur et assurer une mise en avant de vos produits afin de vous démarquer de la concurrence.
-          </p>
+          <div className="space-y-8 text-gray-700 text-lg leading-relaxed">
+            <p>
+              La satisfaction de nos clients est notre moteur. Être à l’écoute de vos attentes et vous proposer des
+              services de qualité au meilleur prix font partie de nos engagements. Lys Conseil vous propose un service
+              photographique complet pour sublimer votre image et vos produits.
+            </p>
 
-          <h2 className="text-2xl font-semibold mt-8">Service de portraits</h2>
-          <p>
-            Dans nos locaux ou directement chez vous, nous pourrons réaliser des portraits pour vos réseaux sociaux, vos cartes de visite. Du plan serré à la prise de vue en activité, vous aurez une image qui vous ressemble et qui vous met en valeur.
-          </p>
+            <p>
+              Que ce soit pour soigner votre présence professionnelle ou valoriser vos offres, notre équipe met tout en
+              œuvre pour que vos visuels fassent la différence.
+            </p>
 
-          <h2 className="text-2xl font-semibold mt-8">Photos de produits</h2>
-          <p>
-            Vos clients attendent de vous le meilleur. Pour mettre en avant la qualité de vos produits et susciter l’acte d’achat, il vous est essentiel d’avoir recours à des images qui apportent la preuve visuelle de l’intérêt de vos produits. Nous vous proposons donc de les mettre en avant pour vous en organisant une séance photo.
-          </p>
+            <div className="border-l-4 border-lysco-pink pl-4">
+              <h2 className="text-2xl font-semibold mb-2">📸 Service de portraits</h2>
+              <p>
+                Réalisés dans nos locaux ou chez vous, les portraits professionnels mettent en avant votre image avec
+                authenticité : parfaits pour vos réseaux sociaux, présentations ou cartes de visite.
+              </p>
+            </div>
 
-          <h2 className="text-2xl font-semibold mt-8">Tarifs</h2>
-          <p>
-            <strong>Sur devis</strong><br />
-            <em>Prestations disponibles en Île-de-France, Guadeloupe et Orléans</em>
-          </p>
+            <div className="border-l-4 border-lysco-turquoise pl-4">
+              <h2 className="text-2xl font-semibold mb-2">🛍️ Photos de produits</h2>
+              <p>
+                Pour susciter l’acte d’achat, rien de tel qu’une image percutante. Nous organisons des shootings
+                produits soignés, pour montrer la qualité et les atouts de vos articles.
+              </p>
+            </div>
+
+            <div className="bg-white border border-gray-200 rounded-xl p-6 shadow-md">
+              <h2 className="text-xl font-semibold text-center text-gray-800 mb-2">💰 Tarifs</h2>
+              <p className="text-center text-gray-700 mb-1">
+                <strong>Sur devis</strong>
+              </p>
+              <p className="text-center text-gray-500">
+                <em>Prestations disponibles en Île-de-France, Guadeloupe et Orléans</em>
+              </p>
+            </div>
+          </div>
+
+          <div className="text-center mt-16">
+            <Link to="/contact">
+              <Button size="lg" className="bg-lysco-turquoise hover:bg-lysco-turquoise/90 text-white text-lg px-8 py-4 rounded-xl shadow-md">
+                Contactez-nous
+              </Button>
+            </Link>
+          </div>
         </div>
-
-        <div className="text-center mt-12">
-          <Link to="/contact">
-            <Button className="bg-lysco-turquoise hover:bg-lysco-turquoise/90">
-              Contactez-nous
-            </Button>
-          </Link>
-        </div>
-      </div>
       </main>
       <Footer />
     </div>
