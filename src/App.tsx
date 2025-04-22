@@ -10,6 +10,9 @@ import Register from "./pages/Register";
 import Dashboard from "./pages/Dashboard";
 import NotFound from "./pages/NotFound";
 import ResetPassword from "./pages/ResetPassword";
+import Domiciliation from "./pages/Domiciliation";
+import ServicesAdmin from "./pages/ServicesAdmin";
+import Communication from "./pages/Communication";
 
 const queryClient = new QueryClient();
 
@@ -25,6 +28,9 @@ const App = () => (
           <Route path="/register" element={<Register />} />
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/reset-password" element={<ResetPassword />} />
+          <Route path="/domiciliation" element={<Domiciliation />} />
+          <Route path="/services-admin" element={<ServicesAdmin />} />
+          <Route path="/communication" element={<Communication />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
