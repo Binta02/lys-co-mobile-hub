@@ -51,8 +51,8 @@ const Communication = () => {
         <div id="print"><CommunicationPrint /></div>
         <div id="site-internet"><CommunicationSiteInternet /></div>
         {/* <div id="photos"><CommunicationPhotos /></div> */}
-        <div id="media-training"><CommunicationMediaTraining /></div>
-        <div id="packs"><CommunicationPacks /></div>
+        {/* <div id="media-training"><CommunicationMediaTraining /></div>
+        <div id="packs"><CommunicationPacks /></div> */}
         <CommunicationFAQ />
       </main>
       <Footer />
