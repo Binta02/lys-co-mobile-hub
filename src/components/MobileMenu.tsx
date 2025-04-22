@@ -1,16 +1,14 @@
-
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
-
 interface MobileMenuProps {
   onClose: () => void;
 }
-
-const MobileMenu: React.FC<MobileMenuProps> = ({ onClose }) => {
-  return (
-    <div className="md:hidden fixed inset-0 z-50 bg-white animate-fade-in" onClick={onClose}>
-      <div className="container mx-auto px-4 py-6 flex flex-col space-y-6">
+const MobileMenu: React.FC<MobileMenuProps> = ({
+  onClose
+}) => {
+  return <div className="md:hidden fixed inset-0 z-50 bg-white animate-fade-in" onClick={onClose}>
+      <div className="container mx-auto px-4 py-6 flex flex-col space-y-6 bg-slate-50">
         <Link to="/" className="text-lg font-medium text-gray-700 hover:text-lysco-turquoise py-2" onClick={onClose}>
           Accueil
         </Link>
@@ -33,8 +31,6 @@ const MobileMenu: React.FC<MobileMenuProps> = ({ onClose }) => {
           </Link>
         </div>
       </div>
-    </div>
-  );
+    </div>;
 };
-
 export default MobileMenu;
