@@ -49,9 +49,7 @@ const MobileMenu: React.FC<MobileMenuProps> = ({
           <Link to="/register" onClick={onClose}>
             
           </Link>
-          <Button variant="ghost" onClick={handleLogout} className="w-full text-gray-700 hover:text-lysco-turquoise">
-            Déconnexion
-          </Button>
+          
         </div>
       </div>
     </div>;
