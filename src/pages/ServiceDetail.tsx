@@ -16,6 +16,7 @@ interface ServiceData {
   priceUnit?: string;
   originalPrice?: string;
   isPromo?: boolean;
+  note?: string;
 }
 
 const serviceData: Record<string, ServiceData> = {
@@ -75,6 +76,60 @@ const serviceData: Record<string, ServiceData> = {
     title: 'Pack domicilié',
     price: '1514,00',
     description: 'Pack complet incluant un site internet sur mesure, 100 cartes de visite professionnelles, création de pages Instagram et LinkedIn, et 3 mois de domiciliation gratuite.'
+  },
+  'vtc-creation': {
+    title: 'Accompagnement création VTC – Driel',
+    price: '900,00',
+    note: '*hors coûts organismes',
+    description: "Notre service d'accompagnement pour l'ouverture de votre société VTC est spécialement conçu pour simplifier le processus de création et de lancement de votre entreprise de transport avec chauffeur. En partenariat avec notre expert-comptable spécialisé dans le domaine, nous vous offrons une assistance professionnelle et personnalisée à chaque étape du processus, garantissant une démarche efficace et conforme à toutes les exigences réglementaires.\n\nNous comprenons que le démarrage d'une entreprise VTC peut être complexe, avec de nombreuses démarches administratives et juridiques à suivre. C'est pourquoi notre équipe dédiée est là pour vous guider à travers toutes les étapes, depuis l'enregistrement de votre société jusqu'à l'obtention des licences et des permis nécessaires. Notre objectif est de vous offrir une assistance complète et de qualité, vous permettant de lancer votre entreprise avec confiance et succès.\n\nDe plus, pour rendre nos services encore plus accessibles, nous offrons une réduction de 50 euros sur les frais de service si vous choisissez de domicilier votre entreprise chez nous. Cette réduction s'applique en plus des frais de service hors frais d'organisme, ce qui vous permet de bénéficier d'un accompagnement professionnel à un tarif avantageux."
+  },
+  'bank-account': {
+    title: 'Accompagnement ouverture de compte bancaire en ligne',
+    price: '150,00',
+    description: "Service d'assistance personnalisée pour l'ouverture de votre compte bancaire professionnel en ligne."
+  },
+  'company-creation': {
+    title: 'Accompagnement ouverture de votre société',
+    price: '600,00',
+    description: "Assistance complète pour la création de votre société, incluant les démarches administratives et juridiques."
+  },
+  'micro-company': {
+    title: 'Accompagnement ouverture micro entreprise',
+    price: '150,00',
+    description: "Accompagnement pour la création de votre micro-entreprise, incluant les formalités administratives."
+  },
+  'company-transfer': {
+    title: 'Accompagnement transfert de société',
+    price: '600,00',
+    note: '*hors coûts organismes',
+    description: "Service d'accompagnement pour le transfert de votre société, incluant toutes les démarches nécessaires."
+  },
+  'share-transfer': {
+    title: 'Cession de parts',
+    price: '200,00',
+    description: "Assistance pour la cession de parts de votre société, incluant la préparation des documents nécessaires."
+  },
+  'commercial-ad': {
+    title: "Création annonce commerciale pour site d'annonces",
+    price: '15,00',
+    description: "Rédaction professionnelle d'annonces commerciales pour différentes plateformes."
+  },
+  'quote-creation': {
+    title: 'Création devis ou service',
+    price: '15,00',
+    description: "Création de devis professionnels personnalisés pour vos clients."
+  },
+  'annual-accounts': {
+    title: 'Dépôt des comptes annuels',
+    price: '300,00',
+    note: '*hors coûts organismes',
+    description: "Service de dépôt de vos comptes annuels, en conformité avec les exigences légales."
+  },
+  'company-modification': {
+    title: 'Modification société',
+    price: '900,00',
+    note: '*hors coûts organismes',
+    description: "Accompagnement pour toute modification de votre société (statuts, siège social, etc.)."
   }
 };
 

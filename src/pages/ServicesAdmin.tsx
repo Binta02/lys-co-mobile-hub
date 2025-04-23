@@ -1,8 +1,7 @@
-
 import React from 'react';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
-import PriceCard from '@/components/services/PriceCard';
+import AdminServiceOffers from '@/components/admin/AdminServiceOffers';
 import { Button } from '@/components/ui/button';
 import { FileText, ClipboardCheck } from 'lucide-react';
 import { Link } from 'react-router-dom';
@@ -42,6 +41,9 @@ const ServicesAdmin = () => {
             </div>
           </div>
         </section>
+
+        {/* Admin Service Offers */}
+        <AdminServiceOffers />
 
         {/* Tarifs Section */}
         <section className="py-16 bg-gray-50">
@@ -170,4 +172,3 @@ const ServicesAdmin = () => {
 };
 
 export default ServicesAdmin;
-
