@@ -1,9 +1,9 @@
-
 import React from 'react';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import DomiciliationPricing from '@/components/domiciliation/DomiciliationPricing';
 import DomiciliationServices from '@/components/domiciliation/DomiciliationServices';
+import DomiciliationOffers from '@/components/domiciliation/DomiciliationOffers';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Link } from 'react-router-dom';
@@ -42,6 +42,9 @@ const Domiciliation = () => {
         <section className="py-16">
           <div className="container mx-auto px-4">
             <div className="max-w-4xl mx-auto space-y-12">
+              {/* Add DomiciliationOffers before other sections */}
+              <DomiciliationOffers />
+
               <Card>
                 <CardHeader>
                   <CardTitle>Pourquoi se domicilier chez Lys&Co ?</CardTitle>
