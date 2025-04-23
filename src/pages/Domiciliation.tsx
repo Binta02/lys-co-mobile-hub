@@ -7,6 +7,7 @@ import DomiciliationServices from '@/components/domiciliation/DomiciliationServi
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Link } from 'react-router-dom';
+import { ChevronRight } from 'lucide-react';
 
 const Domiciliation = () => {
   return (
@@ -27,7 +28,11 @@ const Domiciliation = () => {
                     Demander un devis
                   </Button>
                 </Link>
-                <Button variant="outline">Voir nos tarifs</Button>
+                <Link to="#pricing">
+                  <Button variant="outline" className="flex items-center">
+                    Voir nos tarifs <ChevronRight className="ml-2 h-4 w-4" />
+                  </Button>
+                </Link>
               </div>
             </div>
           </div>
@@ -96,7 +101,7 @@ const Domiciliation = () => {
               </Card>
 
               {/* Pricing Section */}
-              <div className="space-y-6">
+              <div id="pricing" className="space-y-6">
                 <div className="text-center">
                   <h2 className="text-3xl font-bold mb-4">Nos Tarifs</h2>
                   <p className="text-gray-600 mb-8">
@@ -147,7 +152,9 @@ const Domiciliation = () => {
                     </ul>
                   </div>
                   <Link to="/contact">
-                    <Button variant="outline" className="w-full">Réserver un espace</Button>
+                    <Button variant="outline" className="w-full flex items-center justify-center">
+                      Réserver un espace <ChevronRight className="ml-2 h-4 w-4" />
+                    </Button>
                   </Link>
                 </CardContent>
               </Card>
