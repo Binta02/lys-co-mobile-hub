@@ -1,4 +1,3 @@
-
 import React, { useMemo } from 'react';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
@@ -10,15 +9,15 @@ import RelatedProducts from '@/components/services/RelatedProducts';
 import ProductDescription from '@/components/services/ProductDescription';
 import { useParams } from 'react-router-dom';
 
-// Define the service type with optional priceUnit
 interface ServiceData {
   title: string;
   price: string;
   description: string;
   priceUnit?: string;
+  originalPrice?: string;
+  isPromo?: boolean;
 }
 
-// Update the type annotation for serviceData
 const serviceData: Record<string, ServiceData> = {
   'reexpedition-courrier': {
     title: 'Réexpédition courrier (3 mois)',
@@ -41,26 +40,39 @@ const serviceData: Record<string, ServiceData> = {
     priceUnit: '/heure',
     description: 'Espaces de coworking modernes et confortables, équipés de toutes les commodités nécessaires. Location flexible à l\'heure, à la demi-journée ou à la journée complète.'
   },
-  'domiciliation-societe': {
-    title: 'Domiciliation Sociétés - Artisans - Commerçants',
-    price: '36,00',
-    priceUnit: '/mois',
-    description: 'Service complet de domiciliation commerciale pour entreprises, artisans et commerçants. Inclut une adresse professionnelle et la gestion de votre courrier.'
+  'domiciliation-1an-entreprise': {
+    title: 'Domiciliation 1 an – Entreprise',
+    price: '361,80',
+    originalPrice: '432,00',
+    isPromo: true,
+    description: 'Service de domiciliation commerciale annuelle pour entreprises. Profitez d\'une adresse professionnelle prestigieuse pour votre société pendant 12 mois.'
   },
-  'domiciliation-auto-entrepreneur': {
-    title: 'Domiciliation Auto-Entrepreneurs',
-    price: '24,00',
-    priceUnit: '/mois',
-    description: 'Solution de domiciliation adaptée aux besoins spécifiques des auto-entrepreneurs. Bénéficiez d\'une adresse professionnelle à moindre coût.'
+  'domiciliation-3mois-entreprise': {
+    title: 'Domiciliation 3 mois – Entreprise',
+    price: '108,00',
+    description: 'Solution de domiciliation trimestrielle pour entreprises. Idéal pour tester notre service ou pour des besoins à court terme.'
   },
-  'domiciliation-association': {
-    title: 'Domiciliation Associations',
-    price: '15,00',
-    priceUnit: '/mois',
-    description: 'Offre dédiée aux associations avec tarif préférentiel. Donnez une adresse officielle à votre association et centralisez votre courrier.'
+  'domiciliation-3mois-micro': {
+    title: 'Domiciliation 3 mois – Micro Entreprise',
+    price: '72,00',
+    description: 'Offre adaptée aux micro-entreprises pour une durée de 3 mois. Une solution économique pour les entrepreneurs individuels.'
   },
-  'pack-exclusif': {
-    title: 'Pack Exclusif Nouveaux Domiciliés',
+  'domiciliation-6mois-entreprise': {
+    title: 'Domiciliation 6 mois – Entreprise',
+    price: '162,00',
+    originalPrice: '216,00',
+    isPromo: true,
+    description: 'Service de domiciliation semestrielle pour entreprises. Une solution flexible avec un excellent rapport qualité-prix.'
+  },
+  'domiciliation-6mois-micro': {
+    title: 'Domiciliation 6 mois – Micro Entreprise',
+    price: '108,00',
+    originalPrice: '144,00',
+    isPromo: true,
+    description: 'Offre semestrielle spéciale micro-entreprises. Bénéficiez d\'une réduction importante sur 6 mois de domiciliation.'
+  },
+  'pack-domine': {
+    title: 'Pack domicilié',
     price: '1514,00',
     description: 'Pack complet incluant un site internet sur mesure, 100 cartes de visite professionnelles, création de pages Instagram et LinkedIn, et 3 mois de domiciliation gratuite.'
   }
@@ -71,7 +83,6 @@ const ServiceDetail = () => {
   
   const service = useMemo(() => {
     if (!id || !serviceData[id as keyof typeof serviceData]) {
-      // Service par défaut si l'ID est invalide
       return serviceData['reexpedition-courrier'];
     }
     return serviceData[id as keyof typeof serviceData];
@@ -83,10 +94,19 @@ const ServiceDetail = () => {
       <main className="flex-1 py-16">
         <div className="container mx-auto px-4">
           <div className="grid md:grid-cols-2 gap-8">
-            {/* Service Info */}
             <div className="space-y-6">
               <h1 className="text-3xl font-bold">{service.title}</h1>
-              <div className="text-2xl font-semibold text-lysco-turquoise">{service.price} €{service.priceUnit || ''}</div>
+              <div className="flex items-baseline gap-2">
+                {service.isPromo && service.originalPrice && (
+                  <span className="text-lg line-through text-gray-500">{service.originalPrice} €</span>
+                )}
+                <div className="text-2xl font-semibold text-lysco-turquoise">{service.price} €{service.priceUnit || ''}</div>
+              </div>
+              {service.isPromo && (
+                <div className="inline-block bg-red-100 text-red-600 px-3 py-1 rounded-full text-sm font-medium">
+                  Promo !
+                </div>
+              )}
               <p className="text-sm text-gray-500">Hors taxes</p>
               
               <div className="prose max-w-none">
@@ -94,7 +114,6 @@ const ServiceDetail = () => {
               </div>
             </div>
 
-            {/* Purchase Card */}
             <Card className="p-6">
               <CardContent className="space-y-6">
                 <div className="flex items-center justify-between">
@@ -133,10 +152,8 @@ const ServiceDetail = () => {
             </Card>
           </div>
 
-          {/* Tabs for Description and Reviews */}
           <ProductDescription />
 
-          {/* Related Products */}
           <RelatedProducts />
         </div>
       </main>
