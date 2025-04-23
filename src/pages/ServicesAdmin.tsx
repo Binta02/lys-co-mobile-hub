@@ -1,3 +1,4 @@
+
 import React from 'react';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
@@ -5,6 +6,7 @@ import AdminServiceOffers from '@/components/admin/AdminServiceOffers';
 import { Button } from '@/components/ui/button';
 import { FileText, ClipboardCheck } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import PriceCard from '@/components/services/PriceCard';
 
 const ServicesAdmin = () => {
   return (
