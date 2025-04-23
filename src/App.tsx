@@ -1,4 +1,3 @@
-
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -23,6 +22,7 @@ import ServicesAdmin from "./pages/ServicesAdmin";
 import Communication from "./pages/Communication";
 import Contact from "./pages/Contact";
 import PrivateRoute from "./components/PrivateRoute";
+import ServiceDetail from "./pages/ServiceDetail";
 
 const queryClient = new QueryClient();
 
@@ -47,6 +47,7 @@ const App = () => (
           <Route path="/communication/site-internet" element={<CommunicationSiteInternetPage />} />
           <Route path="/communication/media-training" element={<CommunicationMediaTrainingPage />} />
           <Route path="/communication/packs" element={<CommunicationPacksPage />} />
+          <Route path="/service/:id" element={<ServiceDetail />} />
 
           {/* Protected routes */}
           <Route path="/dashboard" element={
