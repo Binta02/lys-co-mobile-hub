@@ -1,3 +1,4 @@
+
 import React from 'react';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
@@ -27,11 +28,11 @@ const Domiciliation = () => {
                     Demander un devis
                   </Button>
                 </Link>
-                <Link to="#pricing">
+                <a href="#pricing">
                   <Button variant="outline" className="flex items-center">
                     Voir nos tarifs <ChevronRight className="ml-2 h-4 w-4" />
                   </Button>
-                </Link>
+                </a>
               </div>
             </div>
           </div>
@@ -152,7 +153,7 @@ const Domiciliation = () => {
                       <li>250€/mois (journée complète)</li>
                     </ul>
                   </div>
-                  <Link to="/contact">
+                  <Link to="/service/location-bureau">
                     <Button variant="outline" className="w-full flex items-center justify-center">
                       Réserver un espace <ChevronRight className="ml-2 h-4 w-4" />
                     </Button>

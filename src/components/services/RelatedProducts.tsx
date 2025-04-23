@@ -2,6 +2,7 @@
 import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
+import { Link } from 'react-router-dom';
 
 const RelatedProducts = () => {
   return (
@@ -14,7 +15,9 @@ const RelatedProducts = () => {
           </CardHeader>
           <CardContent className="space-y-4">
             <p className="text-2xl font-semibold text-lysco-turquoise">18,00 €</p>
-            <Button className="w-full">Ajouter au panier</Button>
+            <Link to="/service/reception-colis">
+              <Button className="w-full">Ajouter au panier</Button>
+            </Link>
           </CardContent>
         </Card>
 
@@ -24,7 +27,9 @@ const RelatedProducts = () => {
           </CardHeader>
           <CardContent className="space-y-4">
             <p className="text-2xl font-semibold text-lysco-turquoise">18,00 €</p>
-            <Button className="w-full">Ajouter au panier</Button>
+            <Link to="/service/scan-courrier">
+              <Button className="w-full">Ajouter au panier</Button>
+            </Link>
           </CardContent>
         </Card>
 
@@ -34,7 +39,9 @@ const RelatedProducts = () => {
           </CardHeader>
           <CardContent className="space-y-4">
             <p className="text-2xl font-semibold text-lysco-turquoise">30,00 €</p>
-            <Button className="w-full">Ajouter au panier</Button>
+            <Link to="/service/creation-courrier">
+              <Button className="w-full">Ajouter au panier</Button>
+            </Link>
           </CardContent>
         </Card>
       </div>
