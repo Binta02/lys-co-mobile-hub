@@ -10,7 +10,16 @@ import RelatedProducts from '@/components/services/RelatedProducts';
 import ProductDescription from '@/components/services/ProductDescription';
 import { useParams } from 'react-router-dom';
 
-const serviceData = {
+// Define the service type with optional priceUnit
+interface ServiceData {
+  title: string;
+  price: string;
+  description: string;
+  priceUnit?: string;
+}
+
+// Update the type annotation for serviceData
+const serviceData: Record<string, ServiceData> = {
   'reexpedition-courrier': {
     title: 'Réexpédition courrier (3 mois)',
     price: '30,00',
