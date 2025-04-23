@@ -27,7 +27,7 @@ const ServiceSection: React.FC = () => {
             title="Services administratifs"
             description="Confiez-nous vos tâches administratives pour vous concentrer sur le développement de votre activité."
             icon={<FileText />}
-            link="/admin-services"
+            link="/services-admin"
             color="pink"
           />
           
@@ -35,7 +35,7 @@ const ServiceSection: React.FC = () => {
             title="Communication & Marketing"
             description="Stratégies de communication, création de contenu et gestion des réseaux sociaux pour augmenter votre visibilité."
             icon={<MessageCircle />}
-            link="/marketing"
+            link="/communication"
             color="turquoise"
           />
         </div>
