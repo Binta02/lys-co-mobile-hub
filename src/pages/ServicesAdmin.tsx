@@ -16,119 +16,26 @@ const ServicesAdmin = () => {
         <section className="bg-gradient-to-r from-lysco-turquoise/10 to-lysco-pink/10 py-16">
           <div className="container mx-auto px-4">
             <div className="max-w-4xl mx-auto text-center">
-              <h1 className="text-4xl md:text-5xl font-bold mb-6">
-                FORMALITES ENTREPRISES – ADMINISTRATIF
-              </h1>
-              <p className="text-xl text-gray-600 mb-8">
-                Si vous êtes en pleine création d'entreprise, envisagez de changer votre siège social 
-                ou devez gérer d'autres modifications importantes, mais que le temps ou les connaissances 
-                vous manquent pour aborder les démarches administratives, sachez que vous n'êtes pas seul. 
-                Notre partenaire, un expert-comptable qualifié, est prêt à vous épauler à chaque étape du processus. 
-                Il vous offrira une assistance personnalisée et des conseils avisés pour naviguer aisément 
-                à travers ces formalités, assurant ainsi une transition en douceur et conforme aux exigences légales. 
-                N'attendez plus pour demander de l'aide !
-              </p>
-            </div>
-          </div>
-        </section>
-
-        {/* Tarifs Section */}
-        <section className="py-16 bg-white">
-          <div className="container mx-auto px-4">
-            <h2 className="text-3xl font-bold text-center mb-12">Nos Tarifs</h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              <PriceCard 
-                service="Aide à l'inscription auto entreprise" 
-                price="150 €" 
-              />
-              <PriceCard 
-                service="Aide à l'inscription entreprise individuelle" 
-                price="150 €" 
-              />
-              <PriceCard 
-                service="Aide à la rédaction de formalités de création" 
-                price="600 €" 
-                note="*hors coûts organismes" 
-              />
-              <PriceCard 
-                service="Vtc – Driel (registre des transports, vtc marchandises)" 
-                price="900 €" 
-                note="*hors coûts organismes" 
-              />
-              <PriceCard 
-                service="Modification société" 
-                price="900 €" 
-                note="*hors coûts organismes" 
-              />
-              <PriceCard 
-                service="Dépôt des comptes annuels" 
-                price="300 €" 
-                note="*hors coûts organismes" 
-              />
-              <PriceCard 
-                service="Cession de part" 
-                price="200 €" 
-              />
-              <PriceCard 
-                service="Accompagnement ouverture compte en ligne" 
-                price="150 €" 
-                note="hors frais" 
-              />
-            </div>
-            <div className="text-center mt-8">
-              <Link to="/contact">
-                <Button className="bg-lysco-turquoise hover:bg-lysco-turquoise/90 text-white">
-                  Aller à la boutique
-                </Button>
-              </Link>
-            </div>
-          </div>
-        </section>
-
-        {/* Assistanat Section */}
-        <section className="py-16 bg-gray-50">
-          <div className="container mx-auto px-4">
-            <div className="max-w-4xl mx-auto">
-              <h2 className="text-3xl font-bold text-center mb-8">ASSISTANAT</h2>
-              <p className="text-lg text-gray-600 mb-12">
-                Imaginez déléguer toute la gestion administrative, comptable et commerciale à des 
-                assistants experts, vous permettant ainsi de vous recentrer sur l'essentiel de votre 
-                activité. Nos partenaires secrétaires prennent en charge toutes vos obligations, 
-                de la paperasserie quotidienne à la comptabilité, en passant par le suivi commercial. 
-                Ce service vous offre la liberté de vous consacrer pleinement à ce que vous faites de mieux, 
-                tout en ayant la tranquillité d'esprit que les aspects les plus fastidieux de votre entreprise 
-                sont gérés efficacement et professionnellement.
-              </p>
-              
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
-                <PriceCard 
-                  service="Service d'assistanat" 
-                  price="30 € /heure" 
-                />
-                <PriceCard 
-                  service="Création de devis" 
-                  price="15 € /page" 
-                />
-                <PriceCard 
-                  service="Création des factures" 
-                  price="15 € /page" 
-                />
-                <PriceCard 
-                  service="Annonces commerciales" 
-                  price="10 € /annonce" 
-                  note="destinées aux sites d'annonces" 
-                />
-                <PriceCard 
-                  service="Création de courriers administratif" 
-                  price="Sur devis" 
-                  note="selon les spécificités de votre demande" 
-                />
+              <div className="flex justify-center mb-6">
+                <FileText className="w-16 h-16 text-lysco-turquoise" />
               </div>
-
-              <div className="text-center">
+              <h1 className="text-4xl md:text-5xl font-bold mb-6 text-gray-800">
+                FORMALITÉS ENTREPRISES – ADMINISTRATIF
+              </h1>
+              <p className="text-xl text-gray-600 mb-8 leading-relaxed">
+                Vous êtes en création d'entreprise, en changement de siège social ou face à des modifications importantes ? 
+                Notre expert-comptable partenaire vous accompagne à chaque étape, offrant une assistance personnalisée 
+                et des conseils experts pour des démarches administratives en toute sérénité.
+              </p>
+              <div className="flex justify-center space-x-4">
                 <Link to="/contact">
+                  <Button variant="outline" className="border-lysco-turquoise text-lysco-turquoise hover:bg-lysco-turquoise hover:text-white">
+                    Contactez-nous
+                  </Button>
+                </Link>
+                <Link to="/shop">
                   <Button className="bg-lysco-turquoise hover:bg-lysco-turquoise/90 text-white">
-                    Aller à la boutique
+                    Voir nos services
                   </Button>
                 </Link>
               </div>
@@ -136,25 +43,123 @@ const ServicesAdmin = () => {
           </div>
         </section>
 
-        {/* Call to Action */}
+        {/* Tarifs Section */}
+        <section className="py-16 bg-gray-50">
+          <div className="container mx-auto px-4">
+            <div className="text-center mb-12">
+              <h2 className="text-3xl font-bold mb-4 text-gray-800">Nos Tarifs de Formalités</h2>
+              <p className="text-gray-600 max-w-2xl mx-auto">
+                Des solutions administratives transparentes et adaptées à chaque besoin professionnel.
+              </p>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              <PriceCard 
+                service="Inscription Auto Entreprise" 
+                price="150 €" 
+              />
+              <PriceCard 
+                service="Inscription Entreprise Individuelle" 
+                price="150 €" 
+              />
+              <PriceCard 
+                service="Rédaction Formalités de Création" 
+                price="600 €" 
+                note="*hors coûts organismes" 
+              />
+              <PriceCard 
+                service="VTC – Driel (Registre Transports)" 
+                price="900 €" 
+                note="*hors coûts organismes" 
+              />
+              <PriceCard 
+                service="Modification Société" 
+                price="900 €" 
+                note="*hors coûts organismes" 
+              />
+              <PriceCard 
+                service="Dépôt Comptes Annuels" 
+                price="300 €" 
+                note="*hors coûts organismes" 
+              />
+              <PriceCard 
+                service="Cession de Part" 
+                price="200 €" 
+              />
+              <PriceCard 
+                service="Accompagnement Compte en Ligne" 
+                price="150 €" 
+                note="hors frais" 
+              />
+            </div>
+          </div>
+        </section>
+
+        {/* Assistanat Section */}
         <section className="py-16 bg-white">
           <div className="container mx-auto px-4">
-            <div className="max-w-4xl mx-auto text-center">
-              <p className="text-lg text-gray-600 mb-8">
-                Chez Lys&Co, notre priorité est de vous offrir des solutions sur mesure, répondant 
-                avec précision à vos exigences professionnelles. Nous sommes dédiés à la qualité 
-                et à l'efficacité, veillant à ce que chaque service proposé soit en parfaite 
-                adéquation avec vos objectifs. Pour toute interrogation ou pour explorer ensemble 
-                les opportunités d'accompagnement personnalisé que nous pouvons vous proposer, 
-                notre équipe reste à votre entière disposition. Nous vous invitons chaleureusement 
-                à prendre contact avec nous, afin de discuter des solutions adaptées à votre 
-                situation unique.
+            <div className="max-w-4xl mx-auto grid md:grid-cols-2 gap-12 items-center">
+              <div>
+                <div className="flex justify-center mb-6">
+                  <ClipboardCheck className="w-16 h-16 text-lysco-pink" />
+                </div>
+                <h2 className="text-3xl font-bold mb-6 text-center text-gray-800">ASSISTANAT</h2>
+                <p className="text-gray-600 mb-6 leading-relaxed">
+                  Déléguez toute la gestion administrative, comptable et commerciale à nos assistants experts. 
+                  Libérez-vous des tâches chronophages pour vous concentrer sur le cœur de votre activité.
+                </p>
+              </div>
+              <div className="bg-gray-50 p-8 rounded-lg shadow-sm">
+                <div className="grid grid-cols-1 gap-4">
+                  <PriceCard 
+                    service="Assistance Administrative" 
+                    price="30 € /heure" 
+                  />
+                  <PriceCard 
+                    service="Création de Devis" 
+                    price="15 € /page" 
+                  />
+                  <PriceCard 
+                    service="Création de Factures" 
+                    price="15 € /page" 
+                  />
+                  <PriceCard 
+                    service="Annonces Commerciales" 
+                    price="10 € /annonce" 
+                    note="destinées aux sites d'annonces" 
+                  />
+                  <PriceCard 
+                    service="Courriers Administratifs" 
+                    price="Sur devis" 
+                    note="selon les spécificités" 
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Call to Action */}
+        <section className="py-16 bg-gradient-to-r from-lysco-turquoise/10 to-lysco-pink/10">
+          <div className="container mx-auto px-4">
+            <div className="max-w-3xl mx-auto text-center">
+              <h3 className="text-3xl font-bold mb-6 text-gray-800">Votre Partenaire Administratif</h3>
+              <p className="text-gray-600 mb-8 leading-relaxed">
+                Chez Lys&Co, nous offrons des solutions sur mesure qui répondent précisément à vos exigences professionnelles. 
+                Notre équipe est dédiée à la qualité et à l'efficacité, garantissant que chaque service soit parfaitement 
+                adapté à vos objectifs.
               </p>
-              <Link to="/contact">
-                <Button variant="outline" className="border-lysco-turquoise text-lysco-turquoise hover:bg-lysco-turquoise hover:text-white">
-                  Discuter de votre projet
-                </Button>
-              </Link>
+              <div className="flex justify-center space-x-4">
+                <Link to="/contact">
+                  <Button className="bg-lysco-turquoise hover:bg-lysco-turquoise/90 text-white">
+                    Discuter de votre projet
+                  </Button>
+                </Link>
+                <Link to="/shop">
+                  <Button variant="outline" className="border-lysco-pink text-lysco-pink hover:bg-lysco-pink hover:text-white">
+                    Nos tarifs détaillés
+                  </Button>
+                </Link>
+              </div>
             </div>
           </div>
         </section>
@@ -165,3 +170,4 @@ const ServicesAdmin = () => {
 };
 
 export default ServicesAdmin;
+
