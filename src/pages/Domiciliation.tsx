@@ -1,4 +1,3 @@
-
 import React from 'react';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
@@ -93,8 +92,10 @@ const Domiciliation = () => {
                     </li>
                   </ul>
                   <div className="mt-6">
-                    <Link to="/contact">
-                      <Button className="w-full">Je profite de l'offre</Button>
+                    <Link to="/service/pack-exclusif">
+                      <Button className="w-full flex items-center justify-center">
+                        Je profite de l'offre <ChevronRight className="ml-2 h-4 w-4" />
+                      </Button>
                     </Link>
                   </div>
                 </CardContent>
