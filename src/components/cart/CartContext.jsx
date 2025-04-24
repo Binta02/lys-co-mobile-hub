@@ -1,70 +1,31 @@
-import React, { createContext, useContext, useState } from 'react';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
-import { Minus, Plus, ShoppingCart, Trash } from 'lucide-react';
 
-const CartContext = createContext();
-
-export const CartProvider = ({ children }) => {
-  const [cartItems, setCartItems] = useState([]);
-
-  const addToCart = (item) => {
-    setCartItems((prevItems) => {
-      const existingItem = prevItems.find((i) => i.id === item.id);
-      if (existingItem) {
-        return prevItems.map((i) =>
-          i.id === item.id ? { ...i, quantity: i.quantity + 1 } : i
-        );
-      }
-      return [...prevItems, { ...item, quantity: 1 }];
-    });
-  };
-
-  const removeFromCart = (id) => {
-    setCartItems((prevItems) => prevItems.filter((item) => item.id !== id));
-  };
-
-  const updateQuantity = (id, quantity) => {
-    setCartItems((prevItems) =>
-      prevItems.map((item) =>
-        item.id === id ? { ...item, quantity: Math.max(1, quantity) } : item
-      )
-    );
-  };
-
-  const clearCart = () => setCartItems([]);
-
-  const total = cartItems.reduce(
-    (sum, item) => sum + item.price * item.quantity,
-    0
-  );
-
-  return (
-    <CartContext.Provider
-      value={{ cartItems, addToCart, removeFromCart, updateQuantity, clearCart, total }}
-    >
-      {children}
-    </CartContext.Provider>
-  );
-};
-
-export const useCart = () => useContext(CartContext);
+import React from 'react';
+import {
+  Sheet,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "@/components/ui/sheet";
+import { Button } from "@/components/ui/button";
+import { ShoppingCart, Trash, Plus, Minus } from "lucide-react";
+import { useCart } from "@/contexts/CartContext";
+import { Badge } from "@/components/ui/badge";
 
 export function CartDrawer() {
-  const { cartItems, removeFromCart, updateQuantity, total } = useCart();
+  const { items, removeItem, updateQuantity, total } = useCart();
 
   return (
     <Sheet>
       <SheetTrigger asChild>
         <Button variant="outline" size="icon" className="relative">
           <ShoppingCart className="h-4 w-4" />
-          {cartItems.length > 0 && (
-            <Badge
+          {items.length > 0 && (
+            <Badge 
               className="absolute -top-2 -right-2 h-5 w-5 flex items-center justify-center p-0 text-xs"
               variant="destructive"
             >
-              {cartItems.length}
+              {items.length}
             </Badge>
           )}
         </Button>
@@ -74,11 +35,11 @@ export function CartDrawer() {
           <SheetTitle>Votre panier</SheetTitle>
         </SheetHeader>
         <div className="mt-8 space-y-4">
-          {cartItems.length === 0 ? (
+          {items.length === 0 ? (
             <p className="text-center text-gray-500">Votre panier est vide</p>
           ) : (
             <>
-              {cartItems.map((item) => (
+              {items.map((item) => (
                 <div key={item.id} className="flex items-center justify-between border-b pb-4">
                   <div className="space-y-1">
                     <p className="font-medium">{item.title}</p>
@@ -106,7 +67,7 @@ export function CartDrawer() {
                       variant="ghost"
                       size="icon"
                       className="h-8 w-8 text-red-500"
-                      onClick={() => removeFromCart(item.id)}
+                      onClick={() => removeItem(item.id)}
                     >
                       <Trash className="h-4 w-4" />
                     </Button>
