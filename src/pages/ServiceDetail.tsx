@@ -8,7 +8,6 @@ import { CreditCard, Lock } from 'lucide-react';
 import RelatedProducts from '@/components/services/RelatedProducts';
 import ProductDescription from '@/components/services/ProductDescription';
 import { useParams } from 'react-router-dom';
-import { useCart } from "@/components/cart/CartContext";
 
 interface ServiceData {
   title: string;
@@ -147,7 +146,6 @@ const serviceData: Record<string, ServiceData> = {
 };
 
 const ServiceDetail = () => {
-  const { addItem } = useCart();
   const { id } = useParams<{ id: string }>();
   
   const service = useMemo(() => {
@@ -194,21 +192,10 @@ const ServiceDetail = () => {
                     className="w-24" 
                   />
                 </div>
-                <Button
-                  className="w-full bg-lysco-turquoise hover:bg-lysco-turquoise/90"
-                  onClick={() =>
-                    addItem({
-                      id: `service-${id}`,
-                      title: service.title,
-                      price: parseFloat(service.price.replace(',', '.')),
-                      quantity: 1
-                    })
-                  }
-                >
-                  <ShoppingCart className="h-4 w-4" />
+
+                <Button className="w-full bg-lysco-turquoise hover:bg-lysco-turquoise/90">
                   Ajouter au panier
                 </Button>
-
 
                 <div className="pt-4 border-t">
                   <div className="flex items-center justify-center gap-2 text-sm text-gray-600">
