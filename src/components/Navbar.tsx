@@ -1,14 +1,18 @@
-
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
-import { Menu, X } from 'lucide-react';
+import { Menu, X, User } from 'lucide-react';
 import MobileMenu from './MobileMenu';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from '@/components/ui/sonner';
 import { Session } from '@supabase/supabase-js';
 import { CartDrawer } from "@/components/cart/CartDrawer";
-
+import {
+  DropdownMenu,
+  DropdownMenuTrigger,
+  DropdownMenuContent,
+  DropdownMenuItem,
+} from '@/components/ui/dropdown-menu';
 
 const Navbar = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -17,14 +21,10 @@ const Navbar = () => {
   const location = useLocation();
 
   useEffect(() => {
-    // Set up auth state listener
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
-      (event, session) => {
-        setSession(session);
-      }
+      (_event, session) => setSession(session)
     );
 
-    // Check for existing session
     supabase.auth.getSession().then(({ data: { session } }) => {
       setSession(session);
     });
@@ -37,24 +37,15 @@ const Navbar = () => {
   };
 
   const handleLogout = async () => {
-    try {
-      const { error } = await supabase.auth.signOut();
-      if (error) {
-        toast.error('Erreur lors de la déconnexion', {
-          description: error.message
-        });
-        return;
-      }
-      
+    const { error } = await supabase.auth.signOut();
+    if (error) {
+      toast.error('Erreur lors de la déconnexion', { description: error.message });
+    } else {
       toast.success('Déconnexion réussie');
       navigate('/login');
-    } catch (error) {
-      console.error('Logout error:', error);
-      toast.error('Une erreur inattendue est survenue');
     }
   };
 
-  // Close mobile menu when route changes
   useEffect(() => {
     setIsMobileMenuOpen(false);
   }, [location.pathname]);
@@ -68,7 +59,6 @@ const Navbar = () => {
           </span>
         </Link>
 
-        {/* Desktop Navigation */}
         <div className="hidden md:flex items-center space-x-6">
           <Link to="/" className="text-gray-700 hover:text-lysco-turquoise transition-colors">
             Accueil
@@ -85,23 +75,25 @@ const Navbar = () => {
           <Link to="/contact" className="text-gray-700 hover:text-lysco-turquoise transition-colors">
             Contact
           </Link>
-          <CartDrawer /> {/* 👉 Ajout du panier ici */}
-          
+
+          <CartDrawer />
+
           {session ? (
-            <>
-              <Link to="/dashboard">
-                <Button variant="outline" className="border-lysco-turquoise text-lysco-turquoise hover:bg-lysco-turquoise hover:text-white">
-                  Dashboard
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="ghost" size="icon">
+                  <User className="w-5 h-5 text-lysco-turquoise" />
                 </Button>
-              </Link>
-              <Button 
-                variant="ghost" 
-                onClick={handleLogout}
-                className="text-gray-700 hover:text-lysco-turquoise"
-              >
-                Déconnexion
-              </Button>
-            </>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end">
+                <DropdownMenuItem onClick={() => navigate('/dashboard')}>
+                  Dashboard
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={handleLogout}>
+                  Déconnexion
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
           ) : (
             <Link to="/login">
               <Button variant="outline" className="border-lysco-turquoise text-lysco-turquoise hover:bg-lysco-turquoise hover:text-white">
@@ -111,8 +103,7 @@ const Navbar = () => {
           )}
         </div>
 
-        {/* Mobile Menu Button */}
-        <button 
+        <button
           className="md:hidden text-gray-700"
           onClick={toggleMobileMenu}
           aria-label="Toggle menu"
@@ -121,7 +112,6 @@ const Navbar = () => {
         </button>
       </div>
 
-      {/* Mobile Menu */}
       {isMobileMenuOpen && <MobileMenu onClose={toggleMobileMenu} session={session} />}
     </nav>
   );

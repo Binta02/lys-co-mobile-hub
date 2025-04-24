@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from '@/components/ui/sonner';
 import { Session } from '@supabase/supabase-js';
+import { CartDrawer } from "@/components/cart/CartDrawer";
 
 interface MobileMenuProps {
   onClose: () => void;
@@ -53,7 +54,8 @@ const MobileMenu: React.FC<MobileMenuProps> = ({
         <Link to="/contact" className="text-lg font-medium text-gray-700 hover:text-lysco-turquoise py-2" onClick={onClose}>
           Contact
         </Link>
-        
+        <CartDrawer /> {/* 👉 Ajout du panier ici */}
+
         <div className="flex flex-col space-y-3 pt-4">
           {session ? (
             <>
