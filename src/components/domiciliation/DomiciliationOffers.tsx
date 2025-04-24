@@ -3,7 +3,7 @@ import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { ShoppingCart } from 'lucide-react';
-import { useCart } from "@/contexts/CartContext";
+import { useCart } from "@/components/cart/CartContext";
 
 
 interface OfferProps {
