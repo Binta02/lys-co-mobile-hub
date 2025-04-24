@@ -71,7 +71,7 @@ const DomiciliationOffers = () => {
                   )}
                   <p className="text-2xl font-semibold text-lysco-turquoise">{offer.price} €</p>
                 </div>
-                <Button className="mt-4 w-full flex items-center justify-center gap-2">
+                <Button className="mt-4 w-full flex items-center justify-center gap-2" onClick={() => addToCart(service)}>
                   <ShoppingCart className="h-4 w-4" />
                   Ajouter au panier
                 </Button>
