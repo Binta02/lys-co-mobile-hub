@@ -76,7 +76,7 @@ const Navbar = () => {
             Contact
           </Link>
 
-          <CartDrawer />
+          {session && <CartDrawer />} {/* ✅ Affiche le panier uniquement si connecté */}
 
           {session ? (
             <DropdownMenu>
