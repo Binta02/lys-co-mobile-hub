@@ -1,0 +1,18 @@
+{
+    "sourceFile": "src/components/domiciliation/DomiciliationOffers.tsx",
+    "activeCommit": 0,
+    "commits": [
+        {
+            "activePatchIndex": 0,
+            "patches": [
+                {
+                    "date": 1745482350631,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n"
+                }
+            ],
+            "date": 1745482350631,
+            "name": "Commit-0",
+            "content": "import React from 'react';\r\nimport { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';\r\nimport { Button } from '@/components/ui/button';\r\nimport { ShoppingCart } from 'lucide-react';\r\nimport { useCart } from '@/components/cart/CartContext';\r\n\r\ninterface OfferProps {\r\n  title: string;\r\n  price: string;\r\n  originalPrice?: string;\r\n  isPromo?: boolean;\r\n}\r\n\r\nconst offers: OfferProps[] = [\r\n  {\r\n    title: 'Domiciliation 1 an – Entreprise',\r\n    price: '361,80',\r\n    originalPrice: '432,00',\r\n    isPromo: true,\r\n  },\r\n  {\r\n    title: 'Domiciliation 3 mois – Entreprise',\r\n    price: '108,00',\r\n  },\r\n  {\r\n    title: 'Domiciliation 3 mois – Micro Entreprise',\r\n    price: '72,00',\r\n  },\r\n  {\r\n    title: 'Domiciliation 6 mois – Entreprise',\r\n    price: '162,00',\r\n    originalPrice: '216,00',\r\n    isPromo: true,\r\n  },\r\n  {\r\n    title: 'Domiciliation 6 mois – Micro Entreprise',\r\n    price: '108,00',\r\n    originalPrice: '144,00',\r\n    isPromo: true,\r\n  },\r\n  {\r\n    title: 'Pack domicilié',\r\n    price: '1514,00',\r\n  },\r\n];\r\n\r\nconst DomiciliationOffers = () => {\r\n  const { addToCart } = useCart();\r\n\r\n  return (\r\n    <div className=\"py-12\">\r\n      <div className=\"container mx-auto px-4\">\r\n        <div className=\"text-center mb-8\">\r\n          <h2 className=\"text-3xl font-bold mb-4\">Nos offres de domiciliation</h2>\r\n          <p className=\"text-gray-600\">6 résultats affichés</p>\r\n          <p className=\"text-sm text-gray-500\">Tri par défaut</p>\r\n        </div>\r\n        <div className=\"grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6\">\r\n          {offers.map((offer, index) => (\r\n            <Card key={index} className=\"flex flex-col\">\r\n              <CardHeader>\r\n                {offer.isPromo && (\r\n                  <div className=\"inline-block bg-red-100 text-red-600 px-3 py-1 rounded-full text-sm font-medium mb-2\">\r\n                    Promo !\r\n                  </div>\r\n                )}\r\n                <CardTitle className=\"text-xl\">{offer.title}</CardTitle>\r\n              </CardHeader>\r\n              <CardContent className=\"flex-grow flex flex-col justify-between\">\r\n                <div className=\"space-y-2\">\r\n                  {offer.isPromo && offer.originalPrice && (\r\n                    <p className=\"text-lg line-through text-gray-500\">{offer.originalPrice} €</p>\r\n                  )}\r\n                  <p className=\"text-2xl font-semibold text-lysco-turquoise\">{offer.price} €</p>\r\n                </div>\r\n                <Button\r\n                  className=\"mt-4 w-full flex items-center justify-center gap-2\"\r\n                  onClick={() => addToCart({ id: offer.id, title: offer.title, price: parseFloat(offer.price) })}\r\n                >\r\n                  <ShoppingCart className=\"h-4 w-4\" />\r\n                  Ajouter au panier\r\n                </Button>\r\n              </CardContent>\r\n            </Card>\r\n          ))}\r\n        </div>\r\n      </div>\r\n    </div>\r\n  );\r\n};\r\n\r\nexport default DomiciliationOffers;\r\n"
+        }
+    ]
+}

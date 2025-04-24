@@ -1,8 +1,8 @@
+
 import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { ShoppingCart } from 'lucide-react';
-import { useCart } from '@/components/cart/CartContext';
 
 interface OfferProps {
   title: string;
@@ -45,8 +45,6 @@ const offers: OfferProps[] = [
 ];
 
 const DomiciliationOffers = () => {
-  const { addToCart } = useCart();
-
   return (
     <div className="py-12">
       <div className="container mx-auto px-4">
@@ -73,10 +71,7 @@ const DomiciliationOffers = () => {
                   )}
                   <p className="text-2xl font-semibold text-lysco-turquoise">{offer.price} €</p>
                 </div>
-                <Button
-                  className="mt-4 w-full flex items-center justify-center gap-2"
-                  onClick={() => addToCart({ id: offer.id, title: offer.title, price: parseFloat(offer.price) })}
-                >
+                <Button className="mt-4 w-full flex items-center justify-center gap-2" onClick={() => addToCart(service)}>
                   <ShoppingCart className="h-4 w-4" />
                   Ajouter au panier
                 </Button>
