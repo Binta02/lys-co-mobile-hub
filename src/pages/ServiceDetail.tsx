@@ -202,17 +202,15 @@ const ServiceDetail = () => {
                     <Lock className="h-4 w-4" />
                     <span>PAIEMENT SÉCURISÉ GARANTI</span>
                   </div>
-                  
-                  <div className="mt-4 grid grid-cols-3 gap-2">
-                    <div className="flex items-center justify-center p-2 border rounded">
-                      <CreditCard className="h-6 w-6" />
-                    </div>
-                    <div className="flex items-center justify-center p-2 border rounded">
-                      <img src="/visa.png" alt="Visa" className="h-6" />
-                    </div>
-                    <div className="flex items-center justify-center p-2 border rounded">
-                      <img src="/mastercard.png" alt="Mastercard" className="h-6" />
-                    </div>
+                  <div className="mt-4">
+                    <form action="/create-checkout-session" method="POST">
+                      <Button 
+                        type="submit"
+                        className="w-full mt-4 bg-black text-white hover:bg-gray-800"
+                      >
+                        Payer avec Stripe (Carte bancaire, Apple Pay, Google Pay)
+                      </Button>
+                    </form>
                   </div>
                 </div>
               </CardContent>
