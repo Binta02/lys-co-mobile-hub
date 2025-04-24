@@ -1,10 +1,9 @@
-
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Button } from "@/components/ui/button";
 import { ModeToggle } from "@/components/ModeToggle";
 import { useAuth } from '@/contexts/AuthContext';
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { CartDrawer } from "./cart/CartDrawer";
 
 const Navbar = () => {
@@ -25,17 +24,16 @@ const Navbar = () => {
                 <AvatarFallback>CN</AvatarFallback>
               </Avatar>
               <span>{user.email}</span>
-              <Button variant="outline" size="sm" onClick={logout}>Logout</Button>
+              <Button variant="outline" size="sm" onClick={logout}>
+                Logout
+              </Button>
             </div>
           ) : (
-            <>
-              <Link to="/login">
-                <Button variant="outline" size="sm">Login</Button>
-              </Link>
-              <Link to="/register">
-                <Button size="sm">Register</Button>
-              </Link>
-            </>
+            <Link to="/login">
+              <Button variant="outline" size="sm">
+                Connexion
+              </Button>
+            </Link>
           )}
           <ModeToggle />
         </div>
