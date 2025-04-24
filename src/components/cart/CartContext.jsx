@@ -8,7 +8,8 @@ import {
 } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
 import { ShoppingCart, Trash, Plus, Minus } from "lucide-react";
-import { useCart } from "@/contexts/CartContext";
+import { useCart } from "@/components/cart/CartContext";
+
 import { Badge } from "@/components/ui/badge";
 
 export function CartDrawer() {

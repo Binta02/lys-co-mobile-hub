@@ -23,11 +23,14 @@ import Communication from "./pages/Communication";
 import Contact from "./pages/Contact";
 import PrivateRoute from "./components/PrivateRoute";
 import ServiceDetail from "./pages/ServiceDetail";
+import { CartProvider } from "@/components/cart/CartContext";
+
 
 const queryClient = new QueryClient();
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
+    <CartProvider>
     <TooltipProvider>
       <Toaster />
       <Sonner />
@@ -76,6 +79,7 @@ const App = () => (
         </Routes>
       </BrowserRouter>
     </TooltipProvider>
+    </CartProvider>
   </QueryClientProvider>
 );
 
