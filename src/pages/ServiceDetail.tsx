@@ -195,16 +195,13 @@ const ServiceDetail = () => {
                   />
                 </div>
 
-                <Button className="w-full bg-lysco-turquoise hover:bg-lysco-turquoise/90">
-                  Ajouter au panier
-                </Button>
                 <Button
                   className="w-full bg-lysco-turquoise hover:bg-lysco-turquoise/90"
                   onClick={() =>
                     addItem({
-                      id: `offer-${index}`,
-                      title: offer.title,
-                      price: parseFloat(offer.price.replace(',', '.')),
+                      id: `service-${id}`,
+                      title: service.title,
+                      price: parseFloat(service.price.replace(',', '.')),
                       quantity: 1
                     })
                   }
@@ -212,7 +209,6 @@ const ServiceDetail = () => {
                   <ShoppingCart className="h-4 w-4" />
                   Ajouter au panier
                 </Button>
-
                 <div className="pt-4 border-t">
                   <div className="flex items-center justify-center gap-2 text-sm text-gray-600">
                     <Lock className="h-4 w-4" />
