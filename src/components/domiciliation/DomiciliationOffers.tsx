@@ -3,6 +3,8 @@ import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { ShoppingCart } from 'lucide-react';
+import { useCart } from "@/contexts/CartContext";
+
 
 interface OfferProps {
   title: string;
@@ -45,13 +47,12 @@ const offers: OfferProps[] = [
 ];
 
 const DomiciliationOffers = () => {
+  const { addItem } = useCart();
   return (
     <div className="py-12">
       <div className="container mx-auto px-4">
         <div className="text-center mb-8">
           <h2 className="text-3xl font-bold mb-4">Nos offres de domiciliation</h2>
-          <p className="text-gray-600">6 résultats affichés</p>
-          <p className="text-sm text-gray-500">Tri par défaut</p>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {offers.map((offer, index) => (
@@ -71,7 +72,21 @@ const DomiciliationOffers = () => {
                   )}
                   <p className="text-2xl font-semibold text-lysco-turquoise">{offer.price} €</p>
                 </div>
-                <Button className="mt-4 w-full flex items-center justify-center gap-2" onClick={() => addToCart(service)}>
+                {/* <Button className="mt-4 w-full flex items-center justify-center gap-2" onClick={() => addToCart(service)}>
+                  <ShoppingCart className="h-4 w-4" />
+                  Ajouter au panier
+                </Button> */}
+                <Button
+                  className="mt-4 w-full flex items-center justify-center gap-2"
+                  onClick={() =>
+                    addItem({
+                      id: `offer-${index}`,
+                      title: offer.title,
+                      price: parseFloat(offer.price.replace(',', '.')),
+                      quantity: 1
+                    })
+                  }
+                >
                   <ShoppingCart className="h-4 w-4" />
                   Ajouter au panier
                 </Button>
