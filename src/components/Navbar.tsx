@@ -7,6 +7,8 @@ import MobileMenu from './MobileMenu';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from '@/components/ui/sonner';
 import { Session } from '@supabase/supabase-js';
+import { CartDrawer } from '@/components/cart/CartDrawer';
+
 
 const Navbar = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -83,6 +85,7 @@ const Navbar = () => {
           <Link to="/contact" className="text-gray-700 hover:text-lysco-turquoise transition-colors">
             Contact
           </Link>
+          <CartDrawer /> {/* 👉 Ajout du panier ici */}
           
           {session ? (
             <>
