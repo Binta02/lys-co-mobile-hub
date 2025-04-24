@@ -37,7 +37,6 @@ const Domiciliation = () => {
             </div>
           </div>
         </section>
-
         {/* Main Content Section */}
         <section className="py-16">
           <div className="container mx-auto px-4">
