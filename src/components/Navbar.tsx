@@ -7,7 +7,7 @@ import MobileMenu from './MobileMenu';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from '@/components/ui/sonner';
 import { Session } from '@supabase/supabase-js';
-import { CartDrawer } from '@/components/cart/CartDrawer';
+import { CartDrawer } from "@/components/cart/CartDrawer";
 
 
 const Navbar = () => {
