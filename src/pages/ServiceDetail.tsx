@@ -41,6 +41,23 @@ const serviceData: Record<string, ServiceData> = {
     priceUnit: '/heure',
     description: 'Espaces de coworking modernes et confortables, équipés de toutes les commodités nécessaires. Location flexible à l\'heure, à la demi-journée ou à la journée complète.'
   },
+  'coworking-space': {
+  title: 'Espace de coworking',
+  price: '5,00',
+  priceUnit: '/heure',
+  description: 'Espace de coworking pour 8 personnes, idéal pour travailler seul ou en petit groupe, avec accès Wi-Fi et café.'
+},
+'formation-room': {
+  title: 'Salle de formation',
+  price: '10,00',
+  priceUnit: '/heure',
+  description: 'Salle de formation pouvant accueillir jusqu\'à 10 personnes. 10€/heure, 25€/demi-journée, 45€/journée. Équipement fourni sur demande.'
+},
+'reunion-table': {
+  title: 'Table de réunion',
+  price: '0,00', // ou "Sur demande"
+  description: 'Table de réunion pour 5 personnes dans un espace calme et professionnel. Réservation sur demande.'
+}
   'domiciliation-1an-entreprise': {
     title: 'Domiciliation 1 an – Entreprise',
     price: '361,80',
