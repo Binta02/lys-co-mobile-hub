@@ -23,58 +23,61 @@ import Communication from "./pages/Communication";
 import Contact from "./pages/Contact";
 import PrivateRoute from "./components/PrivateRoute";
 import ServiceDetail from "./pages/ServiceDetail";
+import { CartProvider } from "./contexts/CartContext";
 
 const queryClient = new QueryClient();
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
     <TooltipProvider>
-      <Toaster />
-      <Sonner />
-      <BrowserRouter>
-        <Routes>
-          {/* Public routes */}
-          <Route path="/" element={<Index />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/register" element={<Register />} />
-          <Route path="/reset-password" element={<ResetPassword />} />
-          <Route path="/contact" element={<Contact />} />
-          <Route path="/communication/strategie" element={<CommunicationStrategiePage />} />
-          <Route path="/communication/creations" element={<CommunicationCreationsPage />} />
-          <Route path="/communication/community-management" element={<CommunicationCommunityManagementPage />} />
-          <Route path="/communication/print" element={<CommunicationPrintPage />} />
-          <Route path="/communication/photo" element={<CommunicationPhotosPage />} />
-          <Route path="/communication/site-internet" element={<CommunicationSiteInternetPage />} />
-          <Route path="/communication/media-training" element={<CommunicationMediaTrainingPage />} />
-          <Route path="/communication/packs" element={<CommunicationPacksPage />} />
-          <Route path="/service/:id" element={<ServiceDetail />} />
+      <CartProvider>
+        <Toaster />
+        <Sonner />
+        <BrowserRouter>
+          <Routes>
+            {/* Public routes */}
+            <Route path="/" element={<Index />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/register" element={<Register />} />
+            <Route path="/reset-password" element={<ResetPassword />} />
+            <Route path="/contact" element={<Contact />} />
+            <Route path="/communication/strategie" element={<CommunicationStrategiePage />} />
+            <Route path="/communication/creations" element={<CommunicationCreationsPage />} />
+            <Route path="/communication/community-management" element={<CommunicationCommunityManagementPage />} />
+            <Route path="/communication/print" element={<CommunicationPrintPage />} />
+            <Route path="/communication/photo" element={<CommunicationPhotosPage />} />
+            <Route path="/communication/site-internet" element={<CommunicationSiteInternetPage />} />
+            <Route path="/communication/media-training" element={<CommunicationMediaTrainingPage />} />
+            <Route path="/communication/packs" element={<CommunicationPacksPage />} />
+            <Route path="/service/:id" element={<ServiceDetail />} />
 
-          {/* Protected routes */}
-          <Route path="/dashboard" element={
-            <PrivateRoute>
-              <Dashboard />
-            </PrivateRoute>
-          } />
-          <Route path="/domiciliation" element={
-            <PrivateRoute>
-              <Domiciliation />
-            </PrivateRoute>
-          } />
-          <Route path="/services-admin" element={
-            <PrivateRoute>
-              <ServicesAdmin />
-            </PrivateRoute>
-          } />
-          <Route path="/communication" element={
-            <PrivateRoute>
-              <Communication />
-            </PrivateRoute>
-          } />
+            {/* Protected routes */}
+            <Route path="/dashboard" element={
+              <PrivateRoute>
+                <Dashboard />
+              </PrivateRoute>
+            } />
+            <Route path="/domiciliation" element={
+              <PrivateRoute>
+                <Domiciliation />
+              </PrivateRoute>
+            } />
+            <Route path="/services-admin" element={
+              <PrivateRoute>
+                <ServicesAdmin />
+              </PrivateRoute>
+            } />
+            <Route path="/communication" element={
+              <PrivateRoute>
+                <Communication />
+              </PrivateRoute>
+            } />
 
-          {/* Catch all */}
-          <Route path="*" element={<NotFound />} />
-        </Routes>
-      </BrowserRouter>
+            {/* Catch all */}
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </BrowserRouter>
+      </CartProvider>
     </TooltipProvider>
   </QueryClientProvider>
 );

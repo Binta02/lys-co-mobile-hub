@@ -8,6 +8,7 @@ import { CreditCard, Lock } from 'lucide-react';
 import RelatedProducts from '@/components/services/RelatedProducts';
 import ProductDescription from '@/components/services/ProductDescription';
 import { useParams } from 'react-router-dom';
+import { useCart } from "@/contexts/CartContext";
 
 interface ServiceData {
   title: string;
@@ -135,13 +136,24 @@ const serviceData: Record<string, ServiceData> = {
 
 const ServiceDetail = () => {
   const { id } = useParams<{ id: string }>();
-  
+  const { addItem } = useCart();
+
   const service = useMemo(() => {
     if (!id || !serviceData[id as keyof typeof serviceData]) {
       return serviceData['reexpedition-courrier'];
     }
     return serviceData[id as keyof typeof serviceData];
   }, [id]);
+
+  const handleAddToCart = () => {
+    addItem({
+      id: id || '',
+      title: service.title,
+      price: service.price,
+      quantity: 1,
+      note: service.note
+    });
+  };
 
   return (
     <div className="min-h-screen flex flex-col">
@@ -181,7 +193,10 @@ const ServiceDetail = () => {
                   />
                 </div>
 
-                <Button className="w-full bg-lysco-turquoise hover:bg-lysco-turquoise/90">
+                <Button 
+                  className="w-full bg-lysco-turquoise hover:bg-lysco-turquoise/90"
+                  onClick={handleAddToCart}
+                >
                   Ajouter au panier
                 </Button>
 
