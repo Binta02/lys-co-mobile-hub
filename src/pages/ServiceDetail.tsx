@@ -208,14 +208,11 @@ const ServiceDetail = () => {
                   <ShoppingCart className="h-4 w-4" />
                   Ajouter au panier
                 </Button>
-
-
                 <div className="pt-4 border-t">
                   <div className="flex items-center justify-center gap-2 text-sm text-gray-600">
                     <Lock className="h-4 w-4" />
                     <span>PAIEMENT SÉCURISÉ GARANTI</span>
                   </div>
-
                   <div className="mt-4">
                     <form action="/create-checkout-session" method="POST">
                       <Button 
