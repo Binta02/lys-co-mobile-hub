@@ -197,14 +197,18 @@ const ServiceDetail = () => {
 
                 <Button
                   className="w-full bg-lysco-turquoise hover:bg-lysco-turquoise/90"
-                  onClick={() =>
-                    addItem({
-                      id: `service-${id}`,
-                      title: service.title,
-                      price: parseFloat(service.price.replace(',', '.')),
-                      quantity: 1
-                    })
-                  }
+                  onClick={() => {
+                    try {
+                      addItem({
+                        id: `service-${id}`,
+                        title: service.title,
+                        price: parseFloat(service.price.replace(',', '.')),
+                        quantity: 1,
+                      });
+                    } catch (error) {
+                      console.error("Erreur ajout panier :", error);
+                    }
+                  }}
                 >
                   <ShoppingCart className="h-4 w-4" />
                   Ajouter au panier
