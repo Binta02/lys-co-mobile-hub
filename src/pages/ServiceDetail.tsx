@@ -8,6 +8,7 @@ import { CreditCard, Lock } from 'lucide-react';
 import RelatedProducts from '@/components/services/RelatedProducts';
 import ProductDescription from '@/components/services/ProductDescription';
 import { useCart } from "@/components/cart/CartContext";
+import { ShoppingCart } from 'lucide-react';
 import { useParams } from 'react-router-dom';
 
 interface ServiceData {
