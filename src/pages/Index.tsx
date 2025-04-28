@@ -25,7 +25,7 @@ const Index: React.FC = () => {
     return () => subscription.unsubscribe();
   }, []);
 
-  const startLink = session ? "/domiciliation" : "/register";
+  const startLink = session ? "/dashboard" : "/register";
 
   return (
     <div className="flex flex-col min-h-screen">
