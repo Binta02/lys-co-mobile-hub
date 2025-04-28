@@ -42,13 +42,70 @@ const Domiciliation = () => {
             <p className="text-lg font-semibold">Chargement...</p>
           </div>
         ) : pageData ? (
-          <section className="py-16 container mx-auto px-4">
-            <h1 className="text-4xl font-bold text-center mb-6">{pageData.title.rendered}</h1>
-            <div 
-              className="prose max-w-4xl mx-auto"
-              dangerouslySetInnerHTML={{ __html: pageData.content.rendered }}
-            />
-          </section>
+          <>
+            {/* Hero Section */}
+            <section className="bg-gradient-to-r from-lysco-turquoise/10 to-lysco-pink/10 py-16">
+              <div className="container mx-auto px-4">
+                <div className="max-w-3xl mx-auto text-center">
+                  <h1 className="text-4xl md:text-5xl font-bold mb-6">{pageData.title.rendered}</h1>
+                  <p className="text-xl text-gray-600 mb-8">
+                    Depuis 2010, Lys&Co est votre partenaire de confiance pour la domiciliation d'entreprises.
+                  </p>
+                  <div className="flex gap-4 justify-center">
+                    <Link to="/contact">
+                      <Button className="bg-lysco-turquoise hover:bg-lysco-turquoise/90">
+                        Demander un devis
+                      </Button>
+                    </Link>
+                    <a href="#pricing">
+                      <Button variant="outline" className="flex items-center">
+                        Voir nos tarifs <ChevronRight className="ml-2 h-4 w-4" />
+                      </Button>
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </section>
+
+            {/* Main Content */}
+            <section className="py-16">
+              <div className="container mx-auto px-4">
+                <div className="max-w-4xl mx-auto space-y-12">
+
+                  {/* Contenu principal WordPress */}
+                  <Card>
+                    <CardHeader>
+                      <CardTitle>Pourquoi se domicilier chez Lys&Co ?</CardTitle>
+                      <CardDescription>Une solution flexible et sans engagement</CardDescription>
+                    </CardHeader>
+                    <CardContent className="prose max-w-none">
+                      <div dangerouslySetInnerHTML={{ __html: pageData.content.rendered }} />
+                    </CardContent>
+                  </Card>
+
+                  {/* Autres sections comme ton ancienne page */}
+                  {/* Exemples : DomiciliationOffers, DomiciliationPricing, DomiciliationServices */}
+
+                  <div id="pricing" className="space-y-6">
+                    <div className="text-center">
+                      <h2 className="text-3xl font-bold mb-4">Nos Tarifs</h2>
+                      <p className="text-gray-600 mb-8">Des solutions adaptées à chaque type d'entreprise</p>
+                    </div>
+                    {/* Ici tu peux intégrer DomiciliationPricing si tu veux */}
+                  </div>
+
+                  <div className="space-y-6">
+                    <div className="text-center">
+                      <h2 className="text-3xl font-bold mb-4">Nos Services Complémentaires</h2>
+                      <p className="text-gray-600 mb-8">Optimisez votre temps avec nos services supplémentaires !</p>
+                    </div>
+                    {/* Ici tu peux intégrer DomiciliationServices si tu veux */}
+                  </div>
+
+                </div>
+              </div>
+            </section>
+          </>
         ) : (
           <div className="flex justify-center items-center h-screen">
             <p className="text-lg text-red-600">Impossible de charger la page.</p>
