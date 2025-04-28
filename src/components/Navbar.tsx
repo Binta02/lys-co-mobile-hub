@@ -103,13 +103,24 @@ const Navbar = () => {
           )}
         </div>
 
-        <button
+        {/* <button
           className="md:hidden text-gray-700"
           onClick={toggleMobileMenu}
           aria-label="Toggle menu"
         >
           {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
-        </button>
+        </button> */}
+        <button
+  className="md:hidden text-black"
+  onClick={toggleMobileMenu}
+  aria-label="Toggle menu"
+>
+  {isMobileMenuOpen 
+    ? <X size={24} className="stroke-black" />
+    : <Menu size={24} />
+  }
+</button>
+
       </div>
 
       {isMobileMenuOpen && <MobileMenu onClose={toggleMobileMenu} session={session} />}
