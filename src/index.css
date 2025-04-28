@@ -116,3 +116,7 @@
 .md\:hidden.text-gray-700 svg {
   color: black;
 }
+button svg {
+  color: black;
+  stroke: black;
+}
