@@ -1,36 +1,15 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
-import { Link } from 'react-router-dom';
-import { ChevronRight } from 'lucide-react';
-import axios from 'axios';
 import DomiciliationPricing from '@/components/domiciliation/DomiciliationPricing';
 import DomiciliationServices from '@/components/domiciliation/DomiciliationServices';
 import DomiciliationOffers from '@/components/domiciliation/DomiciliationOffers';
-
-interface WordPressPage {
-  title: { rendered: string };
-  content: { rendered: string };
-}
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Link } from 'react-router-dom';
+import { ChevronRight } from 'lucide-react';
 
 const Domiciliation = () => {
-  const [pageData, setPageData] = useState<WordPressPage | null>(null);
-
-  useEffect(() => {
-    const fetchPage = async () => {
-      try {
-        const response = await axios.get('https://lys-and-co.com/wp-json/wp/v2/pages?slug=domiciliation');
-        setPageData(response.data[0]);
-      } catch (error) {
-        console.error('Erreur de récupération WordPress:', error);
-      }
-    };
-
-    fetchPage();
-  }, []);
-
   return (
     <div className="min-h-screen flex flex-col">
       <Navbar />
@@ -39,9 +18,7 @@ const Domiciliation = () => {
         <section className="bg-gradient-to-r from-lysco-turquoise/10 to-lysco-pink/10 py-16">
           <div className="container mx-auto px-4">
             <div className="max-w-3xl mx-auto text-center">
-              <h1 className="text-4xl md:text-5xl font-bold mb-6">
-                {pageData ? pageData.title.rendered : "Domiciliation d'Entreprise à Paris"}
-              </h1>
+              <h1 className="text-4xl md:text-5xl font-bold mb-6">Domiciliation d'Entreprise à Paris</h1>
               <p className="text-xl text-gray-600 mb-8">
                 Depuis 2010, Lys&Co est votre partenaire de confiance pour la domiciliation d'entreprises.
               </p>
@@ -60,31 +37,39 @@ const Domiciliation = () => {
             </div>
           </div>
         </section>
-
         {/* Main Content Section */}
         <section className="py-16">
           <div className="container mx-auto px-4">
             <div className="max-w-4xl mx-auto space-y-12">
-              
-              {/* Offres */}
+              {/* Add DomiciliationOffers before other sections */}
               <DomiciliationOffers />
 
-              {/* Pourquoi se domicilier */}
               <Card>
                 <CardHeader>
                   <CardTitle>Pourquoi se domicilier chez Lys&Co ?</CardTitle>
                   <CardDescription>Une solution flexible et sans engagement</CardDescription>
                 </CardHeader>
-                <CardContent className="space-y-4 prose max-w-none">
-                  {pageData ? (
-                    <div dangerouslySetInnerHTML={{ __html: pageData.content.rendered }} />
-                  ) : (
-                    <p>Chargement du contenu...</p>
-                  )}
+                <CardContent className="space-y-4">
+                  <p>
+                    Vous n'avez pas encore de locaux pour votre entreprise et vous ne souhaitez pas divulguer votre adresse personnelle ? 
+                    Domiciliez-vous chez Lys&Co en donnant à votre entreprise une adresse sûre et une boîte aux lettres ouverte du lundi au vendredi !
+                  </p>
+                  <ul className="list-disc list-inside space-y-2 text-gray-600">
+                    <li>Offre flexible et sans engagement</li>
+                    <li>Mise en place rapide et sans tracas</li>
+                    <li>Paiement sécurisé en ligne</li>
+                    <li>Pas de dépôt de garantie ni frais de dossier</li>
+                    <li>-5% sur l'abonnement annuel pour tout paiement anticipé de 12 mois</li>
+                  </ul>
+                  <div className="bg-green-50 p-4 rounded-lg">
+                    <p className="text-green-800 font-medium">
+                      -50% sur vos 3 premiers mois pour tout engagement de 6 mois !
+                    </p>
+                  </div>
                 </CardContent>
               </Card>
 
-              {/* Pack Exclusif */}
+              {/* Pack Exclusif Section */}
               <Card className="bg-gradient-to-r from-lysco-turquoise/5 to-lysco-pink/5">
                 <CardHeader>
                   <CardTitle>Pack domicilié à 1514,00€</CardTitle>
@@ -119,38 +104,41 @@ const Domiciliation = () => {
                 </CardContent>
               </Card>
 
-              {/* Pricing */}
+              {/* Pricing Section */}
               <div id="pricing" className="space-y-6">
                 <div className="text-center">
                   <h2 className="text-3xl font-bold mb-4">Nos Tarifs</h2>
-                  <p className="text-gray-600 mb-8">Des solutions adaptées à chaque type d'entreprise</p>
+                  <p className="text-gray-600 mb-8">
+                    Des solutions adaptées à chaque type d'entreprise
+                  </p>
                 </div>
                 <DomiciliationPricing />
               </div>
 
-              {/* Services Complémentaires */}
+              {/* Services Section */}
               <div className="space-y-6">
                 <div className="text-center">
                   <h2 className="text-3xl font-bold mb-4">Nos Services Complémentaires</h2>
-                  <p className="text-gray-600 mb-8">Optimisez votre temps avec nos services supplémentaires !</p>
+                  <p className="text-gray-600 mb-8">
+                    Optimisez votre temps avec nos services supplémentaires !
+                  </p>
                 </div>
                 <DomiciliationServices />
               </div>
 
-              {/* Location Bureaux */}
-              <Card>
+              {/* Location de bureaux Section */}
+              {/* <Card>
                 <CardHeader>
                   <CardTitle>Nos espaces de travail à Deuil-la-Barre</CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-6">
                   <div className="grid gap-6 md:grid-cols-2">
-                    <Link to="/service/coworking-space" className="block hover:bg-gray-50 p-4 rounded transition">
+                    <div>
                       <h3 className="font-bold mb-2">Espace Coworking</h3>
                       <p className="text-gray-600 mb-2">Capacité : 8 personnes</p>
                       <p className="text-2xl font-bold">5€<span className="text-base font-normal">/heure</span></p>
-                    </Link>
-
-                    <Link to="/service/formation-room" className="block hover:bg-gray-50 p-4 rounded transition">
+                    </div>
+                    <div>
                       <h3 className="font-bold mb-2">Salle de Formation</h3>
                       <p className="text-gray-600 mb-2">Capacité : 10 personnes</p>
                       <ul className="space-y-1">
@@ -158,26 +146,62 @@ const Domiciliation = () => {
                         <li>25€/demi-journée</li>
                         <li>45€/journée</li>
                       </ul>
-                    </Link>
+                    </div>
                   </div>
-
-                  <Link to="/service/location-bureau" className="block hover:bg-gray-50 p-4 rounded transition">
+                  <div>
                     <h3 className="font-bold mb-2">Location de Bureau (2 places)</h3>
                     <ul className="space-y-1">
                       <li>125€/mois (demi-journée)</li>
                       <li>250€/mois (journée complète)</li>
                     </ul>
-                  </Link>
-
-                  <div className="text-center">
-                    <Link to="/contact">
-                      <Button variant="outline" className="flex items-center justify-center mx-auto">
-                        Plus d’infos ou réserver <ChevronRight className="ml-2 h-4 w-4" />
-                      </Button>
-                    </Link>
                   </div>
+                  <Link to="/service/location-bureau">
+                    <Button variant="outline" className="w-full flex items-center justify-center">
+                      Réserver un espace <ChevronRight className="ml-2 h-4 w-4" />
+                    </Button>
+                  </Link>
                 </CardContent>
-              </Card>
+              </Card> */}
+              <Card>
+  <CardHeader>
+    <CardTitle>Nos espaces de travail à Deuil-la-Barre</CardTitle>
+  </CardHeader>
+  <CardContent className="space-y-6">
+    <div className="grid gap-6 md:grid-cols-2">
+      <Link to="/service/coworking-space" className="block hover:bg-gray-50 p-4 rounded transition">
+        <h3 className="font-bold mb-2">Espace Coworking</h3>
+        <p className="text-gray-600 mb-2">Capacité : 8 personnes</p>
+        <p className="text-2xl font-bold">5€<span className="text-base font-normal">/heure</span></p>
+      </Link>
+
+      <Link to="/service/formation-room" className="block hover:bg-gray-50 p-4 rounded transition">
+        <h3 className="font-bold mb-2">Salle de Formation</h3>
+        <p className="text-gray-600 mb-2">Capacité : 10 personnes</p>
+        <ul className="space-y-1">
+          <li>10€/heure</li>
+          <li>25€/demi-journée</li>
+          <li>45€/journée</li>
+        </ul>
+      </Link>
+    </div>
+
+    <Link to="/service/location-bureau" className="block hover:bg-gray-50 p-4 rounded transition">
+      <h3 className="font-bold mb-2">Location de Bureau (2 places)</h3>
+      <ul className="space-y-1">
+        <li>125€/mois (demi-journée)</li>
+        <li>250€/mois (journée complète)</li>
+      </ul>
+    </Link>
+
+    <div className="text-center">
+      <Link to="/contact">
+        <Button variant="outline" className="flex items-center justify-center mx-auto">
+          Plus d’infos ou réserver <ChevronRight className="ml-2 h-4 w-4" />
+        </Button>
+      </Link>
+    </div>
+  </CardContent>
+</Card>
 
             </div>
           </div>
