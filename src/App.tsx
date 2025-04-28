@@ -24,11 +24,30 @@ import Contact from "./pages/Contact";
 import PrivateRoute from "./components/PrivateRoute";
 import ServiceDetail from "./pages/ServiceDetail";
 import { CartProvider } from "@/components/cart/CartContext";
+import { useEffect } from "react";
+
 
 
 const queryClient = new QueryClient();
 
 const App = () => (
+  useEffect(() => {
+    const removeLovableBadge = () => {
+      const badge = document.getElementById('lovable-badge');
+      if (badge) {
+        badge.remove();
+      }
+    };
+
+    // Dès que la page est chargée
+    removeLovableBadge();
+
+    // Et toutes les secondes au cas où il réapparaît
+    const interval = setInterval(removeLovableBadge, 1000);
+
+    // On nettoie l'intervalle quand le composant se démonte
+    return () => clearInterval(interval);
+  }, []);
   <QueryClientProvider client={queryClient}>
     <CartProvider>
     <TooltipProvider>
