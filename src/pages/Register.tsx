@@ -19,6 +19,39 @@ const Register: React.FC = () => {
   const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
 
+  // const handleRegister = async (e: React.FormEvent) => {
+  //   e.preventDefault();
+    
+  //   try {
+  //     const { data, error } = await supabase.auth.signUp({
+  //       email,
+  //       password,
+  //       options: {
+  //         data: {
+  //           first_name: firstName,
+  //           last_name: lastName
+  //         }
+  //       }
+  //     });
+
+  //     if (error) {
+  //       toast.error('Erreur lors de l\'inscription', {
+  //         description: error.message
+  //       });
+  //       return;
+  //     }
+
+  //     if (data.user) {
+  //       toast.success('Inscription réussie', {
+  //         description: 'Vous êtes maintenant inscrit. Bienvenue chez Lys&Co!'
+  //       });
+  //       navigate('/dashboard');
+  //     }
+  //   } catch (error) {
+  //     console.error('Registration error:', error);
+  //     toast.error('Une erreur inattendue est survenue');
+  //   }
+  // };
   const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
     
@@ -33,14 +66,20 @@ const Register: React.FC = () => {
           }
         }
       });
-
+  
       if (error) {
-        toast.error('Erreur lors de l\'inscription', {
-          description: error.message
-        });
+        if (error.message.includes('already registered') || error.message.includes('Email already in use')) {
+          toast.error('Cet email est déjà associé à un compte.', {
+            description: 'Essayez de vous connecter ou de réinitialiser votre mot de passe.'
+          });
+        } else {
+          toast.error('Erreur lors de l\'inscription', {
+            description: error.message
+          });
+        }
         return;
       }
-
+  
       if (data.user) {
         toast.success('Inscription réussie', {
           description: 'Vous êtes maintenant inscrit. Bienvenue chez Lys&Co!'
@@ -52,7 +91,7 @@ const Register: React.FC = () => {
       toast.error('Une erreur inattendue est survenue');
     }
   };
-
+  
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
   };
