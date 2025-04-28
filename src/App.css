@@ -40,6 +40,6 @@
 .read-the-docs {
   color: #888;
 }
-#lovable-badge {  
-  display: none!important;
+.md\:hidden.text-gray-700 svg {
+  color: black;
 }
