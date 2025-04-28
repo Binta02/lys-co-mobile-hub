@@ -1,26 +1,30 @@
-import { useEffect, useState } from 'react';
-import axios from 'axios';
+import React, { useEffect, useState } from 'react';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
+import { Link } from 'react-router-dom';
+import { ChevronRight } from 'lucide-react';
+import axios from 'axios';
 
 interface WordPressPage {
   title: { rendered: string };
   content: { rendered: string };
 }
 
-const DomiciliationPage = () => {
+const Domiciliation = () => {
   const [pageData, setPageData] = useState<WordPressPage | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchPage = async () => {
       try {
-        const { data } = await axios.get('https://lys-and-co.com/wp-json/wp/v2/pages?slug=domiciliation');
-        if (data.length > 0) {
-          setPageData(data[0]);
-        }
+        const response = await axios.get(
+          'https://lys-and-co.com/wp-json/wp/v2/pages?slug=domiciliation'
+        );
+        setPageData(response.data[0]);
       } catch (error) {
-        console.error('Erreur lors du chargement de la page WordPress :', error);
+        console.error('Erreur de récupération WordPress:', error);
       } finally {
         setLoading(false);
       }
@@ -29,26 +33,31 @@ const DomiciliationPage = () => {
     fetchPage();
   }, []);
 
-  if (loading) {
-    return <div className="flex justify-center items-center min-h-screen">Chargement...</div>;
-  }
-
-  if (!pageData) {
-    return <div className="flex justify-center items-center min-h-screen">Page non trouvée.</div>;
-  }
-
   return (
     <div className="min-h-screen flex flex-col">
       <Navbar />
-      <main className="flex-1 py-12">
-        <div className="container mx-auto px-4">
-          <h1 className="text-3xl font-bold mb-8" dangerouslySetInnerHTML={{ __html: pageData.title.rendered }} />
-          <div className="prose max-w-none" dangerouslySetInnerHTML={{ __html: pageData.content.rendered }} />
-        </div>
+      <main className="flex-1">
+        {loading ? (
+          <div className="flex justify-center items-center h-screen">
+            <p className="text-lg font-semibold">Chargement...</p>
+          </div>
+        ) : pageData ? (
+          <section className="py-16 container mx-auto px-4">
+            <h1 className="text-4xl font-bold text-center mb-6">{pageData.title.rendered}</h1>
+            <div 
+              className="prose max-w-4xl mx-auto"
+              dangerouslySetInnerHTML={{ __html: pageData.content.rendered }}
+            />
+          </section>
+        ) : (
+          <div className="flex justify-center items-center h-screen">
+            <p className="text-lg text-red-600">Impossible de charger la page.</p>
+          </div>
+        )}
       </main>
       <Footer />
     </div>
   );
 };
 
-export default DomiciliationPage;
+export default Domiciliation;
