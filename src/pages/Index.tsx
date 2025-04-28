@@ -4,7 +4,11 @@ import { Link } from 'react-router-dom';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import ServiceSection from '@/components/ServiceSection';
+import { supabase } from '@/integrations/supabase/client';
+import { Session } from '@supabase/supabase-js';
+
 const Index: React.FC = () => {
+  const startLink = session ? "/domiciliation" : "/register";
   return <div className="flex flex-col min-h-screen">
       <Navbar />
       
@@ -22,10 +26,8 @@ const Index: React.FC = () => {
                 Développez votre entreprise avec Lys&Co <br></br>
                 Communication 360° – Accompagnement – Domiciliation
               </p>
-              <div className="flex flex-col sm:flex-row gap-4 justify-center animate-fade-in" style={{
-              animationDelay: "0.4s"
-            }}>
-                <Link to="/register">
+              <div className="flex flex-col sm:flex-row gap-4 justify-center animate-fade-in" style={{ animationDelay: "0.4s" }}>
+                <Link to={startLink}>
                   <Button className="w-full sm:w-auto bg-white text-lysco-pink hover:bg-opacity-90 py-6 px-8 text-lg">
                     Commencer maintenant
                   </Button>
@@ -102,9 +104,9 @@ const Index: React.FC = () => {
                 Rejoignez Lys&Co dès aujourd'hui et profitez de nos services adaptés à vos besoins.
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                <Link to="/register">
+                <Link to={startLink}>
                   <Button className="w-full sm:w-auto bg-lysco-pink text-white hover:bg-opacity-90 py-6 px-8 text-lg">
-                    Créer un compte
+                    {session ? "Accéder à mon espace" : "Créer un compte"}
                   </Button>
                 </Link>
                 <Link to="/contact">
