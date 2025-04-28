@@ -22,13 +22,13 @@ const DomiciliationOffers = () => {
   useEffect(() => {
     const fetchOffers = async () => {
       try {
-        const response = await fetch('https://lys-and-co.com/wp-json/wp/v2/product?categories=22&per_page=100');
+        const response = await fetch('https://lys-and-co.com/wp-json/wp/v2/product?categories=22&per_page=100&_embed');
         const data = await response.json();
 
         const formattedOffers = data.map((item: any) => ({
           id: item.id,
           title: item.title.rendered,
-          price: (item.price || item.acf?.price || "0").replace('.', ','), // adapt depending on your API structure
+          price: (item.acf?.price || "0").replace('.', ','), 
           originalPrice: item.acf?.original_price ? item.acf.original_price.replace('.', ',') : undefined,
           isPromo: !!item.acf?.original_price,
           slug: item.slug,
