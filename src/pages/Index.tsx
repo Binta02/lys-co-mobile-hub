@@ -20,7 +20,8 @@ const Index: React.FC = () => {
               animationDelay: "0.2s"
             }}>
                 Développez votre entreprise avec Lys&Co <br></br>
-                - Domiciliation commerciale - Services administratifs - Solutions de communication 360°.
+                {/* Domiciliation commerciale - Services administratifs - Solutions de communication 360°. */}
+                Communication 360° – Accompagnement – Domiciliation
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center animate-fade-in" style={{
               animationDelay: "0.4s"
