@@ -12,32 +12,17 @@ const Index: React.FC = () => {
         {/* Hero Section */}
         <section className="py-20 px-4 bg-gradient-to-r from-lysco-turquoise/90 to-lysco-pink/90 text-white">
           <div className="container mx-auto">
-            {/* <div className="max-w-3xl mx-auto text-center">
+            <div className="max-w-3xl mx-auto text-center">
               <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-6 animate-fade-in">
-                Solutions de domiciliation et de communication pour votre entreprise
+                Solutions de domiciliation, accompagnement et de communication pour votre entreprise
               </h1>
               <p className="text-lg sm:text-xl mb-8 opacity-90 animate-fade-in" style={{
               animationDelay: "0.2s"
             }}>
                 Développez votre entreprise avec Lys&Co <br></br>
-                Domiciliation commerciale - Services administratifs - Solutions de communication 360°.
+                {/* Domiciliation commerciale - Services administratifs - Solutions de communication 360°. */}
                 Communication 360° – Accompagnement – Domiciliation
-              </p> */}
-
-              <div className="max-w-4xl mx-auto text-center px-4">
-  <h1 className="text-4xl sm:text-5xl md:text-6xl font-extrabold leading-tight tracking-tight mb-6 animate-fade-in">
-    Solutions de domiciliation <br className="hidden sm:block" />et de communication pour votre entreprise
-  </h1>
-  <p
-    className="text-lg sm:text-xl md:text-2xl text-gray-600 mb-8 animate-fade-in"
-    style={{ animationDelay: "0.2s", animationFillMode: "forwards" }}
-  >
-    Développez votre entreprise avec <span className="text-lysco-turquoise font-semibold">Lys&Co</span>.<br />
-    <span className="mt-2 inline-block">— Domiciliation commerciale</span> <br />
-    <span className="mt-2 inline-block">— Services administratifs</span> <br />
-    <span className="mt-2 inline-block">— Solutions de communication 360°</span>
-  </p>
-
+              </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center animate-fade-in" style={{
               animationDelay: "0.4s"
             }}>
