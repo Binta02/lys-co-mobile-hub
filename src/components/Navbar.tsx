@@ -110,16 +110,17 @@ const Navbar = () => {
         >
           {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
         </button> */}
-        <button
-  className="md:hidden text-black"
-  onClick={toggleMobileMenu}
-  aria-label="Toggle menu"
->
-  {isMobileMenuOpen 
-    ? <X size={24} className="stroke-black" />
-    : <Menu size={24} />
-  }
-</button>
+        <button 
+        className="md:hidden text-black"
+        onClick={toggleMobileMenu}
+        aria-label="Toggle menu"
+      >
+        {isMobileMenuOpen 
+          ? <X size={24} className="text-black" />
+          : <Menu size={24} className="text-black" />
+        }
+      </button>
+
 
       </div>
 
