@@ -120,8 +120,6 @@ const Navbar = () => {
           : <Menu size={24} className="text-black" />
         }
       </button>
-
-
       </div>
 
       {isMobileMenuOpen && <MobileMenu onClose={toggleMobileMenu} session={session} />}

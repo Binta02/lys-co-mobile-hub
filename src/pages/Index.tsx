@@ -19,7 +19,8 @@ const Index: React.FC = () => {
               <p className="text-lg sm:text-xl mb-8 opacity-90 animate-fade-in" style={{
               animationDelay: "0.2s"
             }}>
-                Développez votre entreprise avec Lys&Co : domiciliation commerciale, services administratifs et solutions de communication 360°.
+                Développez votre entreprise avec Lys&Co <br></br>
+                - Domiciliation commerciale - Services administratifs - Solutions de communication 360°.
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center animate-fade-in" style={{
               animationDelay: "0.4s"
