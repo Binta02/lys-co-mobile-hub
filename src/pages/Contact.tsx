@@ -43,7 +43,7 @@ const Contact = () => {
                   <MapPin className="w-6 h-6 text-lysco-turquoise mt-1" />
                   <div>
                     <h3 className="font-semibold mb-1">Adresse</h3>
-                    <p className="text-gray-600">23 rue du Roule, 75001 Paris</p>
+                    <p className="text-gray-600">28 Rue de l'Eglise, 95210 Deuil-la-Barre</p>
                   </div>
                 </div>
 
@@ -51,7 +51,7 @@ const Contact = () => {
                   <Phone className="w-6 h-6 text-lysco-turquoise mt-1" />
                   <div>
                     <h3 className="font-semibold mb-1">Téléphone</h3>
-                    <p className="text-gray-600">01 45 08 48 76</p>
+                    <p className="text-gray-600">09 53 42 11 63 / 07 56 85 37 02 </p>
                   </div>
                 </div>
 
