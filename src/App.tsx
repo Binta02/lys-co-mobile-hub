@@ -30,7 +30,78 @@ import { useEffect } from "react";
 
 const queryClient = new QueryClient();
 
-const App = () => (
+// const App = () => (
+//   useEffect(() => {
+//     const removeLovableBadge = () => {
+//       const badge = document.getElementById('lovable-badge');
+//       if (badge) {
+//         badge.remove();
+//       }
+//     };
+
+//     // Dès que la page est chargée
+//     removeLovableBadge();
+
+//     // Et toutes les secondes au cas où il réapparaît
+//     const interval = setInterval(removeLovableBadge, 1000);
+
+//     // On nettoie l'intervalle quand le composant se démonte
+//     return () => clearInterval(interval);
+//   }, []);
+//   <QueryClientProvider client={queryClient}>
+//     <CartProvider>
+//     <TooltipProvider>
+//       <Toaster />
+//       <Sonner />
+//       <BrowserRouter>
+//         <Routes>
+//           {/* Public routes */}
+//           <Route path="/" element={<Index />} />
+//           <Route path="/login" element={<Login />} />
+//           <Route path="/register" element={<Register />} />
+//           <Route path="/reset-password" element={<ResetPassword />} />
+//           <Route path="/contact" element={<Contact />} />
+//           <Route path="/communication/strategie" element={<CommunicationStrategiePage />} />
+//           <Route path="/communication/creations" element={<CommunicationCreationsPage />} />
+//           <Route path="/communication/community-management" element={<CommunicationCommunityManagementPage />} />
+//           <Route path="/communication/print" element={<CommunicationPrintPage />} />
+//           <Route path="/communication/photo" element={<CommunicationPhotosPage />} />
+//           <Route path="/communication/site-internet" element={<CommunicationSiteInternetPage />} />
+//           <Route path="/communication/media-training" element={<CommunicationMediaTrainingPage />} />
+//           <Route path="/communication/packs" element={<CommunicationPacksPage />} />
+//           <Route path="/service/:id" element={<ServiceDetail />} />
+
+//           {/* Protected routes */}
+//           <Route path="/dashboard" element={
+//             <PrivateRoute>
+//               <Dashboard />
+//             </PrivateRoute>
+//           } />
+//           <Route path="/domiciliation" element={
+//             <PrivateRoute>
+//               <Domiciliation />
+//             </PrivateRoute>
+//           } />
+//           <Route path="/services-admin" element={
+//             <PrivateRoute>
+//               <ServicesAdmin />
+//             </PrivateRoute>
+//           } />
+//           <Route path="/communication" element={
+//             <PrivateRoute>
+//               <Communication />
+//             </PrivateRoute>
+//           } />
+
+//           {/* Catch all */}
+//           <Route path="*" element={<NotFound />} />
+//         </Routes>
+//       </BrowserRouter>
+//     </TooltipProvider>
+//     </CartProvider>
+//   </QueryClientProvider>
+// );
+const App = () => {
   useEffect(() => {
     const removeLovableBadge = () => {
       const badge = document.getElementById('lovable-badge');
@@ -39,67 +110,49 @@ const App = () => (
       }
     };
 
-    // Dès que la page est chargée
     removeLovableBadge();
-
-    // Et toutes les secondes au cas où il réapparaît
     const interval = setInterval(removeLovableBadge, 1000);
-
-    // On nettoie l'intervalle quand le composant se démonte
     return () => clearInterval(interval);
   }, []);
-  <QueryClientProvider client={queryClient}>
-    <CartProvider>
-    <TooltipProvider>
-      <Toaster />
-      <Sonner />
-      <BrowserRouter>
-        <Routes>
-          {/* Public routes */}
-          <Route path="/" element={<Index />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/register" element={<Register />} />
-          <Route path="/reset-password" element={<ResetPassword />} />
-          <Route path="/contact" element={<Contact />} />
-          <Route path="/communication/strategie" element={<CommunicationStrategiePage />} />
-          <Route path="/communication/creations" element={<CommunicationCreationsPage />} />
-          <Route path="/communication/community-management" element={<CommunicationCommunityManagementPage />} />
-          <Route path="/communication/print" element={<CommunicationPrintPage />} />
-          <Route path="/communication/photo" element={<CommunicationPhotosPage />} />
-          <Route path="/communication/site-internet" element={<CommunicationSiteInternetPage />} />
-          <Route path="/communication/media-training" element={<CommunicationMediaTrainingPage />} />
-          <Route path="/communication/packs" element={<CommunicationPacksPage />} />
-          <Route path="/service/:id" element={<ServiceDetail />} />
 
-          {/* Protected routes */}
-          <Route path="/dashboard" element={
-            <PrivateRoute>
-              <Dashboard />
-            </PrivateRoute>
-          } />
-          <Route path="/domiciliation" element={
-            <PrivateRoute>
-              <Domiciliation />
-            </PrivateRoute>
-          } />
-          <Route path="/services-admin" element={
-            <PrivateRoute>
-              <ServicesAdmin />
-            </PrivateRoute>
-          } />
-          <Route path="/communication" element={
-            <PrivateRoute>
-              <Communication />
-            </PrivateRoute>
-          } />
+  return (
+    <QueryClientProvider client={queryClient}>
+      <CartProvider>
+        <TooltipProvider>
+          <Toaster />
+          <Sonner />
+          <BrowserRouter>
+            <Routes>
+              {/* Public routes */}
+              <Route path="/" element={<Index />} />
+              <Route path="/login" element={<Login />} />
+              <Route path="/register" element={<Register />} />
+              <Route path="/reset-password" element={<ResetPassword />} />
+              <Route path="/contact" element={<Contact />} />
+              <Route path="/communication/strategie" element={<CommunicationStrategiePage />} />
+              <Route path="/communication/creations" element={<CommunicationCreationsPage />} />
+              <Route path="/communication/community-management" element={<CommunicationCommunityManagementPage />} />
+              <Route path="/communication/print" element={<CommunicationPrintPage />} />
+              <Route path="/communication/photo" element={<CommunicationPhotosPage />} />
+              <Route path="/communication/site-internet" element={<CommunicationSiteInternetPage />} />
+              <Route path="/communication/media-training" element={<CommunicationMediaTrainingPage />} />
+              <Route path="/communication/packs" element={<CommunicationPacksPage />} />
+              <Route path="/service/:id" element={<ServiceDetail />} />
 
-          {/* Catch all */}
-          <Route path="*" element={<NotFound />} />
-        </Routes>
-      </BrowserRouter>
-    </TooltipProvider>
-    </CartProvider>
-  </QueryClientProvider>
-);
+              {/* Protected routes */}
+              <Route path="/dashboard" element={<PrivateRoute><Dashboard /></PrivateRoute>} />
+              <Route path="/domiciliation" element={<PrivateRoute><Domiciliation /></PrivateRoute>} />
+              <Route path="/services-admin" element={<PrivateRoute><ServicesAdmin /></PrivateRoute>} />
+              <Route path="/communication" element={<PrivateRoute><Communication /></PrivateRoute>} />
+
+              {/* Catch all */}
+              <Route path="*" element={<NotFound />} />
+            </Routes>
+          </BrowserRouter>
+        </TooltipProvider>
+      </CartProvider>
+    </QueryClientProvider>
+  );
+};
 
 export default App;
