@@ -18,7 +18,7 @@ const Domiciliation = () => {
         <section className="bg-gradient-to-r from-lysco-turquoise/10 to-lysco-pink/10 py-16">
           <div className="container mx-auto px-4">
             <div className="max-w-3xl mx-auto text-center">
-              <h1 className="text-4xl md:text-5xl font-bold mb-6">Domiciliation d'Entreprise à Paris</h1>
+              <h1 className="text-4xl md:text-5xl font-bold mb-6">Domiciliation d'Entreprise</h1>
               <p className="text-xl text-gray-600 mb-8">
                 Depuis 2010, Lys&Co est votre partenaire de confiance pour la domiciliation d'entreprises.
               </p>
