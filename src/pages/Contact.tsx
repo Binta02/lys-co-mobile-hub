@@ -10,10 +10,33 @@ import { Textarea } from '@/components/ui/textarea';
 import { Mail, Phone, MapPin } from 'lucide-react';
 
 const Contact = () => {
-  const handleSubmit = (e: React.FormEvent) => {
+  // const handleSubmit = (e: React.FormEvent) => {
+  //   e.preventDefault();
+  //   // Form submission logic will be implemented later
+  // };
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Form submission logic will be implemented later
+  
+    const formData = new FormData(e.target as HTMLFormElement);
+  
+    try {
+      const response = await fetch('/send_mail.php', {
+        method: 'POST',
+        body: formData,
+      });
+  
+      const result = await response.text();
+      if (result === 'success') {
+        alert('Message envoyé avec succès !');
+      } else {
+        alert('Erreur lors de l\'envoi du message.');
+      }
+    } catch (error) {
+      console.error('Erreur:', error);
+      alert('Erreur lors de l\'envoi du message.');
+    }
   };
+  
 
   return (
     <div className="min-h-screen flex flex-col">
