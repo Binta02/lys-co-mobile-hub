@@ -366,7 +366,7 @@ const ServiceDetail = () => {
 
             <Card className="p-6">
               <CardContent className="space-y-6">
-                <Button
+                {/* <Button
                   className="w-full bg-lysco-turquoise hover:bg-lysco-turquoise/90"
                   onClick={() => {
                     addItem({
@@ -378,7 +378,35 @@ const ServiceDetail = () => {
                   }}
                 >
                   <ShoppingCart className="h-4 w-4 mr-2" /> Ajouter au panier
-                </Button>
+                </Button> */}
+                <Button
+  className="w-full bg-lysco-turquoise hover:bg-lysco-turquoise/90"
+  disabled={
+    (id === 'coworking-space' && (!dateReservation || selectedHours.length === 0)) ||
+    (id === 'formation-room' && (
+      !modeReservation ||
+      !dateReservation ||
+      (modeReservation === 'hour' && selectedHours.length === 0) ||
+      (modeReservation === 'halfDay' && !halfDayPeriod)
+    )) ||
+    (id === 'location-bureau' && (
+      !modeReservation ||
+      !dateReservation ||
+      (modeReservation === 'halfDay' && !halfDayPeriod)
+    ))
+  }
+  onClick={() => {
+    addItem({
+      id: `service-${id}`,
+      title: `${service.title} - ${modeReservation}${halfDayPeriod ? ` (${halfDayPeriod})` : ''} - ${dateReservation} ${selectedHours.join(', ')}`,
+      price: calculPrix(),
+      quantity: 1,
+    });
+  }}
+>
+  <ShoppingCart className="h-4 w-4 mr-2" /> Ajouter au panier
+</Button>
+
                 <div className="pt-4 border-t">
                   <div className="flex items-center justify-center gap-2 text-sm text-gray-600">
                     <Lock className="h-4 w-4" />
