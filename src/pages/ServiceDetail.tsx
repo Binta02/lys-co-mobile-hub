@@ -190,7 +190,7 @@ const ServiceDetail = () => {
   };
 
   const calculPrix = () => {
-    if (id === 'coworking-space') {
+    if ((id === 'coworking-space' || id === 'formation-room') && modeReservation === 'hour') {
       return (selectedHours.length || 1) * (reservationPrices[id].hour || 5);
     }
     if (reservationPrices[id]) {
@@ -198,6 +198,7 @@ const ServiceDetail = () => {
     }
     return parseFloat(service.price.replace(',', '.'));
   };
+  
 
   return (
     <div className="min-h-screen flex flex-col">
@@ -228,7 +229,7 @@ const ServiceDetail = () => {
                     </select>
                   </div>
 
-                  {modeReservation === 'halfDay' && id === 'location-bureau' && (
+                  {modeReservation === 'halfDay' && (id === 'location-bureau' || id === 'formation-room') && (
                     <div className="space-y-2 mt-2">
                       <label className="font-semibold">Matin ou Après-midi</label>
                       <select 
@@ -241,7 +242,6 @@ const ServiceDetail = () => {
                       </select>
                     </div>
                   )}
-
                   <div className="space-y-2 mt-4">
                     <label className="font-semibold">Choisir une date</label>
                     <input
@@ -256,7 +256,7 @@ const ServiceDetail = () => {
                     />
                   </div>
 
-                  {modeReservation === 'hour' && id === 'coworking-space' && dateReservation && (
+                  {modeReservation === 'hour' && (id === 'coworking-space' || id === 'formation-room') && dateReservation && (
                     <div className="mt-4">
                       <p className="font-semibold mb-2">Choisir des heures :</p>
                       <div className="grid grid-cols-4 gap-2">
@@ -266,7 +266,11 @@ const ServiceDetail = () => {
                             disabled={isHourReserved(dateReservation, hour)}
                             onClick={() => toggleHour(hour)}
                             className={`p-2 border rounded text-sm ${
-                              isHourReserved(dateReservation, hour) ? 'bg-red-200 cursor-not-allowed' : selectedHours.includes(hour) ? 'bg-green-200' : 'bg-gray-100'
+                              isHourReserved(dateReservation, hour)
+                                ? 'bg-red-200 cursor-not-allowed'
+                                : selectedHours.includes(hour)
+                                ? 'bg-green-200'
+                                : 'bg-gray-100'
                             }`}
                           >
                             {hour}
@@ -276,6 +280,7 @@ const ServiceDetail = () => {
                       <p className="text-xs text-gray-400 mt-2">* Les heures en rouge sont déjà réservées.</p>
                     </div>
                   )}
+
                 </>
               )}
             </div>
