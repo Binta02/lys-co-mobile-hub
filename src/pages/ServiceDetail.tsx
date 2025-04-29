@@ -149,126 +149,55 @@ const serviceData: Record<string, ServiceData> = {
     description: "Accompagnement pour toute modification de votre société (statuts, siège social, etc.)."
   }
 };
-
-// const ServiceDetail = () => {
-//   const { addItem } = useCart();
-//   const { id } = useParams<{ id: string }>();
-  
-//   const service = useMemo(() => {
-//     if (!id || !serviceData[id as keyof typeof serviceData]) {
-//       return serviceData['reexpedition-courrier'];
-//     }
-//     return serviceData[id as keyof typeof serviceData];
-//   }, [id]);
-
-//   return (
-//     <div className="min-h-screen flex flex-col">
-//       <Navbar />
-//       <main className="flex-1 py-16">
-//         <div className="container mx-auto px-4">
-//           <div className="grid md:grid-cols-2 gap-8">
-//             <div className="space-y-6">
-//               <h1 className="text-3xl font-bold">{service.title}</h1>
-//               <div className="flex items-baseline gap-2">
-//                 {service.isPromo && service.originalPrice && (
-//                   <span className="text-lg line-through text-gray-500">{service.originalPrice} €</span>
-//                 )}
-//                 <div className="text-2xl font-semibold text-lysco-turquoise">{service.price} €{service.priceUnit || ''}</div>
-//               </div>
-//               {service.isPromo && (
-//                 <div className="inline-block bg-red-100 text-red-600 px-3 py-1 rounded-full text-sm font-medium">
-//                   Promo !
-//                 </div>
-//               )}
-//               <p className="text-sm text-gray-500">Hors taxes</p>
-              
-//               <div className="prose max-w-none">
-//                 <p>{service.description}</p>
-//               </div>
-//             </div>
-
-//             <Card className="p-6">
-//               <CardContent className="space-y-6">
-//                 <div className="flex items-center justify-between">
-//                   <span>Quantité</span>
-//                   <Input 
-//                     type="number" 
-//                     defaultValue={1} 
-//                     min={1}
-//                     className="w-24" 
-//                   />
-//                 </div>
-
-//                 <Button
-//                   className="w-full bg-lysco-turquoise hover:bg-lysco-turquoise/90"
-//                   onClick={() => {
-//                     try {
-//                       addItem({
-//                         id: `service-${id}`,
-//                         title: service.title,
-//                         price: parseFloat(service.price.replace(',', '.')),
-//                         quantity: 1,
-//                       });
-//                     } catch (error) {
-//                       console.error("Erreur ajout panier :", error);
-//                     }
-//                   }}
-//                 >
-//                   <ShoppingCart className="h-4 w-4" />
-//                   Ajouter au panier
-//                 </Button>
-//                 <div className="pt-4 border-t">
-//                   <div className="flex items-center justify-center gap-2 text-sm text-gray-600">
-//                     <Lock className="h-4 w-4" />
-//                     <span>PAIEMENT SÉCURISÉ GARANTI</span>
-//                   </div>
-//                   <div className="mt-4">
-//                     <form action="/create-checkout-session" method="POST">
-//                       <Button 
-//                         type="submit"
-//                         className="w-full mt-4 bg-black text-white hover:bg-gray-800"
-//                       >
-//                         Payer avec Stripe (Carte bancaire, Apple Pay, Google Pay)
-//                       </Button>
-//                     </form>
-//                   </div>
-//                 </div>
-//               </CardContent>
-//             </Card>
-//           </div>
-
-//           <ProductDescription />
-
-//           <RelatedProducts />
-//         </div>
-//       </main>
-//       <Footer />
-//     </div>
-//   );
-// };
-
-// export default ServiceDetail;
-
-const reservationPrices: Record<string, { hour?: number; halfDay?: number; fullDay?: number }> = {
+const reservationPrices = {
   'coworking-space': { hour: 5 },
   'formation-room': { hour: 10, halfDay: 25, fullDay: 45 },
   'location-bureau': { halfDay: 125, fullDay: 250 },
 };
+// --- Simuler les réservations existantes (date -> heures prises)
+const reservations = {
+  '2024-05-01': ['09:00', '10:00'],
+  '2024-05-02': ['13:00', '14:00'],
+};
+
+const hoursAvailable = ['09:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00'];
 
 const ServiceDetail = () => {
   const { addItem } = useCart();
-  const { id } = useParams<{ id: string }>();
+  const { id } = useParams();
 
   const service = useMemo(() => {
-    if (!id || !serviceData[id as keyof typeof serviceData]) {
-      return serviceData['coworking-space'];
-    }
-    return serviceData[id as keyof typeof serviceData];
+    if (!id || !serviceData[id]) return serviceData['coworking-space'];
+    return serviceData[id];
   }, [id]);
 
-  const [modeReservation, setModeReservation] = useState<'hour' | 'halfDay' | 'fullDay'>('hour');
-  const [dateReservation, setDateReservation] = useState<Date | null>(null);
-  const [prixActuel, setPrixActuel] = useState<number>(parseFloat(service.price.replace(',', '.')));
+  const [modeReservation, setModeReservation] = useState('hour');
+  const [dateReservation, setDateReservation] = useState('');
+  const [selectedHours, setSelectedHours] = useState([]);
+  const [halfDayPeriod, setHalfDayPeriod] = useState('morning');
+  const [prixActuel, setPrixActuel] = useState(parseFloat(service.price.replace(',', '.')));
+
+  const toggleHour = (hour) => {
+    if (selectedHours.includes(hour)) {
+      setSelectedHours(selectedHours.filter(h => h !== hour));
+    } else {
+      setSelectedHours([...selectedHours, hour]);
+    }
+  };
+
+  const isHourReserved = (date, hour) => {
+    return reservations[date]?.includes(hour);
+  };
+
+  const calculPrix = () => {
+    if (id === 'coworking-space') {
+      return (selectedHours.length || 1) * (reservationPrices[id].hour || 5);
+    }
+    if (reservationPrices[id]) {
+      return reservationPrices[id][modeReservation] || 0;
+    }
+    return parseFloat(service.price.replace(',', '.'));
+  };
 
   return (
     <div className="min-h-screen flex flex-col">
@@ -278,48 +207,75 @@ const ServiceDetail = () => {
           <div className="grid md:grid-cols-2 gap-8">
             <div className="space-y-6">
               <h1 className="text-3xl font-bold">{service.title}</h1>
-              <div className="flex items-baseline gap-2">
-                <div className="text-2xl font-semibold text-lysco-turquoise">{prixActuel.toFixed(2)} €{service.priceUnit || ''}</div>
-              </div>
+              <div className="text-2xl font-semibold text-lysco-turquoise">{calculPrix().toFixed(2)} €</div>
               <p className="text-sm text-gray-500">Hors taxes</p>
-
               <div className="prose max-w-none">
                 <p>{service.description}</p>
               </div>
 
-              {reservationPrices[id || ''] && (
+              {reservationPrices[id] && (
                 <>
                   <div className="space-y-2">
                     <label className="font-semibold">Type de réservation</label>
                     <select 
                       value={modeReservation}
-                      onChange={(e) => {
-                        const value = e.target.value as 'hour' | 'halfDay' | 'fullDay';
-                        setModeReservation(value);
-                        const selectedPrices = reservationPrices[id || ''];
-                        if (selectedPrices) {
-                          setPrixActuel(selectedPrices[value] || 0);
-                        }
-                      }}
+                      onChange={(e) => setModeReservation(e.target.value)}
                       className="w-full p-2 border rounded"
                     >
-                      {reservationPrices[id || ''].hour && <option value="hour">À l'heure</option>}
-                      {reservationPrices[id || ''].halfDay && <option value="halfDay">Demi-journée</option>}
-                      {reservationPrices[id || ''].fullDay && <option value="fullDay">Journée complète</option>}
+                      {reservationPrices[id].hour && <option value="hour">À l'heure</option>}
+                      {reservationPrices[id].halfDay && <option value="halfDay">Demi-journée</option>}
+                      {reservationPrices[id].fullDay && <option value="fullDay">Journée complète</option>}
                     </select>
                   </div>
 
+                  {modeReservation === 'halfDay' && id === 'location-bureau' && (
+                    <div className="space-y-2 mt-2">
+                      <label className="font-semibold">Matin ou Après-midi</label>
+                      <select 
+                        value={halfDayPeriod}
+                        onChange={(e) => setHalfDayPeriod(e.target.value)}
+                        className="w-full p-2 border rounded"
+                      >
+                        <option value="morning">Matin (9h-12h)</option>
+                        <option value="afternoon">Après-midi (13h-16h)</option>
+                      </select>
+                    </div>
+                  )}
+
                   <div className="space-y-2 mt-4">
                     <label className="font-semibold">Choisir une date</label>
-                    <DatePicker 
-                      selected={dateReservation} 
-                      onChange={(date) => setDateReservation(date)} 
-                      minDate={new Date()}
+                    <input
+                      type="date"
+                      value={dateReservation}
+                      onChange={(e) => {
+                        setDateReservation(e.target.value);
+                        setSelectedHours([]);
+                      }}
+                      min={new Date().toISOString().split('T')[0]}
                       className="w-full p-2 border rounded"
-                      dateFormat="dd/MM/yyyy"
-                      placeholderText="Sélectionner une date"
                     />
                   </div>
+
+                  {modeReservation === 'hour' && id === 'coworking-space' && dateReservation && (
+                    <div className="mt-4">
+                      <p className="font-semibold mb-2">Choisir des heures :</p>
+                      <div className="grid grid-cols-4 gap-2">
+                        {hoursAvailable.map((hour) => (
+                          <button
+                            key={hour}
+                            disabled={isHourReserved(dateReservation, hour)}
+                            onClick={() => toggleHour(hour)}
+                            className={`p-2 border rounded text-sm ${
+                              isHourReserved(dateReservation, hour) ? 'bg-red-200 cursor-not-allowed' : selectedHours.includes(hour) ? 'bg-green-200' : 'bg-gray-100'
+                            }`}
+                          >
+                            {hour}
+                          </button>
+                        ))}
+                      </div>
+                      <p className="text-xs text-gray-400 mt-2">* Les heures en rouge sont déjà réservées.</p>
+                    </div>
+                  )}
                 </>
               )}
             </div>
@@ -329,20 +285,15 @@ const ServiceDetail = () => {
                 <Button
                   className="w-full bg-lysco-turquoise hover:bg-lysco-turquoise/90"
                   onClick={() => {
-                    try {
-                      addItem({
-                        id: `service-${id}`,
-                        title: `${service.title} (${modeReservation}) - ${dateReservation ? dateReservation.toLocaleDateString() : 'date à définir'}`,
-                        price: prixActuel,
-                        quantity: 1,
-                      });
-                    } catch (error) {
-                      console.error("Erreur ajout panier:", error);
-                    }
+                    addItem({
+                      id: `service-${id}`,
+                      title: `${service.title} - ${modeReservation}${halfDayPeriod ? ` (${halfDayPeriod})` : ''} - ${dateReservation} ${selectedHours.join(', ')}`,
+                      price: calculPrix(),
+                      quantity: 1,
+                    });
                   }}
                 >
-                  <ShoppingCart className="h-4 w-4 mr-2" />
-                  Ajouter au panier
+                  <ShoppingCart className="h-4 w-4 mr-2" /> Ajouter au panier
                 </Button>
                 <div className="pt-4 border-t">
                   <div className="flex items-center justify-center gap-2 text-sm text-gray-600">
@@ -353,7 +304,6 @@ const ServiceDetail = () => {
               </CardContent>
             </Card>
           </div>
-
           <ProductDescription />
           <RelatedProducts />
         </div>
