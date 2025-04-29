@@ -147,16 +147,125 @@ const serviceData: Record<string, ServiceData> = {
   }
 };
 
+// const ServiceDetail = () => {
+//   const { addItem } = useCart();
+//   const { id } = useParams<{ id: string }>();
+  
+//   const service = useMemo(() => {
+//     if (!id || !serviceData[id as keyof typeof serviceData]) {
+//       return serviceData['reexpedition-courrier'];
+//     }
+//     return serviceData[id as keyof typeof serviceData];
+//   }, [id]);
+
+//   return (
+//     <div className="min-h-screen flex flex-col">
+//       <Navbar />
+//       <main className="flex-1 py-16">
+//         <div className="container mx-auto px-4">
+//           <div className="grid md:grid-cols-2 gap-8">
+//             <div className="space-y-6">
+//               <h1 className="text-3xl font-bold">{service.title}</h1>
+//               <div className="flex items-baseline gap-2">
+//                 {service.isPromo && service.originalPrice && (
+//                   <span className="text-lg line-through text-gray-500">{service.originalPrice} €</span>
+//                 )}
+//                 <div className="text-2xl font-semibold text-lysco-turquoise">{service.price} €{service.priceUnit || ''}</div>
+//               </div>
+//               {service.isPromo && (
+//                 <div className="inline-block bg-red-100 text-red-600 px-3 py-1 rounded-full text-sm font-medium">
+//                   Promo !
+//                 </div>
+//               )}
+//               <p className="text-sm text-gray-500">Hors taxes</p>
+              
+//               <div className="prose max-w-none">
+//                 <p>{service.description}</p>
+//               </div>
+//             </div>
+
+//             <Card className="p-6">
+//               <CardContent className="space-y-6">
+//                 <div className="flex items-center justify-between">
+//                   <span>Quantité</span>
+//                   <Input 
+//                     type="number" 
+//                     defaultValue={1} 
+//                     min={1}
+//                     className="w-24" 
+//                   />
+//                 </div>
+
+//                 <Button
+//                   className="w-full bg-lysco-turquoise hover:bg-lysco-turquoise/90"
+//                   onClick={() => {
+//                     try {
+//                       addItem({
+//                         id: `service-${id}`,
+//                         title: service.title,
+//                         price: parseFloat(service.price.replace(',', '.')),
+//                         quantity: 1,
+//                       });
+//                     } catch (error) {
+//                       console.error("Erreur ajout panier :", error);
+//                     }
+//                   }}
+//                 >
+//                   <ShoppingCart className="h-4 w-4" />
+//                   Ajouter au panier
+//                 </Button>
+//                 <div className="pt-4 border-t">
+//                   <div className="flex items-center justify-center gap-2 text-sm text-gray-600">
+//                     <Lock className="h-4 w-4" />
+//                     <span>PAIEMENT SÉCURISÉ GARANTI</span>
+//                   </div>
+//                   <div className="mt-4">
+//                     <form action="/create-checkout-session" method="POST">
+//                       <Button 
+//                         type="submit"
+//                         className="w-full mt-4 bg-black text-white hover:bg-gray-800"
+//                       >
+//                         Payer avec Stripe (Carte bancaire, Apple Pay, Google Pay)
+//                       </Button>
+//                     </form>
+//                   </div>
+//                 </div>
+//               </CardContent>
+//             </Card>
+//           </div>
+
+//           <ProductDescription />
+
+//           <RelatedProducts />
+//         </div>
+//       </main>
+//       <Footer />
+//     </div>
+//   );
+// };
+
+// export default ServiceDetail;
+
+const reservationPrices: Record<string, { hour?: number; halfDay?: number; fullDay?: number }> = {
+  'coworking-space': { hour: 5 },
+  'formation-room': { hour: 10, halfDay: 25, fullDay: 45 },
+  'location-bureau': { halfDay: 125, fullDay: 250 },
+};
+
 const ServiceDetail = () => {
   const { addItem } = useCart();
   const { id } = useParams<{ id: string }>();
-  
+
   const service = useMemo(() => {
     if (!id || !serviceData[id as keyof typeof serviceData]) {
-      return serviceData['reexpedition-courrier'];
+      return serviceData['coworking-space'];
     }
     return serviceData[id as keyof typeof serviceData];
   }, [id]);
+
+  const [modeReservation, setModeReservation] = useState<'hour' | 'halfDay' | 'fullDay'>('hour');
+  const [dateReservation, setDateReservation] = useState<Date | null>(null);
+  const [prixActuel, setPrixActuel] = useState<number>(parseFloat(service.price.replace(',', '.')));
 
   return (
     <div className="min-h-screen flex flex-col">
@@ -167,51 +276,69 @@ const ServiceDetail = () => {
             <div className="space-y-6">
               <h1 className="text-3xl font-bold">{service.title}</h1>
               <div className="flex items-baseline gap-2">
-                {service.isPromo && service.originalPrice && (
-                  <span className="text-lg line-through text-gray-500">{service.originalPrice} €</span>
-                )}
-                <div className="text-2xl font-semibold text-lysco-turquoise">{service.price} €{service.priceUnit || ''}</div>
+                <div className="text-2xl font-semibold text-lysco-turquoise">{prixActuel.toFixed(2)} €{service.priceUnit || ''}</div>
               </div>
-              {service.isPromo && (
-                <div className="inline-block bg-red-100 text-red-600 px-3 py-1 rounded-full text-sm font-medium">
-                  Promo !
-                </div>
-              )}
               <p className="text-sm text-gray-500">Hors taxes</p>
-              
+
               <div className="prose max-w-none">
                 <p>{service.description}</p>
               </div>
+
+              {reservationPrices[id || ''] && (
+                <>
+                  <div className="space-y-2">
+                    <label className="font-semibold">Type de réservation</label>
+                    <select 
+                      value={modeReservation}
+                      onChange={(e) => {
+                        const value = e.target.value as 'hour' | 'halfDay' | 'fullDay';
+                        setModeReservation(value);
+                        const selectedPrices = reservationPrices[id || ''];
+                        if (selectedPrices) {
+                          setPrixActuel(selectedPrices[value] || 0);
+                        }
+                      }}
+                      className="w-full p-2 border rounded"
+                    >
+                      {reservationPrices[id || ''].hour && <option value="hour">À l'heure</option>}
+                      {reservationPrices[id || ''].halfDay && <option value="halfDay">Demi-journée</option>}
+                      {reservationPrices[id || ''].fullDay && <option value="fullDay">Journée complète</option>}
+                    </select>
+                  </div>
+
+                  <div className="space-y-2 mt-4">
+                    <label className="font-semibold">Choisir une date</label>
+                    <DatePicker 
+                      selected={dateReservation} 
+                      onChange={(date) => setDateReservation(date)} 
+                      minDate={new Date()}
+                      className="w-full p-2 border rounded"
+                      dateFormat="dd/MM/yyyy"
+                      placeholderText="Sélectionner une date"
+                    />
+                  </div>
+                </>
+              )}
             </div>
 
             <Card className="p-6">
               <CardContent className="space-y-6">
-                <div className="flex items-center justify-between">
-                  <span>Quantité</span>
-                  <Input 
-                    type="number" 
-                    defaultValue={1} 
-                    min={1}
-                    className="w-24" 
-                  />
-                </div>
-
                 <Button
                   className="w-full bg-lysco-turquoise hover:bg-lysco-turquoise/90"
                   onClick={() => {
                     try {
                       addItem({
                         id: `service-${id}`,
-                        title: service.title,
-                        price: parseFloat(service.price.replace(',', '.')),
+                        title: `${service.title} (${modeReservation}) - ${dateReservation ? dateReservation.toLocaleDateString() : 'date à définir'}`,
+                        price: prixActuel,
                         quantity: 1,
                       });
                     } catch (error) {
-                      console.error("Erreur ajout panier :", error);
+                      console.error("Erreur ajout panier:", error);
                     }
                   }}
                 >
-                  <ShoppingCart className="h-4 w-4" />
+                  <ShoppingCart className="h-4 w-4 mr-2" />
                   Ajouter au panier
                 </Button>
                 <div className="pt-4 border-t">
@@ -219,23 +346,12 @@ const ServiceDetail = () => {
                     <Lock className="h-4 w-4" />
                     <span>PAIEMENT SÉCURISÉ GARANTI</span>
                   </div>
-                  <div className="mt-4">
-                    <form action="/create-checkout-session" method="POST">
-                      <Button 
-                        type="submit"
-                        className="w-full mt-4 bg-black text-white hover:bg-gray-800"
-                      >
-                        Payer avec Stripe (Carte bancaire, Apple Pay, Google Pay)
-                      </Button>
-                    </form>
-                  </div>
                 </div>
               </CardContent>
             </Card>
           </div>
 
           <ProductDescription />
-
           <RelatedProducts />
         </div>
       </main>
