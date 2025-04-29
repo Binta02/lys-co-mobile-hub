@@ -10,6 +10,9 @@ import ProductDescription from '@/components/services/ProductDescription';
 import { useCart } from "@/components/cart/CartContext";
 import { ShoppingCart } from 'lucide-react';
 import { useParams } from 'react-router-dom';
+import DatePicker from 'react-datepicker';
+import 'react-datepicker/dist/react-datepicker.css';
+
 
 interface ServiceData {
   title: string;
