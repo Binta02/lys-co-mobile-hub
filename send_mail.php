@@ -20,6 +20,7 @@ use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 
 require 'vendor/autoload.php'; // chemin vers Composer autoload.php
+$config = require 'config_mail.php';
 
 // Récupérer les données envoyées
 $firstName = $_POST['firstName'] ?? '';
@@ -36,18 +37,17 @@ $mail_body .= "Message:\n$message";
 
 $mail = new PHPMailer(true);
 
-try {
-    // Configuration SMTP
-    $mail->isSMTP();
-    $mail->Host = 'smtp.hostinger.com';
-    $mail->SMTPAuth = true;
-    $mail->Username = 'contact@lys-and-co.com'; // Ton email complet
-    $mail->Password = 'Oceanne971-'; // ⚡ Mot de passe
-    $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS; // SSL/TLS
-    $mail->Port = 465;
+    try {
+      $mail->isSMTP();
+      $mail->Host = $config['host'];
+      $mail->SMTPAuth = true;
+      $mail->Username = $config['username'];
+      $mail->Password = $config['password'];
+      $mail->SMTPSecure = $config['encryption'];
+      $mail->Port = $config['port'];
 
     // Expéditeur et destinataire
-    $mail->setFrom('contact@lys-and-co.com', 'Site Lys & Co');
+    $mail->setFrom($config['from_email'], $config['from_name']);
     $mail->addAddress('contact@lys-and-co.com'); // Où recevoir le mail
 
     // Contenu
