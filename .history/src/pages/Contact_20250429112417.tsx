@@ -24,7 +24,7 @@ const Contact = () => {
       //   method: 'POST',
       //   body: formData,
       // });
-      const response = await fetch('http://localhost:8000/send_mail.php', {
+      const response = await fetch('/send_mail.php', {
         method: 'POST',
         body: formData,
       });

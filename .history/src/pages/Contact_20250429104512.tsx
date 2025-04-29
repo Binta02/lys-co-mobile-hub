@@ -20,15 +20,10 @@ const Contact = () => {
     const formData = new FormData(e.target as HTMLFormElement);
   
     try {
-      // const response = await fetch('http://localhost:8000/send_mail.php', {
-      //   method: 'POST',
-      //   body: formData,
-      // });
       const response = await fetch('http://localhost:8000/send_mail.php', {
         method: 'POST',
         body: formData,
       });
-      
   
       const result = await response.text();
       if (result === 'success') {

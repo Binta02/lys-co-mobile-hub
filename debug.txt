@@ -1,0 +1,23 @@
+Reçu: Nom: Binta Tandian
+Email: tandianbinta00@gmail.com
+
+Message:
+gggggggggggggggggggggReçu:
+Nom: Binta Tandian
+Email: tandianbinta00@gmail.com
+
+Message:
+dffffffffffffffffffffffffffssssssssssssssssssssssssss
+=== Nouveau test à 2025-04-29 09:21:34 ===
+Données reçues:
+Prénom: Binta
+Nom: Tandian
+Email: tandianbinta00@gmail.com
+Sujet: Candidature
+Message:
+ffffffffffffffffffffffffff
+
+Tentative d'envoi du mail...
+Mail envoyé avec succès.
+
+
