@@ -156,8 +156,8 @@ const reservationPrices = {
 };
 // --- Simuler les réservations existantes (date -> heures prises)
 const reservations = {
-  '2024-05-01': ['09:00', '10:00'],
-  '2024-05-02': ['13:00', '14:00'],
+  '2025-05-01': ['09:00', '10:00'],
+  '2025-05-02': ['13:00', '14:00'],
 };
 
 const hoursAvailable = ['09:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00'];
