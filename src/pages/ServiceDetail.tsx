@@ -214,21 +214,21 @@ const ServiceDetail = () => {
                 <p>{service.description}</p>
               </div>
 
-              {reservationPrices[id] && (
+              {reservationPrices[id] && id !== 'coworking-space' && (
                 <>
-                  <div className="space-y-2">
-                    <label className="font-semibold">Type de réservation</label>
-                    <select 
-                      value={modeReservation}
-                      onChange={(e) => setModeReservation(e.target.value)}
-                      className="w-full p-2 border rounded"
-                    >
-                      {reservationPrices[id].hour && <option value="hour">À l'heure</option>}
-                      {reservationPrices[id].halfDay && <option value="halfDay">Demi-journée</option>}
-                      {reservationPrices[id].fullDay && <option value="fullDay">Journée complète</option>}
-                    </select>
-                  </div>
-
+                <div className="space-y-2">
+                  <label className="font-semibold">Type de réservation</label>
+                  <select 
+                    value={modeReservation}
+                    onChange={(e) => setModeReservation(e.target.value)}
+                    className="w-full p-2 border rounded"
+                  >
+                    <option value="" disabled>Sélectionner une option</option>
+                    {reservationPrices[id].hour && <option value="hour">À l'heure</option>}
+                    {reservationPrices[id].halfDay && <option value="halfDay">Demi-journée</option>}
+                    {reservationPrices[id].fullDay && <option value="fullDay">Journée complète</option>}
+                  </select>
+                </div>
                   {modeReservation === 'halfDay' && (id === 'location-bureau' || id === 'formation-room') && (
                     <div className="space-y-2 mt-2">
                       <label className="font-semibold">Matin ou Après-midi</label>
