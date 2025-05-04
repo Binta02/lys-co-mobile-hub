@@ -3,37 +3,82 @@ import React, { useEffect, useState } from 'react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import ReviewForm from './ReviewForm';
 import ReviewsList from './ReviewsList';
-import { useParams } from 'react-router-dom';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
 
 const ProductDescription = () => {
-  const { id } = useParams();
-  const [productName, setProductName] = useState("Produit");
+  const [productName, setProductName] = useState("");
+  const [productId, setProductId] = useState("");
   const [reviews, setReviews] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const { toast } = useToast();
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const location = useLocation();
+
+  // Fonction pour déterminer le nom et l'ID du produit en fonction de l'URL
+  const determineProductInfo = () => {
+    const path = location.pathname;
+    let name = '';
+    let id = '';
+    
+    if (path.includes('/domiciliation/3-mois-entreprise')) {
+      name = 'Domiciliation 3 mois – Entreprise';
+      id = 'domiciliation-3mois-entreprise';
+    } else if (path.includes('/domiciliation/3-mois-micro-entreprise')) {
+      name = 'Domiciliation 3 mois – Micro Entreprise';
+      id = 'domiciliation-3mois-micro';
+    } else if (path.includes('/domiciliation/6-mois-entreprise')) {
+      name = 'Domiciliation 6 mois – Entreprise';
+      id = 'domiciliation-6mois-entreprise';
+    } else if (path.includes('/domiciliation/6-mois-micro-entreprise')) {
+      name = 'Domiciliation 6 mois – Micro Entreprise';
+      id = 'domiciliation-6mois-micro';
+    } else if (path.includes('/domiciliation/1-an-entreprise')) {
+      name = 'Domiciliation 1 an – Entreprise';
+      id = 'domiciliation-1an-entreprise';
+    } else if (path.includes('/domiciliation/pack-domicilie')) {
+      name = 'Pack domicilié';
+      id = 'pack-domicilie';
+    } else {
+      // Fallback pour les autres pages
+      const pathParts = path.split('/');
+      const lastPart = pathParts[pathParts.length - 1];
+      name = lastPart.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+      id = lastPart;
+    }
+    
+    return { name, id };
+  };
 
   // Fonction pour charger les avis
   const fetchReviews = async () => {
     try {
       setIsLoading(true);
+      const { name, id } = determineProductInfo();
+      
       if (!id) return;
 
       const { data, error } = await supabase
         .from('reviews')
-        .select('*')
+        .select('*, profiles(first_name, last_name)')
         .eq('product_id', id)
         .order('created_at', { ascending: false });
 
       if (error) throw error;
       
-      setReviews(data || []);
-    } catch (error: any) {
+      // Format the reviews to include user_name from the profiles
+      const formattedReviews = data.map(review => ({
+        ...review,
+        user_name: review.profiles ? 
+          `${review.profiles.first_name || ''} ${review.profiles.last_name || ''}`.trim() || 'Client' : 
+          'Client'
+      }));
+      
+      setReviews(formattedReviews);
+    } catch (error) {
       console.error('Erreur lors du chargement des avis:', error);
       toast({
         title: "Erreur",
@@ -65,14 +110,12 @@ const ProductDescription = () => {
 
   // Charger les détails du produit et les avis
   useEffect(() => {
-    if (id) {
-      // On pourrait charger les détails du produit ici si nécessaire
-      // Pour l'instant, on utilise juste l'ID comme nom
-      setProductName(id.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase()));
-      
-      fetchReviews();
-    }
-  }, [id]);
+    const { name, id } = determineProductInfo();
+    setProductName(name);
+    setProductId(id);
+    
+    fetchReviews();
+  }, [location.pathname]);
 
   const handleReviewSubmitted = () => {
     fetchReviews();
@@ -92,9 +135,9 @@ const ProductDescription = () => {
           <Card>
             <CardContent className="prose max-w-none p-6">
               <h3>Description</h3>
-              <p>Notre service d'accompagnement pour l'ouverture de votre société VTC est spécialement conçu pour simplifier le processus de création et de lancement de votre entreprise de transport avec chauffeur. En partenariat avec notre expert-comptable spécialisé dans le domaine, nous vous offrons une assistance professionnelle et personnalisée à chaque étape du processus, garantissant une démarche efficace et conforme à toutes les exigences réglementaires.</p>
-              <p>Nous comprenons que le démarrage d'une entreprise VTC peut être complexe, avec de nombreuses démarches administratives et juridiques à suivre. C'est pourquoi notre équipe dédiée est là pour vous guider à travers toutes les étapes, depuis l'enregistrement de votre société jusqu'à l'obtention des licences et des permis nécessaires. Notre objectif est de vous offrir une assistance complète et de qualité, vous permettant de lancer votre entreprise avec confiance et succès.</p>
-              <p>De plus, pour rendre nos services encore plus accessibles, nous offrons une réduction de 50 euros sur les frais de service si vous choisissez de domicilier votre entreprise chez nous. Cette réduction s'applique en plus des frais de service hors frais d'organisme, ce qui vous permet de bénéficier d'un accompagnement professionnel à un tarif avantageux.</p>
+              <p>Notre service d'accompagnement pour l'ouverture de votre société est spécialement conçu pour simplifier le processus de création et de lancement de votre entreprise. En partenariat avec notre expert-comptable spécialisé dans le domaine, nous vous offrons une assistance professionnelle et personnalisée à chaque étape du processus, garantissant une démarche efficace et conforme à toutes les exigences réglementaires.</p>
+              <p>Nous comprenons que le démarrage d'une entreprise peut être complexe, avec de nombreuses démarches administratives et juridiques à suivre. C'est pourquoi notre équipe dédiée est là pour vous guider à travers toutes les étapes, depuis l'enregistrement de votre société jusqu'à l'obtention des licences et des permis nécessaires. Notre objectif est de vous offrir une assistance complète et de qualité, vous permettant de lancer votre entreprise avec confiance et succès.</p>
+              <p>De plus, pour rendre nos services encore plus accessibles, nous offrons des options de domiciliation pour votre entreprise, vous permettant d'établir une adresse professionnelle prestigieuse sans les coûts d'un espace commercial traditionnel.</p>
             </CardContent>
           </Card>
         </TabsContent>
@@ -107,7 +150,8 @@ const ProductDescription = () => {
               {isLoggedIn ? (
                 <div className="mt-8 border-t pt-6">
                   <ReviewForm 
-                    productName={productName} 
+                    productName={productName}
+                    productId={productId} 
                     onReviewSubmitted={handleReviewSubmitted} 
                   />
                 </div>
@@ -118,7 +162,7 @@ const ProductDescription = () => {
                     className="mt-4 bg-lysco-turquoise hover:bg-lysco-turquoise/90" 
                     asChild
                   >
-                    <Link to="/login?redirect=back">Se connecter</Link>
+                    <Link to={`/login?redirect=${encodeURIComponent(location.pathname)}`}>Se connecter</Link>
                   </Button>
                 </div>
               )}

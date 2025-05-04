@@ -14,6 +14,10 @@ interface Review {
   comment: string;
   created_at: string;
   user_name?: string;
+  profiles?: {
+    first_name?: string;
+    last_name?: string;
+  };
 }
 
 interface ReviewsListProps {
@@ -55,7 +59,7 @@ const ReviewsList = ({ reviews, isLoading }: ReviewsListProps) => {
                   })}
                 </p>
               </div>
-              <div className="mt-4 md:mt-0">
+              <div className="mt-4 md:mt-0 md:ml-4">
                 <p className="text-gray-700">{review.comment}</p>
               </div>
             </div>
