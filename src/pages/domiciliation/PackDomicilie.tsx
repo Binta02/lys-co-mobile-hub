@@ -44,7 +44,7 @@ const PackDomicilie = () => {
               </BreadcrumbItem>
               <BreadcrumbSeparator />
               <BreadcrumbItem>
-                <BreadcrumbLink>Pack domicilié</BreadcrumbLink>
+                <BreadcrumbLink to="">Pack domicilié</BreadcrumbLink>
               </BreadcrumbItem>
             </BreadcrumbList>
           </Breadcrumb>

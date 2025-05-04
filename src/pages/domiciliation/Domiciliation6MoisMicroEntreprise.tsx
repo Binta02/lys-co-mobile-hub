@@ -44,7 +44,7 @@ const Domiciliation6MoisMicroEntreprise = () => {
               </BreadcrumbItem>
               <BreadcrumbSeparator />
               <BreadcrumbItem>
-                <BreadcrumbLink>Domiciliation 6 mois – Micro Entreprise</BreadcrumbLink>
+                <BreadcrumbLink to="">Domiciliation 6 mois – Micro Entreprise</BreadcrumbLink>
               </BreadcrumbItem>
             </BreadcrumbList>
           </Breadcrumb>
