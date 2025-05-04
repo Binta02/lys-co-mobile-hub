@@ -15,6 +15,7 @@ import Checkout from './pages/Checkout';
 import Confirmation from './pages/Confirmation';
 import { Toaster } from './components/ui/toaster';
 import DemandeDevis from './pages/DemandeDevis';
+import ServicesAdmin from './pages/ServicesAdmin';
 
 // Import domiciliation pages
 import Domiciliation1AnEntreprise from './pages/domiciliation/Domiciliation1AnEntreprise';
@@ -56,6 +57,7 @@ function App() {
           <Route path="/communication/print" element={<CommunicationPrint />} />
           <Route path="/communication/photos" element={<CommunicationPhotos />} />
           <Route path="/communication/strategie" element={<CommunicationStrategie />} />
+          <Route path="/services-admin" element={<ServicesAdmin />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/demande-devis" element={<DemandeDevis />} />
           <Route path="/login" element={<Login />} />
