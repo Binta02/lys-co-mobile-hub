@@ -61,21 +61,37 @@ const ProductDescription = () => {
       
       if (!id) return;
 
+      // Modify the query to properly join the profiles table
       const { data, error } = await supabase
         .from('reviews')
-        .select('*, profiles(first_name, last_name)')
+        .select(`
+          *,
+          profiles:user_id (
+            first_name, 
+            last_name
+          )
+        `)
         .eq('product_id', id)
         .order('created_at', { ascending: false });
 
       if (error) throw error;
       
       // Format the reviews to include user_name from the profiles
-      const formattedReviews = data.map(review => ({
-        ...review,
-        user_name: review.profiles ? 
-          `${review.profiles.first_name || ''} ${review.profiles.last_name || ''}`.trim() || 'Client' : 
-          'Client'
-      }));
+      const formattedReviews = data.map(review => {
+        let userName = 'Client';
+        if (review.profiles) {
+          const firstName = review.profiles.first_name || '';
+          const lastName = review.profiles.last_name || '';
+          if (firstName || lastName) {
+            userName = `${firstName} ${lastName}`.trim();
+          }
+        }
+        
+        return {
+          ...review,
+          user_name: userName
+        };
+      });
       
       setReviews(formattedReviews);
     } catch (error) {

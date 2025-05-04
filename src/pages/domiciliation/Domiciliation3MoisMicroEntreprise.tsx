@@ -22,6 +22,7 @@ const Domiciliation3MoisMicroEntreprise = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [session, setSession] = useState(null);
   const productName = 'Domiciliation 3 mois – Micro Entreprise';
+  const productId = 'domiciliation-3mois-micro';
   
   useEffect(() => {
     const fetchReviews = async () => {
@@ -188,6 +189,7 @@ const Domiciliation3MoisMicroEntreprise = () => {
                   {session ? (
                     <ReviewForm 
                       productName={productName} 
+                      productId={productId}
                       onReviewSubmitted={handleReviewSubmitted}
                     />
                   ) : (
