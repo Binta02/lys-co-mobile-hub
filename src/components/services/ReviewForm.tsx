@@ -27,6 +27,7 @@ type FormData = z.infer<typeof reviewSchema>;
 
 const ReviewForm = ({ productName, productId, onReviewSubmitted }: ReviewFormProps) => {
   const [rating, setRating] = useState<number>(0);
+  const [hoveredRating, setHoveredRating] = useState<number>(0);
   const { toast } = useToast();
   const [isSubmitting, setIsSubmitting] = useState(false);
   
@@ -120,12 +121,25 @@ const ReviewForm = ({ productName, productId, onReviewSubmitted }: ReviewFormPro
                   type="button"
                   variant="ghost"
                   size="sm"
-                  className={`p-0 h-auto ${rating >= value ? 'text-yellow-400' : 'text-gray-300'}`}
+                  className={`p-0 h-auto transition-colors duration-200`}
                   onClick={() => setRating(value)}
+                  onMouseEnter={() => setHoveredRating(value)}
+                  onMouseLeave={() => setHoveredRating(0)}
                 >
-                  <Star className="h-6 w-6 fill-current" />
+                  <Star 
+                    className={`h-6 w-6 ${
+                      (hoveredRating > 0 ? value <= hoveredRating : value <= rating) 
+                        ? 'text-yellow-400 fill-yellow-400' 
+                        : 'text-gray-300'
+                    }`} 
+                  />
                 </Button>
               ))}
+              {rating > 0 && (
+                <span className="ml-2 text-sm text-gray-600 self-center">
+                  ({rating}/5)
+                </span>
+              )}
             </div>
           </div>
 

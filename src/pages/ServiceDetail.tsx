@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useMemo, useState, useEffect } from 'react';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import { Card, CardContent } from '@/components/ui/card';
@@ -10,6 +10,10 @@ import { useCart } from "@/components/cart/CartContext";
 import { useParams } from 'react-router-dom';
 import { Toaster } from "@/components/ui/toaster";
 import { useToast } from "@/hooks/use-toast";
+import ReviewForm from '@/components/services/ReviewForm';
+import ReviewsList from '@/components/services/ReviewsList';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { supabase } from "@/integrations/supabase/client";
 
 interface ServiceData {
   title: string;
@@ -196,6 +200,9 @@ const ServiceDetail = () => {
   const [dateReservation, setDateReservation] = useState<string>('');
   const [selectedHours, setSelectedHours] = useState<string[]>([]);
   const [halfDayPeriod, setHalfDayPeriod] = useState<string>('morning');
+  const [reviews, setReviews] = useState<any[]>([]);
+  const [activeTab, setActiveTab] = useState("description");
+  const [refreshReviews, setRefreshReviews] = useState(false);
 
   const toggleHour = (hour: string) => {
     if (selectedHours.includes(hour)) {
@@ -244,6 +251,32 @@ const ServiceDetail = () => {
     }
     
     return parseFloat(service.price.replace(',', '.'));
+  };
+
+  // Fetch reviews for this service
+  useEffect(() => {
+    const fetchReviews = async () => {
+      try {
+        if (id) {
+          const { data, error } = await supabase
+            .from('reviews')
+            .select('*')
+            .eq('product_id', id)
+            .order('created_at', { ascending: false });
+
+          if (error) throw error;
+          setReviews(data || []);
+        }
+      } catch (error) {
+        console.error("Error fetching reviews:", error);
+      }
+    };
+
+    fetchReviews();
+  }, [id, refreshReviews]);
+
+  const handleReviewSubmitted = () => {
+    setRefreshReviews(prev => !prev);
   };
 
   return (
@@ -416,16 +449,38 @@ const ServiceDetail = () => {
                 </div>
               </div>
               
-              {/* Right column: Description */}
+              {/* Right column: Tabs for Description and Reviews */}
               <div className="bg-gray-50 p-6 rounded-lg">
-                <h2 className="text-xl font-semibold mb-4">Description</h2>
-                <div className="prose max-w-none">
-                  <p className="whitespace-pre-line">{service.description}</p>
+                <Tabs defaultValue="description" onValueChange={setActiveTab} className="w-full">
+                  <TabsList className="grid w-full grid-cols-2 mb-4">
+                    <TabsTrigger value="description">Description</TabsTrigger>
+                    <TabsTrigger value="reviews">Avis ({reviews.length})</TabsTrigger>
+                  </TabsList>
                   
-                  {service.note && (
-                    <p className="mt-4 italic text-gray-600">{service.note}</p>
-                  )}
-                </div>
+                  <TabsContent value="description" className="focus-visible:outline-none focus-visible:ring-0">
+                    <h2 className="text-xl font-semibold mb-4">Description</h2>
+                    <div className="prose max-w-none">
+                      <p className="whitespace-pre-line">{service.description}</p>
+                      
+                      {service.note && (
+                        <p className="mt-4 italic text-gray-600">{service.note}</p>
+                      )}
+                    </div>
+                  </TabsContent>
+                  
+                  <TabsContent value="reviews" className="focus-visible:outline-none focus-visible:ring-0 space-y-6">
+                    {id && (
+                      <>
+                        <ReviewsList reviews={reviews} />
+                        <ReviewForm 
+                          productId={id} 
+                          productName={service.title}
+                          onReviewSubmitted={handleReviewSubmitted}
+                        />
+                      </>
+                    )}
+                  </TabsContent>
+                </Tabs>
               </div>
             </div>
           </div>
