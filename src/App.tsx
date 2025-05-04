@@ -1,158 +1,60 @@
-import { Toaster } from "@/components/ui/toaster";
-import { Toaster as Sonner } from "@/components/ui/sonner";
-import { TooltipProvider } from "@/components/ui/tooltip";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
-import CommunicationStrategiePage from "./pages/CommunicationStrategie";
-import CommunicationCreationsPage from "./pages/CommunicationCreations";
-import CommunicationCommunityManagementPage from "./pages/CommunicationCommunityManagement";
-import CommunicationPrintPage from "./pages/CommunicationPrint";
-import CommunicationSiteInternetPage from "./pages/CommunicationSiteInternet";
-import CommunicationPhotosPage from "./pages/CommunicationPhotos";
-import CommunicationMediaTrainingPage from "./pages/CommunicationMediaTraining";
-import CommunicationPacksPage from "./pages/CommunicationPacks";
-import Index from "./pages/Index";
-import Login from "./pages/Login";
-import Register from "./pages/Register";
-import Dashboard from "./pages/Dashboard";
-import NotFound from "./pages/NotFound";
-import ResetPassword from "./pages/ResetPassword";
-import Domiciliation from "./pages/Domiciliation";
-import ServicesAdmin from "./pages/ServicesAdmin";
-import Communication from "./pages/Communication";
-import Contact from "./pages/Contact";
-import PrivateRoute from "./components/PrivateRoute";
-import ServiceDetail from "./pages/ServiceDetail";
-import { CartProvider } from "@/components/cart/CartContext";
-import { useEffect } from "react";
 
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import Index from './pages/Index';
+import Domiciliation from './pages/Domiciliation';
+import Communication from './pages/Communication';
+import Contact from './pages/Contact';
+import Login from './pages/Login';
+import Register from './pages/Register';
+import Dashboard from './pages/Dashboard';
+import ResetPassword from './pages/ResetPassword';
+import ServiceDetail from './pages/ServiceDetail';
+import NotFound from './pages/NotFound';
+import { CartProvider } from './components/cart/CartContext';
+import Checkout from './pages/Checkout';
+import Confirmation from './pages/Confirmation';
+import { Toaster } from './components/ui/toaster';
 
+// Import communication sub-pages
+import CommunicationSiteInternet from './pages/CommunicationSiteInternet';
+import CommunicationCommunityManagement from './pages/CommunicationCommunityManagement';
+import CommunicationCreations from './pages/CommunicationCreations';
+import CommunicationMediaTraining from './pages/CommunicationMediaTraining';
+import CommunicationPacks from './pages/CommunicationPacks';
+import CommunicationPrint from './pages/CommunicationPrint';
+import CommunicationPhotos from './pages/CommunicationPhotos';
+import CommunicationStrategie from './pages/CommunicationStrategie';
 
-const queryClient = new QueryClient();
-
-// const App = () => (
-//   useEffect(() => {
-//     const removeLovableBadge = () => {
-//       const badge = document.getElementById('lovable-badge');
-//       if (badge) {
-//         badge.remove();
-//       }
-//     };
-
-//     // Dès que la page est chargée
-//     removeLovableBadge();
-
-//     // Et toutes les secondes au cas où il réapparaît
-//     const interval = setInterval(removeLovableBadge, 1000);
-
-//     // On nettoie l'intervalle quand le composant se démonte
-//     return () => clearInterval(interval);
-//   }, []);
-//   <QueryClientProvider client={queryClient}>
-//     <CartProvider>
-//     <TooltipProvider>
-//       <Toaster />
-//       <Sonner />
-//       <BrowserRouter>
-//         <Routes>
-//           {/* Public routes */}
-//           <Route path="/" element={<Index />} />
-//           <Route path="/login" element={<Login />} />
-//           <Route path="/register" element={<Register />} />
-//           <Route path="/reset-password" element={<ResetPassword />} />
-//           <Route path="/contact" element={<Contact />} />
-//           <Route path="/communication/strategie" element={<CommunicationStrategiePage />} />
-//           <Route path="/communication/creations" element={<CommunicationCreationsPage />} />
-//           <Route path="/communication/community-management" element={<CommunicationCommunityManagementPage />} />
-//           <Route path="/communication/print" element={<CommunicationPrintPage />} />
-//           <Route path="/communication/photo" element={<CommunicationPhotosPage />} />
-//           <Route path="/communication/site-internet" element={<CommunicationSiteInternetPage />} />
-//           <Route path="/communication/media-training" element={<CommunicationMediaTrainingPage />} />
-//           <Route path="/communication/packs" element={<CommunicationPacksPage />} />
-//           <Route path="/service/:id" element={<ServiceDetail />} />
-
-//           {/* Protected routes */}
-//           <Route path="/dashboard" element={
-//             <PrivateRoute>
-//               <Dashboard />
-//             </PrivateRoute>
-//           } />
-//           <Route path="/domiciliation" element={
-//             <PrivateRoute>
-//               <Domiciliation />
-//             </PrivateRoute>
-//           } />
-//           <Route path="/services-admin" element={
-//             <PrivateRoute>
-//               <ServicesAdmin />
-//             </PrivateRoute>
-//           } />
-//           <Route path="/communication" element={
-//             <PrivateRoute>
-//               <Communication />
-//             </PrivateRoute>
-//           } />
-
-//           {/* Catch all */}
-//           <Route path="*" element={<NotFound />} />
-//         </Routes>
-//       </BrowserRouter>
-//     </TooltipProvider>
-//     </CartProvider>
-//   </QueryClientProvider>
-// );
-const App = () => {
-  useEffect(() => {
-    const removeLovableBadge = () => {
-      const badge = document.getElementById('lovable-badge');
-      if (badge) {
-        badge.remove();
-      }
-    };
-
-    removeLovableBadge();
-    const interval = setInterval(removeLovableBadge, 1000);
-    return () => clearInterval(interval);
-  }, []);
-
+function App() {
   return (
-    <QueryClientProvider client={queryClient}>
-      <CartProvider>
-        <TooltipProvider>
-          <Toaster />
-          <Sonner />
-          <BrowserRouter>
-            <Routes>
-              {/* Public routes */}
-              <Route path="/" element={<Index />} />
-              <Route path="/login" element={<Login />} />
-              <Route path="/register" element={<Register />} />
-              <Route path="/reset-password" element={<ResetPassword />} />
-              <Route path="/contact" element={<Contact />} />
-              <Route path="/communication/strategie" element={<CommunicationStrategiePage />} />
-              <Route path="/communication/creations" element={<CommunicationCreationsPage />} />
-              <Route path="/communication/community-management" element={<CommunicationCommunityManagementPage />} />
-              <Route path="/communication/print" element={<CommunicationPrintPage />} />
-              <Route path="/communication/photo" element={<CommunicationPhotosPage />} />
-              <Route path="/communication/site-internet" element={<CommunicationSiteInternetPage />} />
-              <Route path="/communication/media-training" element={<CommunicationMediaTrainingPage />} />
-              <Route path="/communication/packs" element={<CommunicationPacksPage />} />
-              <Route path="/service/:id" element={<ServiceDetail />} />
-
-              {/* Protected routes */}
-              <Route path="/dashboard" element={<PrivateRoute><Dashboard /></PrivateRoute>} />
-              <Route path="/domiciliation" element={<PrivateRoute><Domiciliation /></PrivateRoute>} />
-              <Route path="/services-admin" element={<PrivateRoute><ServicesAdmin /></PrivateRoute>} />
-              <Route path="/communication" element={<PrivateRoute><Communication /></PrivateRoute>} />
-
-              {/* Catch all */}
-              <Route path="*" element={<NotFound />} />
-            </Routes>
-          </BrowserRouter>
-        </TooltipProvider>
-      </CartProvider>
-    </QueryClientProvider>
+    <CartProvider>
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<Index />} />
+          <Route path="/domiciliation" element={<Domiciliation />} />
+          <Route path="/communication" element={<Communication />} />
+          <Route path="/communication/site-internet" element={<CommunicationSiteInternet />} />
+          <Route path="/communication/community-management" element={<CommunicationCommunityManagement />} />
+          <Route path="/communication/creations" element={<CommunicationCreations />} />
+          <Route path="/communication/media-training" element={<CommunicationMediaTraining />} />
+          <Route path="/communication/packs" element={<CommunicationPacks />} />
+          <Route path="/communication/print" element={<CommunicationPrint />} />
+          <Route path="/communication/photos" element={<CommunicationPhotos />} />
+          <Route path="/communication/strategie" element={<CommunicationStrategie />} />
+          <Route path="/contact" element={<Contact />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
+          <Route path="/dashboard/*" element={<Dashboard />} />
+          <Route path="/reset-password" element={<ResetPassword />} />
+          <Route path="/services/:id" element={<ServiceDetail />} />
+          <Route path="/checkout" element={<Checkout />} />
+          <Route path="/confirmation" element={<Confirmation />} />
+          <Route path="*" element={<NotFound />} />
+        </Routes>
+      </BrowserRouter>
+      <Toaster />
+    </CartProvider>
   );
-};
+}
 
 export default App;

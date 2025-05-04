@@ -12,7 +12,8 @@ import { ShoppingCart } from 'lucide-react';
 import { useParams } from 'react-router-dom';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
-
+import { Toaster } from "@/components/ui/toaster";
+import { useToast } from "@/hooks/use-toast";
 
 interface ServiceData {
   title: string;
@@ -165,6 +166,7 @@ const hoursAvailable = ['09:00', '10:00', '11:00', '12:00', '13:00', '14:00', '1
 const ServiceDetail = () => {
   const { addItem } = useCart();
   const { id } = useParams();
+  const { toast } = useToast();
 
   const service = useMemo(() => {
     if (!id || !serviceData[id]) return serviceData['coworking-space'];
@@ -366,8 +368,22 @@ const ServiceDetail = () => {
 
             <Card className="p-6">
               <CardContent className="space-y-6">
-                {/* <Button
+                <Button
                   className="w-full bg-lysco-turquoise hover:bg-lysco-turquoise/90"
+                  disabled={
+                    (id === 'coworking-space' && (!dateReservation || selectedHours.length === 0)) ||
+                    (id === 'formation-room' && (
+                      !modeReservation ||
+                      !dateReservation ||
+                      (modeReservation === 'hour' && selectedHours.length === 0) ||
+                      (modeReservation === 'halfDay' && !halfDayPeriod)
+                    )) ||
+                    (id === 'location-bureau' && (
+                      !modeReservation ||
+                      !dateReservation ||
+                      (modeReservation === 'halfDay' && !halfDayPeriod)
+                    ))
+                  }
                   onClick={() => {
                     addItem({
                       id: `service-${id}`,
@@ -375,37 +391,15 @@ const ServiceDetail = () => {
                       price: calculPrix(),
                       quantity: 1,
                     });
+                    toast({
+                      title: "Article ajouté au panier",
+                      description: `${service.title} a été ajouté à votre panier.`,
+                      variant: "default",
+                    });
                   }}
                 >
                   <ShoppingCart className="h-4 w-4 mr-2" /> Ajouter au panier
-                </Button> */}
-                <Button
-  className="w-full bg-lysco-turquoise hover:bg-lysco-turquoise/90"
-  disabled={
-    (id === 'coworking-space' && (!dateReservation || selectedHours.length === 0)) ||
-    (id === 'formation-room' && (
-      !modeReservation ||
-      !dateReservation ||
-      (modeReservation === 'hour' && selectedHours.length === 0) ||
-      (modeReservation === 'halfDay' && !halfDayPeriod)
-    )) ||
-    (id === 'location-bureau' && (
-      !modeReservation ||
-      !dateReservation ||
-      (modeReservation === 'halfDay' && !halfDayPeriod)
-    ))
-  }
-  onClick={() => {
-    addItem({
-      id: `service-${id}`,
-      title: `${service.title} - ${modeReservation}${halfDayPeriod ? ` (${halfDayPeriod})` : ''} - ${dateReservation} ${selectedHours.join(', ')}`,
-      price: calculPrix(),
-      quantity: 1,
-    });
-  }}
->
-  <ShoppingCart className="h-4 w-4 mr-2" /> Ajouter au panier
-</Button>
+                </Button>
 
                 <div className="pt-4 border-t">
                   <div className="flex items-center justify-center gap-2 text-sm text-gray-600">
@@ -421,6 +415,7 @@ const ServiceDetail = () => {
         </div>
       </main>
       <Footer />
+      <Toaster />
     </div>
   );
 };

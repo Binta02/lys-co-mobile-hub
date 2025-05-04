@@ -1,4 +1,6 @@
+
 import React from 'react';
+import { Link } from 'react-router-dom';
 import {
   Sheet,
   SheetContent,
@@ -78,8 +80,11 @@ export function CartDrawer() {
                   <span>Total</span>
                   <span>{total.toFixed(2)} €</span>
                 </div>
-                <Button className="w-full mt-4 bg-lysco-turquoise hover:bg-lysco-turquoise/90">
-                  Passer la commande
+                <Button 
+                  className="w-full mt-4 bg-lysco-turquoise hover:bg-lysco-turquoise/90"
+                  asChild
+                >
+                  <Link to="/checkout">Passer la commande</Link>
                 </Button>
               </div>
             </>
