@@ -9,6 +9,7 @@ import { useCart } from "@/components/cart/CartContext";
 import { useToast } from "@/hooks/use-toast";
 import { Toaster } from "@/components/ui/toaster";
 import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbSeparator } from "@/components/ui/breadcrumb";
+import ProductDescription from '@/components/services/ProductDescription';
 
 const Domiciliation3MoisEntreprise = () => {
   const { addItem } = useCart();
@@ -96,6 +97,8 @@ const Domiciliation3MoisEntreprise = () => {
               </div>
             </div>
           </div>
+
+          <ProductDescription />
         </div>
       </main>
       <Footer />
