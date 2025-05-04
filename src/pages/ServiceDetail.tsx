@@ -21,6 +21,27 @@ interface ServiceData {
   note?: string;
 }
 
+interface CoworkingPrices {
+  hour: number;
+}
+
+interface FormationRoomPrices {
+  hour: number;
+  halfDay: number;
+  fullDay: number;
+}
+
+interface LocationBureauPrices {
+  halfDay: number;
+  fullDay: number;
+}
+
+interface ReservationPrices {
+  'coworking-space': CoworkingPrices;
+  'formation-room': FormationRoomPrices;
+  'location-bureau': LocationBureauPrices;
+}
+
 const serviceData: Record<string, ServiceData> = {
   'reexpedition-courrier': {
     title: 'Réexpédition courrier (3 mois)',
@@ -146,11 +167,13 @@ const serviceData: Record<string, ServiceData> = {
     description: "Accompagnement pour toute modification de votre société (statuts, siège social, etc.)."
   }
 };
-const reservationPrices = {
+
+const reservationPrices: ReservationPrices = {
   'coworking-space': { hour: 5 },
   'formation-room': { hour: 10, halfDay: 25, fullDay: 45 },
   'location-bureau': { halfDay: 125, fullDay: 250 },
 };
+
 // --- Simuler les réservations existantes (date -> heures prises)
 const reservations = {
   '2025-05-01': ['09:00', '10:00'],
@@ -169,10 +192,10 @@ const ServiceDetail = () => {
     return serviceData[id];
   }, [id]);
 
-  const [modeReservation, setModeReservation] = useState('hour');
-  const [dateReservation, setDateReservation] = useState('');
+  const [modeReservation, setModeReservation] = useState<string>('hour');
+  const [dateReservation, setDateReservation] = useState<string>('');
   const [selectedHours, setSelectedHours] = useState<string[]>([]);
-  const [halfDayPeriod, setHalfDayPeriod] = useState('morning');
+  const [halfDayPeriod, setHalfDayPeriod] = useState<string>('morning');
 
   const toggleHour = (hour: string) => {
     if (selectedHours.includes(hour)) {
@@ -187,12 +210,39 @@ const ServiceDetail = () => {
   };
 
   const calculPrix = () => {
-    if ((id === 'coworking-space' || id === 'formation-room') && modeReservation === 'hour') {
-      return (selectedHours.length || 1) * (reservationPrices[id as keyof typeof reservationPrices]?.hour || 5);
+    if (!id) return parseFloat(service.price.replace(',', '.'));
+
+    // Check if the id is one of our reservation types
+    if (id === 'coworking-space' || id === 'formation-room' || id === 'location-bureau') {
+      // Handle coworking space hourly pricing
+      if (id === 'coworking-space') {
+        return (selectedHours.length || 1) * reservationPrices[id].hour;
+      }
+      
+      // Handle formation room pricing
+      if (id === 'formation-room') {
+        if (modeReservation === 'hour') {
+          return (selectedHours.length || 1) * reservationPrices[id].hour;
+        }
+        if (modeReservation === 'halfDay') {
+          return reservationPrices[id].halfDay;
+        }
+        if (modeReservation === 'fullDay') {
+          return reservationPrices[id].fullDay;
+        }
+      }
+      
+      // Handle location bureau pricing
+      if (id === 'location-bureau') {
+        if (modeReservation === 'halfDay') {
+          return reservationPrices[id].halfDay;
+        }
+        if (modeReservation === 'fullDay') {
+          return reservationPrices[id].fullDay;
+        }
+      }
     }
-    if (id && reservationPrices[id as keyof typeof reservationPrices]) {
-      return reservationPrices[id as keyof typeof reservationPrices][modeReservation as keyof typeof reservationPrices[keyof typeof reservationPrices]] || 0;
-    }
+    
     return parseFloat(service.price.replace(',', '.'));
   };
 
@@ -224,7 +274,7 @@ const ServiceDetail = () => {
                     )}
                   </div>
                   
-                  {id && reservationPrices[id as keyof typeof reservationPrices] && (
+                  {id && (id === 'coworking-space' || id === 'formation-room' || id === 'location-bureau') && (
                     <div className="flex flex-col items-end">
                       <div className="flex items-center text-gray-600 mb-1">
                         <Clock className="h-4 w-4 mr-1" />
@@ -239,7 +289,7 @@ const ServiceDetail = () => {
                 </div>
 
                 {/* Reservation form */}
-                {id && reservationPrices[id as keyof typeof reservationPrices] && (
+                {id && (id === 'coworking-space' || id === 'formation-room' || id === 'location-bureau') && (
                   <div className="mt-8 space-y-4 p-5 border border-gray-200 rounded-lg">
                     <h3 className="font-semibold text-lg">Réserver</h3>
                     
@@ -253,12 +303,15 @@ const ServiceDetail = () => {
                           className="w-full p-2 border rounded focus:ring-2 focus:ring-lysco-turquoise focus:border-transparent"
                         >
                           <option value="">Sélectionner une option</option>
-                          {reservationPrices[id as keyof typeof reservationPrices].hour && 
-                            <option value="hour">À l'heure</option>}
-                          {reservationPrices[id as keyof typeof reservationPrices].halfDay && 
-                            <option value="halfDay">Demi-journée</option>}
-                          {reservationPrices[id as keyof typeof reservationPrices].fullDay && 
-                            <option value="fullDay">Journée complète</option>}
+                          {id === 'formation-room' && (
+                            <option value="hour">À l'heure</option>
+                          )}
+                          {(id === 'formation-room' || id === 'location-bureau') && (
+                            <option value="halfDay">Demi-journée</option>
+                          )}
+                          {(id === 'formation-room' || id === 'location-bureau') && (
+                            <option value="fullDay">Journée complète</option>
+                          )}
                         </select>
                       </div>
                     )}
