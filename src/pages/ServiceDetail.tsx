@@ -1,17 +1,13 @@
-import React, { useMemo, useState  } from 'react';
+import React, { useMemo, useState } from 'react';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { CreditCard, Lock } from 'lucide-react';
+import { ShoppingCart, Lock, Calendar, Clock } from 'lucide-react';
 import RelatedProducts from '@/components/services/RelatedProducts';
 import ProductDescription from '@/components/services/ProductDescription';
 import { useCart } from "@/components/cart/CartContext";
-import { ShoppingCart } from 'lucide-react';
 import { useParams } from 'react-router-dom';
-import DatePicker from 'react-datepicker';
-import 'react-datepicker/dist/react-datepicker.css';
 import { Toaster } from "@/components/ui/toaster";
 import { useToast } from "@/hooks/use-toast";
 
@@ -175,11 +171,10 @@ const ServiceDetail = () => {
 
   const [modeReservation, setModeReservation] = useState('hour');
   const [dateReservation, setDateReservation] = useState('');
-  const [selectedHours, setSelectedHours] = useState([]);
+  const [selectedHours, setSelectedHours] = useState<string[]>([]);
   const [halfDayPeriod, setHalfDayPeriod] = useState('morning');
-  const [prixActuel, setPrixActuel] = useState(parseFloat(service.price.replace(',', '.')));
 
-  const toggleHour = (hour) => {
+  const toggleHour = (hour: string) => {
     if (selectedHours.includes(hour)) {
       setSelectedHours(selectedHours.filter(h => h !== hour));
     } else {
@@ -187,118 +182,146 @@ const ServiceDetail = () => {
     }
   };
 
-  const isHourReserved = (date, hour) => {
+  const isHourReserved = (date: string, hour: string) => {
     return reservations[date]?.includes(hour);
   };
 
   const calculPrix = () => {
     if ((id === 'coworking-space' || id === 'formation-room') && modeReservation === 'hour') {
-      return (selectedHours.length || 1) * (reservationPrices[id].hour || 5);
+      return (selectedHours.length || 1) * (reservationPrices[id as keyof typeof reservationPrices]?.hour || 5);
     }
-    if (reservationPrices[id]) {
-      return reservationPrices[id][modeReservation] || 0;
+    if (id && reservationPrices[id as keyof typeof reservationPrices]) {
+      return reservationPrices[id as keyof typeof reservationPrices][modeReservation as keyof typeof reservationPrices[keyof typeof reservationPrices]] || 0;
     }
     return parseFloat(service.price.replace(',', '.'));
   };
-  
 
   return (
     <div className="min-h-screen flex flex-col">
       <Navbar />
       <main className="flex-1 py-16">
         <div className="container mx-auto px-4">
-          <div className="grid md:grid-cols-2 gap-8">
-            <div className="space-y-6">
-              <h1 className="text-3xl font-bold">{service.title}</h1>
-              <div className="text-2xl font-semibold text-lysco-turquoise">{calculPrix().toFixed(2)} €</div>
-              <p className="text-sm text-gray-500">Hors taxes</p>
-              <div className="prose max-w-none">
-                <p>{service.description}</p>
-              </div>
+          <div className="bg-white rounded-lg shadow-md p-6 mb-8">
+            <h1 className="text-3xl font-bold mb-6 text-center">{service.title}</h1>
+            
+            <div className="grid md:grid-cols-2 gap-8">
+              {/* Left column: Service information */}
+              <div className="space-y-6">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <div className="text-3xl font-semibold text-lysco-turquoise">{calculPrix().toFixed(2)} €</div>
+                    {service.priceUnit && (
+                      <span className="text-gray-500">{service.priceUnit}</span>
+                    )}
+                    <p className="text-sm text-gray-500">Hors taxes</p>
+                    {service.originalPrice && (
+                      <div className="flex items-center gap-2 mt-1">
+                        <span className="text-lg text-gray-400 line-through">{service.originalPrice} €</span>
+                        {service.isPromo && (
+                          <span className="px-2 py-1 text-xs bg-red-100 text-red-600 rounded-full">Promo</span>
+                        )}
+                      </div>
+                    )}
+                  </div>
+                  
+                  {id && reservationPrices[id as keyof typeof reservationPrices] && (
+                    <div className="flex flex-col items-end">
+                      <div className="flex items-center text-gray-600 mb-1">
+                        <Clock className="h-4 w-4 mr-1" />
+                        <span className="text-sm">Réservation flexible</span>
+                      </div>
+                      <div className="flex items-center text-gray-600">
+                        <Calendar className="h-4 w-4 mr-1" />
+                        <span className="text-sm">Disponible maintenant</span>
+                      </div>
+                    </div>
+                  )}
+                </div>
 
-              
-              {reservationPrices[id] && (
-  <>
-    {/* Coworking Space n'a pas besoin de "Type de réservation" */}
-    {id !== 'coworking-space' && (
-      <div className="space-y-2">
-        <label className="font-semibold">Type de réservation</label>
-        <select
-          value={modeReservation}
-          onChange={(e) => setModeReservation(e.target.value)}
-          className="w-full p-2 border rounded"
-        >
-          <option value="">Sélectionner une option</option>
-          {reservationPrices[id].hour && <option value="hour">À l'heure</option>}
-          {reservationPrices[id].halfDay && <option value="halfDay">Demi-journée</option>}
-          {reservationPrices[id].fullDay && <option value="fullDay">Journée complète</option>}
-        </select>
-      </div>
-    )}
+                {/* Reservation form */}
+                {id && reservationPrices[id as keyof typeof reservationPrices] && (
+                  <div className="mt-8 space-y-4 p-5 border border-gray-200 rounded-lg">
+                    <h3 className="font-semibold text-lg">Réserver</h3>
+                    
+                    {/* Type de réservation */}
+                    {id !== 'coworking-space' && (
+                      <div className="space-y-2">
+                        <label className="font-medium text-gray-700">Type de réservation</label>
+                        <select
+                          value={modeReservation}
+                          onChange={(e) => setModeReservation(e.target.value)}
+                          className="w-full p-2 border rounded focus:ring-2 focus:ring-lysco-turquoise focus:border-transparent"
+                        >
+                          <option value="">Sélectionner une option</option>
+                          {reservationPrices[id as keyof typeof reservationPrices].hour && 
+                            <option value="hour">À l'heure</option>}
+                          {reservationPrices[id as keyof typeof reservationPrices].halfDay && 
+                            <option value="halfDay">Demi-journée</option>}
+                          {reservationPrices[id as keyof typeof reservationPrices].fullDay && 
+                            <option value="fullDay">Journée complète</option>}
+                        </select>
+                      </div>
+                    )}
+                    
+                    {/* Matin / Après-midi */}
+                    {modeReservation === 'halfDay' && (id === 'location-bureau' || id === 'formation-room') && (
+                      <div className="space-y-2">
+                        <label className="font-medium text-gray-700">Matin ou Après-midi</label>
+                        <select
+                          value={halfDayPeriod}
+                          onChange={(e) => setHalfDayPeriod(e.target.value)}
+                          className="w-full p-2 border rounded focus:ring-2 focus:ring-lysco-turquoise focus:border-transparent"
+                        >
+                          <option value="">Sélectionner</option>
+                          <option value="morning">Matin (9h-12h)</option>
+                          <option value="afternoon">Après-midi (13h-16h)</option>
+                        </select>
+                      </div>
+                    )}
+                    
+                    {/* Date */}
+                    <div className="space-y-2">
+                      <label className="font-medium text-gray-700">Choisir une date</label>
+                      <input
+                        type="date"
+                        value={dateReservation}
+                        onChange={(e) => {
+                          setDateReservation(e.target.value);
+                          setSelectedHours([]);
+                        }}
+                        min={new Date().toISOString().split('T')[0]}
+                        className="w-full p-2 border rounded focus:ring-2 focus:ring-lysco-turquoise focus:border-transparent"
+                      />
+                    </div>
 
-    {/* Matin / Après-midi */}
-    {modeReservation === 'halfDay' && (id === 'location-bureau' || id === 'formation-room') && (
-      <div className="space-y-2 mt-2">
-        <label className="font-semibold">Matin ou Après-midi</label>
-        <select
-          value={halfDayPeriod}
-          onChange={(e) => setHalfDayPeriod(e.target.value)}
-          className="w-full p-2 border rounded"
-        >
-          <option value="">Sélectionner</option>
-          <option value="morning">Matin (9h-12h)</option>
-          <option value="afternoon">Après-midi (13h-16h)</option>
-        </select>
-      </div>
-    )}
-
-    {/* Date */}
-    <div className="space-y-2 mt-4">
-      <label className="font-semibold">Choisir une date</label>
-      <input
-        type="date"
-        value={dateReservation}
-        onChange={(e) => {
-          setDateReservation(e.target.value);
-          setSelectedHours([]);
-        }}
-        min={new Date().toISOString().split('T')[0]}
-        className="w-full p-2 border rounded"
-      />
-    </div>
-
-    {/* Choix des heures */}
-    {(id === 'coworking-space' || (id === 'formation-room' && modeReservation === 'hour')) && dateReservation && (
-      <div className="mt-4">
-        <p className="font-semibold mb-2">Choisir des heures :</p>
-        <div className="grid grid-cols-4 gap-2">
-          {hoursAvailable.map((hour) => (
-            <button
-              key={hour}
-              disabled={isHourReserved(dateReservation, hour)}
-              onClick={() => toggleHour(hour)}
-              className={`p-2 border rounded text-sm ${
-                isHourReserved(dateReservation, hour)
-                  ? 'bg-red-200 cursor-not-allowed'
-                  : selectedHours.includes(hour)
-                  ? 'bg-green-200'
-                  : 'bg-gray-100'
-              }`}
-            >
-              {hour}
-            </button>
-          ))}
-        </div>
-        <p className="text-xs text-gray-400 mt-2">* Les heures en rouge sont déjà réservées.</p>
-      </div>
-    )}
-  </>
-)}
-
-            </div>
-
-            <Card className="p-6">
-              <CardContent className="space-y-6">
+                    {/* Choix des heures */}
+                    {(id === 'coworking-space' || (id === 'formation-room' && modeReservation === 'hour')) && dateReservation && (
+                      <div>
+                        <p className="font-medium text-gray-700 mb-2">Choisir des heures :</p>
+                        <div className="grid grid-cols-4 gap-2">
+                          {hoursAvailable.map((hour) => (
+                            <button
+                              key={hour}
+                              disabled={isHourReserved(dateReservation, hour)}
+                              onClick={() => toggleHour(hour)}
+                              className={`p-2 border rounded text-sm transition-colors ${
+                                isHourReserved(dateReservation, hour)
+                                  ? 'bg-red-100 text-red-400 cursor-not-allowed'
+                                  : selectedHours.includes(hour)
+                                  ? 'bg-green-100 text-green-700 border-green-300'
+                                  : 'bg-gray-50 hover:bg-gray-100'
+                              }`}
+                            >
+                              {hour}
+                            </button>
+                          ))}
+                        </div>
+                        <p className="text-xs text-gray-400 mt-2">* Les heures en rouge sont déjà réservées.</p>
+                      </div>
+                    )}
+                  </div>
+                )}
+                
                 <Button
                   className="w-full bg-lysco-turquoise hover:bg-lysco-turquoise/90"
                   disabled={
@@ -331,16 +354,29 @@ const ServiceDetail = () => {
                 >
                   <ShoppingCart className="h-4 w-4 mr-2" /> Ajouter au panier
                 </Button>
-
+                
                 <div className="pt-4 border-t">
                   <div className="flex items-center justify-center gap-2 text-sm text-gray-600">
                     <Lock className="h-4 w-4" />
                     <span>PAIEMENT SÉCURISÉ GARANTI</span>
                   </div>
                 </div>
-              </CardContent>
-            </Card>
+              </div>
+              
+              {/* Right column: Description */}
+              <div className="bg-gray-50 p-6 rounded-lg">
+                <h2 className="text-xl font-semibold mb-4">Description</h2>
+                <div className="prose max-w-none">
+                  <p className="whitespace-pre-line">{service.description}</p>
+                  
+                  {service.note && (
+                    <p className="mt-4 italic text-gray-600">{service.note}</p>
+                  )}
+                </div>
+              </div>
+            </div>
           </div>
+          
           <ProductDescription />
           <RelatedProducts />
         </div>
