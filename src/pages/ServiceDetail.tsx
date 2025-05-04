@@ -203,6 +203,8 @@ const ServiceDetail = () => {
   const [reviews, setReviews] = useState<any[]>([]);
   const [activeTab, setActiveTab] = useState("description");
   const [refreshReviews, setRefreshReviews] = useState(false);
+  const [loadingReviews, setLoadingReviews] = useState(true);
+
 
   const toggleHour = (hour: string) => {
     if (selectedHours.includes(hour)) {
@@ -471,7 +473,7 @@ const ServiceDetail = () => {
                   <TabsContent value="reviews" className="focus-visible:outline-none focus-visible:ring-0 space-y-6">
                     {id && (
                       <>
-                        <ReviewsList reviews={reviews} />
+                        <ReviewsList reviews={reviews} isLoading={loadingReviews} />
                         <ReviewForm 
                           productId={id} 
                           productName={service.title}
