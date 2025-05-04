@@ -61,29 +61,32 @@ const ProductDescription = () => {
       
       if (!id) return;
 
-      // Modify the query to properly join the profiles table
+      // First, fetch reviews without joining profiles
       const { data, error } = await supabase
         .from('reviews')
-        .select(`
-          *,
-          profiles:user_id (
-            first_name, 
-            last_name
-          )
-        `)
+        .select('*')
         .eq('product_id', id)
         .order('created_at', { ascending: false });
 
       if (error) throw error;
       
-      // Format the reviews to include user_name from the profiles
-      const formattedReviews = data.map(review => {
+      // Then for each review, fetch the profile separately if needed
+      const formattedReviews = await Promise.all(data.map(async (review) => {
         let userName = 'Client';
-        if (review.profiles) {
-          const firstName = review.profiles.first_name || '';
-          const lastName = review.profiles.last_name || '';
-          if (firstName || lastName) {
-            userName = `${firstName} ${lastName}`.trim();
+        
+        if (review.user_id) {
+          const { data: profileData, error: profileError } = await supabase
+            .from('profiles')
+            .select('first_name, last_name')
+            .eq('id', review.user_id)
+            .single();
+          
+          if (!profileError && profileData) {
+            const firstName = profileData.first_name || '';
+            const lastName = profileData.last_name || '';
+            if (firstName || lastName) {
+              userName = `${firstName} ${lastName}`.trim();
+            }
           }
         }
         
@@ -91,7 +94,7 @@ const ProductDescription = () => {
           ...review,
           user_name: userName
         };
-      });
+      }));
       
       setReviews(formattedReviews);
     } catch (error) {
