@@ -47,12 +47,12 @@ BreadcrumbItem.displayName = "BreadcrumbItem"
 
 const BreadcrumbLink = React.forwardRef<
   HTMLAnchorElement,
-  React.ComponentProps<typeof Link> & { href?: string }
->(({ className, href, ...props }, ref) => {
-  if (href) {
+  React.ComponentProps<typeof Link>
+>(({ className, to, ...props }, ref) => {
+  if (to) {
     return (
       <Link
-        to={href}
+        to={to}
         ref={ref}
         className={cn("hover:text-foreground transition-colors hover:text-lysco-turquoise", className)}
         {...props}

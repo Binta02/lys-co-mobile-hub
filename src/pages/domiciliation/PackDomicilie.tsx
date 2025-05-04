@@ -36,11 +36,11 @@ const PackDomicilie = () => {
           <Breadcrumb className="mb-6">
             <BreadcrumbList>
               <BreadcrumbItem>
-                <BreadcrumbLink href="/">Accueil</BreadcrumbLink>
+                <BreadcrumbLink to="/">Accueil</BreadcrumbLink>
               </BreadcrumbItem>
               <BreadcrumbSeparator />
               <BreadcrumbItem>
-                <BreadcrumbLink href="/domiciliation">Domiciliation</BreadcrumbLink>
+                <BreadcrumbLink to="/domiciliation">Domiciliation</BreadcrumbLink>
               </BreadcrumbItem>
               <BreadcrumbSeparator />
               <BreadcrumbItem>
