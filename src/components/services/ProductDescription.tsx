@@ -1,20 +1,91 @@
 
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Card, CardContent } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Link } from 'react-router-dom';
 import ReviewForm from './ReviewForm';
+import ReviewsList from './ReviewsList';
 import { useParams } from 'react-router-dom';
+import { supabase } from '@/integrations/supabase/client';
+import { useToast } from '@/hooks/use-toast';
 
 const ProductDescription = () => {
   const { id } = useParams();
-  const productName = "Accompagnement création VTC – Driel (*hors coûts organismes)";
+  const [productName, setProductName] = useState("Produit");
+  const [reviews, setReviews] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const { toast } = useToast();
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  // Fonction pour charger les avis
+  const fetchReviews = async () => {
+    try {
+      setIsLoading(true);
+      if (!id) return;
+
+      const { data, error } = await supabase
+        .from('reviews')
+        .select('*')
+        .eq('product_id', id)
+        .order('created_at', { ascending: false });
+
+      if (error) throw error;
+      
+      setReviews(data || []);
+    } catch (error: any) {
+      console.error('Erreur lors du chargement des avis:', error);
+      toast({
+        title: "Erreur",
+        description: "Impossible de charger les avis",
+        variant: "destructive",
+      });
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  // Vérifier si l'utilisateur est connecté
+  useEffect(() => {
+    const checkAuthStatus = async () => {
+      const { data } = await supabase.auth.getSession();
+      setIsLoggedIn(!!data.session);
+    };
+
+    checkAuthStatus();
+
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
+      setIsLoggedIn(!!session);
+    });
+
+    return () => {
+      subscription.unsubscribe();
+    };
+  }, []);
+
+  // Charger les détails du produit et les avis
+  useEffect(() => {
+    if (id) {
+      // On pourrait charger les détails du produit ici si nécessaire
+      // Pour l'instant, on utilise juste l'ID comme nom
+      setProductName(id.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase()));
+      
+      fetchReviews();
+    }
+  }, [id]);
+
+  const handleReviewSubmitted = () => {
+    fetchReviews();
+  };
 
   return (
     <div className="mt-16">
       <Tabs defaultValue="description" className="space-y-4">
         <TabsList>
           <TabsTrigger value="description">Description</TabsTrigger>
-          <TabsTrigger value="reviews">Avis (0)</TabsTrigger>
+          <TabsTrigger value="reviews">
+            Avis ({reviews.length})
+          </TabsTrigger>
         </TabsList>
         
         <TabsContent value="description">
@@ -31,7 +102,26 @@ const ProductDescription = () => {
         <TabsContent value="reviews">
           <Card>
             <CardContent className="p-6">
-              <ReviewForm productName={productName} />
+              <ReviewsList reviews={reviews} isLoading={isLoading} />
+              
+              {isLoggedIn ? (
+                <div className="mt-8 border-t pt-6">
+                  <ReviewForm 
+                    productName={productName} 
+                    onReviewSubmitted={handleReviewSubmitted} 
+                  />
+                </div>
+              ) : (
+                <div className="mt-8 border-t pt-6 text-center">
+                  <p className="text-gray-600">Vous devez être connecté pour laisser un avis.</p>
+                  <Button 
+                    className="mt-4 bg-lysco-turquoise hover:bg-lysco-turquoise/90" 
+                    asChild
+                  >
+                    <Link to="/login?redirect=back">Se connecter</Link>
+                  </Button>
+                </div>
+              )}
             </CardContent>
           </Card>
         </TabsContent>
