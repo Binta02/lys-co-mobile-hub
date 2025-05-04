@@ -17,6 +17,11 @@ import { Toaster } from './components/ui/toaster';
 import DemandeDevis from './pages/DemandeDevis';
 import ServicesAdmin from './pages/ServicesAdmin';
 
+// Pages pour les nouveaux liens du footer
+import EspacesTravail from './pages/EspacesTravail';
+import Tarifs from './pages/Tarifs';
+import ServicesComplementaires from './pages/ServicesComplementaires';
+
 // Import domiciliation pages
 import Domiciliation1AnEntreprise from './pages/domiciliation/Domiciliation1AnEntreprise';
 import Domiciliation3MoisEntreprise from './pages/domiciliation/Domiciliation3MoisEntreprise';
@@ -67,6 +72,12 @@ function App() {
           <Route path="/services/:id" element={<ServiceDetail />} />
           <Route path="/checkout" element={<Checkout />} />
           <Route path="/confirmation" element={<Confirmation />} />
+          
+          {/* Nouvelles routes pour les liens du footer */}
+          <Route path="/espaces-travail" element={<EspacesTravail />} />
+          <Route path="/tarifs" element={<Tarifs />} />
+          <Route path="/services-complementaires" element={<ServicesComplementaires />} />
+          
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>

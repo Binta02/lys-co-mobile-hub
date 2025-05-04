@@ -23,12 +23,12 @@ const Footer: React.FC = () => {
                 </Link>
               </li>
               <li>
-                <Link to="/admin-services" className="text-gray-600 hover:text-lysco-turquoise transition-colors">
+                <Link to="/services-admin" className="text-gray-600 hover:text-lysco-turquoise transition-colors">
                   Services administratifs
                 </Link>
               </li>
               <li>
-                <Link to="/marketing" className="text-gray-600 hover:text-lysco-turquoise transition-colors">
+                <Link to="/communication" className="text-gray-600 hover:text-lysco-turquoise transition-colors">
                   Communication & Marketing
                 </Link>
               </li>
@@ -39,18 +39,18 @@ const Footer: React.FC = () => {
             <h3 className="text-lg font-semibold mb-4">Liens utiles</h3>
             <ul className="space-y-2">
               <li>
-                <Link to="/about" className="text-gray-600 hover:text-lysco-turquoise transition-colors">
-                  À propos
+                <Link to="/espaces-travail" className="text-gray-600 hover:text-lysco-turquoise transition-colors">
+                  Nos espaces de travail
                 </Link>
               </li>
               <li>
-                <Link to="/faq" className="text-gray-600 hover:text-lysco-turquoise transition-colors">
-                  FAQ
+                <Link to="/tarifs" className="text-gray-600 hover:text-lysco-turquoise transition-colors">
+                  Nos Tarifs
                 </Link>
               </li>
               <li>
-                <Link to="/legal" className="text-gray-600 hover:text-lysco-turquoise transition-colors">
-                  Mentions légales
+                <Link to="/services-complementaires" className="text-gray-600 hover:text-lysco-turquoise transition-colors">
+                  Nos Services Complémentaires
                 </Link>
               </li>
             </ul>
