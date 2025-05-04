@@ -1,3 +1,4 @@
+
 import React from 'react';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
@@ -41,6 +42,34 @@ const Domiciliation = () => {
         <section className="py-16">
           <div className="container mx-auto px-4">
             <div className="max-w-4xl mx-auto space-y-12">
+              {/* Liens rapides vers les offres de domiciliation */}
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <Link to="/domiciliation/1-an-entreprise" className="bg-gradient-to-r from-lysco-turquoise/10 to-lysco-pink/10 p-4 rounded-lg text-center hover:shadow-md transition-shadow">
+                  <h3 className="font-semibold">Domiciliation 1 an</h3>
+                  <p className="text-sm text-gray-600">Entreprise</p>
+                </Link>
+                <Link to="/domiciliation/3-mois-entreprise" className="bg-gradient-to-r from-lysco-turquoise/10 to-lysco-pink/10 p-4 rounded-lg text-center hover:shadow-md transition-shadow">
+                  <h3 className="font-semibold">Domiciliation 3 mois</h3>
+                  <p className="text-sm text-gray-600">Entreprise</p>
+                </Link>
+                <Link to="/domiciliation/3-mois-micro-entreprise" className="bg-gradient-to-r from-lysco-turquoise/10 to-lysco-pink/10 p-4 rounded-lg text-center hover:shadow-md transition-shadow">
+                  <h3 className="font-semibold">Domiciliation 3 mois</h3>
+                  <p className="text-sm text-gray-600">Micro Entreprise</p>
+                </Link>
+                <Link to="/domiciliation/6-mois-entreprise" className="bg-gradient-to-r from-lysco-turquoise/10 to-lysco-pink/10 p-4 rounded-lg text-center hover:shadow-md transition-shadow">
+                  <h3 className="font-semibold">Domiciliation 6 mois</h3>
+                  <p className="text-sm text-gray-600">Entreprise</p>
+                </Link>
+                <Link to="/domiciliation/6-mois-micro-entreprise" className="bg-gradient-to-r from-lysco-turquoise/10 to-lysco-pink/10 p-4 rounded-lg text-center hover:shadow-md transition-shadow">
+                  <h3 className="font-semibold">Domiciliation 6 mois</h3>
+                  <p className="text-sm text-gray-600">Micro Entreprise</p>
+                </Link>
+                <Link to="/domiciliation/pack-domicilie" className="bg-gradient-to-r from-lysco-turquoise/10 to-lysco-pink/10 p-4 rounded-lg text-center hover:shadow-md transition-shadow">
+                  <h3 className="font-semibold">Pack domicilié</h3>
+                  <p className="text-sm text-gray-600">Offre complète</p>
+                </Link>
+              </div>
+
               {/* Add DomiciliationOffers before other sections */}
               <DomiciliationOffers />
 
@@ -95,7 +124,7 @@ const Domiciliation = () => {
                     </li>
                   </ul>
                   <div className="mt-6">
-                    <Link to="/service/pack-exclusif">
+                    <Link to="/domiciliation/pack-domicilie">
                       <Button className="w-full flex items-center justify-center">
                         Je profite de l'offre <ChevronRight className="ml-2 h-4 w-4" />
                       </Button>
@@ -127,18 +156,19 @@ const Domiciliation = () => {
               </div>
 
               {/* Location de bureaux Section */}
-              {/* <Card>
+              <Card>
                 <CardHeader>
                   <CardTitle>Nos espaces de travail à Deuil-la-Barre</CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-6">
                   <div className="grid gap-6 md:grid-cols-2">
-                    <div>
+                    <Link to="/service/coworking-space" className="block hover:bg-gray-50 p-4 rounded transition">
                       <h3 className="font-bold mb-2">Espace Coworking</h3>
                       <p className="text-gray-600 mb-2">Capacité : 8 personnes</p>
                       <p className="text-2xl font-bold">5€<span className="text-base font-normal">/heure</span></p>
-                    </div>
-                    <div>
+                    </Link>
+
+                    <Link to="/service/formation-room" className="block hover:bg-gray-50 p-4 rounded transition">
                       <h3 className="font-bold mb-2">Salle de Formation</h3>
                       <p className="text-gray-600 mb-2">Capacité : 10 personnes</p>
                       <ul className="space-y-1">
@@ -146,62 +176,26 @@ const Domiciliation = () => {
                         <li>25€/demi-journée</li>
                         <li>45€/journée</li>
                       </ul>
-                    </div>
+                    </Link>
                   </div>
-                  <div>
+
+                  <Link to="/service/location-bureau" className="block hover:bg-gray-50 p-4 rounded transition">
                     <h3 className="font-bold mb-2">Location de Bureau (2 places)</h3>
                     <ul className="space-y-1">
                       <li>125€/mois (demi-journée)</li>
                       <li>250€/mois (journée complète)</li>
                     </ul>
-                  </div>
-                  <Link to="/service/location-bureau">
-                    <Button variant="outline" className="w-full flex items-center justify-center">
-                      Réserver un espace <ChevronRight className="ml-2 h-4 w-4" />
-                    </Button>
                   </Link>
+
+                  <div className="text-center">
+                    <Link to="/contact">
+                      <Button variant="outline" className="flex items-center justify-center mx-auto">
+                        Plus d'infos ou réserver <ChevronRight className="ml-2 h-4 w-4" />
+                      </Button>
+                    </Link>
+                  </div>
                 </CardContent>
-              </Card> */}
-              <Card>
-  <CardHeader>
-    <CardTitle>Nos espaces de travail à Deuil-la-Barre</CardTitle>
-  </CardHeader>
-  <CardContent className="space-y-6">
-    <div className="grid gap-6 md:grid-cols-2">
-      <Link to="/service/coworking-space" className="block hover:bg-gray-50 p-4 rounded transition">
-        <h3 className="font-bold mb-2">Espace Coworking</h3>
-        <p className="text-gray-600 mb-2">Capacité : 8 personnes</p>
-        <p className="text-2xl font-bold">5€<span className="text-base font-normal">/heure</span></p>
-      </Link>
-
-      <Link to="/service/formation-room" className="block hover:bg-gray-50 p-4 rounded transition">
-        <h3 className="font-bold mb-2">Salle de Formation</h3>
-        <p className="text-gray-600 mb-2">Capacité : 10 personnes</p>
-        <ul className="space-y-1">
-          <li>10€/heure</li>
-          <li>25€/demi-journée</li>
-          <li>45€/journée</li>
-        </ul>
-      </Link>
-    </div>
-
-    <Link to="/service/location-bureau" className="block hover:bg-gray-50 p-4 rounded transition">
-      <h3 className="font-bold mb-2">Location de Bureau (2 places)</h3>
-      <ul className="space-y-1">
-        <li>125€/mois (demi-journée)</li>
-        <li>250€/mois (journée complète)</li>
-      </ul>
-    </Link>
-
-    <div className="text-center">
-      <Link to="/contact">
-        <Button variant="outline" className="flex items-center justify-center mx-auto">
-          Plus d’infos ou réserver <ChevronRight className="ml-2 h-4 w-4" />
-        </Button>
-      </Link>
-    </div>
-  </CardContent>
-</Card>
+              </Card>
 
             </div>
           </div>

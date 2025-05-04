@@ -1,7 +1,8 @@
+
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
-import { Menu, X, User } from 'lucide-react';
+import { Menu, X, User, ChevronDown } from 'lucide-react';
 import MobileMenu from './MobileMenu';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from '@/components/ui/sonner';
@@ -12,7 +13,22 @@ import {
   DropdownMenuTrigger,
   DropdownMenuContent,
   DropdownMenuItem,
+  DropdownMenuGroup,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuSub,
+  DropdownMenuSubTrigger,
+  DropdownMenuSubContent,
 } from '@/components/ui/dropdown-menu';
+import {
+  NavigationMenu,
+  NavigationMenuContent,
+  NavigationMenuItem,
+  NavigationMenuLink,
+  NavigationMenuList,
+  NavigationMenuTrigger,
+  navigationMenuTriggerStyle,
+} from "@/components/ui/navigation-menu";
 
 const Navbar = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -63,9 +79,76 @@ const Navbar = () => {
           <Link to="/" className="text-gray-700 hover:text-lysco-turquoise transition-colors">
             Accueil
           </Link>
-          <Link to="/domiciliation" className="text-gray-700 hover:text-lysco-turquoise transition-colors">
-            Domiciliation
-          </Link>
+          
+          <NavigationMenu>
+            <NavigationMenuList>
+              <NavigationMenuItem>
+                <NavigationMenuTrigger className="bg-transparent hover:bg-transparent hover:text-lysco-turquoise">Domiciliation</NavigationMenuTrigger>
+                <NavigationMenuContent className="bg-white">
+                  <ul className="grid gap-3 p-6 md:w-[400px] lg:w-[500px] lg:grid-cols-2">
+                    <li className="row-span-3">
+                      <NavigationMenuLink asChild>
+                        <Link
+                          className="flex h-full w-full select-none flex-col justify-end rounded-md bg-gradient-to-b from-lysco-turquoise/20 to-lysco-pink/20 p-6 no-underline outline-none focus:shadow-md"
+                          to="/domiciliation"
+                        >
+                          <div className="mb-2 mt-4 text-lg font-medium">
+                            Services de Domiciliation
+                          </div>
+                          <p className="text-sm leading-tight text-muted-foreground">
+                            Découvrez tous nos services de domiciliation adaptés à votre entreprise.
+                          </p>
+                        </Link>
+                      </NavigationMenuLink>
+                    </li>
+                    <li>
+                      <NavigationMenuLink asChild>
+                        <Link to="/domiciliation/1-an-entreprise" className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground">
+                          <div className="text-sm font-medium leading-none">Domiciliation 1 an – Entreprise</div>
+                        </Link>
+                      </NavigationMenuLink>
+                    </li>
+                    <li>
+                      <NavigationMenuLink asChild>
+                        <Link to="/domiciliation/3-mois-entreprise" className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground">
+                          <div className="text-sm font-medium leading-none">Domiciliation 3 mois – Entreprise</div>
+                        </Link>
+                      </NavigationMenuLink>
+                    </li>
+                    <li>
+                      <NavigationMenuLink asChild>
+                        <Link to="/domiciliation/3-mois-micro-entreprise" className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground">
+                          <div className="text-sm font-medium leading-none">Domiciliation 3 mois – Micro Entreprise</div>
+                        </Link>
+                      </NavigationMenuLink>
+                    </li>
+                    <li>
+                      <NavigationMenuLink asChild>
+                        <Link to="/domiciliation/6-mois-entreprise" className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground">
+                          <div className="text-sm font-medium leading-none">Domiciliation 6 mois – Entreprise</div>
+                        </Link>
+                      </NavigationMenuLink>
+                    </li>
+                    <li>
+                      <NavigationMenuLink asChild>
+                        <Link to="/domiciliation/6-mois-micro-entreprise" className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground">
+                          <div className="text-sm font-medium leading-none">Domiciliation 6 mois – Micro Entreprise</div>
+                        </Link>
+                      </NavigationMenuLink>
+                    </li>
+                    <li>
+                      <NavigationMenuLink asChild>
+                        <Link to="/domiciliation/pack-domicilie" className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground">
+                          <div className="text-sm font-medium leading-none">Pack domicilié</div>
+                        </Link>
+                      </NavigationMenuLink>
+                    </li>
+                  </ul>
+                </NavigationMenuContent>
+              </NavigationMenuItem>
+            </NavigationMenuList>
+          </NavigationMenu>
+          
           <Link to="/services-admin" className="text-gray-700 hover:text-lysco-turquoise transition-colors">
             Services Admin
           </Link>
@@ -76,7 +159,7 @@ const Navbar = () => {
             Contact
           </Link>
 
-          {session && <CartDrawer />} {/* ✅ Affiche le panier uniquement si connecté */}
+          {session && <CartDrawer />}
 
           {session ? (
             <DropdownMenu>
@@ -103,23 +186,16 @@ const Navbar = () => {
           )}
         </div>
 
-        {/* <button
-          className="md:hidden text-gray-700"
+        <button 
+          className="md:hidden text-black"
           onClick={toggleMobileMenu}
           aria-label="Toggle menu"
         >
-          {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
-        </button> */}
-        <button 
-        className="md:hidden text-black"
-        onClick={toggleMobileMenu}
-        aria-label="Toggle menu"
-      >
-        {isMobileMenuOpen 
-          ? <X size={24} className="text-black" />
-          : <Menu size={24} className="text-black" />
-        }
-      </button>
+          {isMobileMenuOpen 
+            ? <X size={24} className="text-black" />
+            : <Menu size={24} className="text-black" />
+          }
+        </button>
       </div>
 
       {isMobileMenuOpen && <MobileMenu onClose={toggleMobileMenu} session={session} />}
