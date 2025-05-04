@@ -35,7 +35,7 @@ const ServicesComplementaires = () => {
               </BreadcrumbItem>
               <BreadcrumbSeparator />
               <BreadcrumbItem>
-                <BreadcrumbLink>Nos Services Complémentaires</BreadcrumbLink>
+                <BreadcrumbLink to="/services-complementaires">Nos Services Complémentaires</BreadcrumbLink>
               </BreadcrumbItem>
             </BreadcrumbList>
           </Breadcrumb>

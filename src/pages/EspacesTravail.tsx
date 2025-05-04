@@ -26,7 +26,7 @@ const EspacesTravail = () => {
               </BreadcrumbItem>
               <BreadcrumbSeparator />
               <BreadcrumbItem>
-                <BreadcrumbLink>Nos espaces de travail</BreadcrumbLink>
+                <BreadcrumbLink to="/espaces-travail">Nos espaces de travail</BreadcrumbLink>
               </BreadcrumbItem>
             </BreadcrumbList>
           </Breadcrumb>

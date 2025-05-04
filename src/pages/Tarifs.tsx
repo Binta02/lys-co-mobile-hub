@@ -35,7 +35,7 @@ const Tarifs = () => {
               </BreadcrumbItem>
               <BreadcrumbSeparator />
               <BreadcrumbItem>
-                <BreadcrumbLink>Nos Tarifs</BreadcrumbLink>
+                <BreadcrumbLink to="/tarifs">Nos Tarifs</BreadcrumbLink>
               </BreadcrumbItem>
             </BreadcrumbList>
           </Breadcrumb>
