@@ -70,6 +70,7 @@ function App() {
           <Route path="/dashboard/*" element={<Dashboard />} />
           <Route path="/reset-password" element={<ResetPassword />} />
           <Route path="/services/:id" element={<ServiceDetail />} />
+          <Route path="/service/:id" element={<ServiceDetail />} />
           <Route path="/checkout" element={<Checkout />} />
           <Route path="/confirmation" element={<Confirmation />} />
           
@@ -77,11 +78,7 @@ function App() {
           <Route path="/espaces-travail" element={<EspacesTravail />} />
           <Route path="/tarifs" element={<Tarifs />} />
           <Route path="/services-complementaires" element={<ServicesComplementaires />} />
-          
-          {/* Routes spécifiques pour les services d'espaces de travail */}
-          <Route path="/services/coworking-space" element={<ServiceDetail />} />
-          <Route path="/services/formation-room" element={<ServiceDetail />} />
-          <Route path="/services/location-bureau" element={<ServiceDetail />} />
+        
           
           <Route path="*" element={<NotFound />} />
         </Routes>

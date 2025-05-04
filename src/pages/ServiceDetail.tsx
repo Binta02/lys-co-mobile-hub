@@ -216,76 +216,7 @@ const ServiceDetail = () => {
                 <p>{service.description}</p>
               </div>
 
-              {/* {reservationPrices[id] && (
-                <>
-                  <div className="space-y-2">
-                    <label className="font-semibold">Type de réservation</label>
-                    <select 
-                      value={modeReservation}
-                      onChange={(e) => setModeReservation(e.target.value)}
-                      className="w-full p-2 border rounded"
-                    >
-                      <option value="">Sélectionner une option</option>
-                      {reservationPrices[id].hour && <option value="hour">À l'heure</option>}
-                      {reservationPrices[id].halfDay && <option value="halfDay">Demi-journée</option>}
-                      {reservationPrices[id].fullDay && <option value="fullDay">Journée complète</option>}
-                    </select>
-                  </div>
-
-                  {modeReservation === 'halfDay' && (id === 'location-bureau' || id === 'formation-room') && (
-                    <div className="space-y-2 mt-2">
-                      <label className="font-semibold">Matin ou Après-midi</label>
-                      <select 
-                        value={halfDayPeriod}
-                        onChange={(e) => setHalfDayPeriod(e.target.value)}
-                        className="w-full p-2 border rounded"
-                      >
-                        <option value="morning">Matin (9h-12h)</option>
-                        <option value="afternoon">Après-midi (13h-16h)</option>
-                      </select>
-                    </div>
-                  )}
-                  <div className="space-y-2 mt-4">
-                    <label className="font-semibold">Choisir une date</label>
-                    <input
-                      type="date"
-                      value={dateReservation}
-                      onChange={(e) => {
-                        setDateReservation(e.target.value);
-                        setSelectedHours([]);
-                      }}
-                      min={new Date().toISOString().split('T')[0]}
-                      className="w-full p-2 border rounded"
-                    />
-                  </div>
-
-                  {modeReservation === 'hour' && (id === 'coworking-space' || id === 'formation-room') && dateReservation && (
-                    <div className="mt-4">
-                      <p className="font-semibold mb-2">Choisir des heures :</p>
-                      <div className="grid grid-cols-4 gap-2">
-                        {hoursAvailable.map((hour) => (
-                          <button
-                            key={hour}
-                            disabled={isHourReserved(dateReservation, hour)}
-                            onClick={() => toggleHour(hour)}
-                            className={`p-2 border rounded text-sm ${
-                              isHourReserved(dateReservation, hour)
-                                ? 'bg-red-200 cursor-not-allowed'
-                                : selectedHours.includes(hour)
-                                ? 'bg-green-200'
-                                : 'bg-gray-100'
-                            }`}
-                          >
-                            {hour}
-                          </button>
-                        ))}
-                      </div>
-                      <p className="text-xs text-gray-400 mt-2">* Les heures en rouge sont déjà réservées.</p>
-                    </div>
-                  )}
-
-                </>
-              )} */}
+              
               {reservationPrices[id] && (
   <>
     {/* Coworking Space n'a pas besoin de "Type de réservation" */}
