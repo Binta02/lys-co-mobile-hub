@@ -78,6 +78,11 @@ function App() {
           <Route path="/tarifs" element={<Tarifs />} />
           <Route path="/services-complementaires" element={<ServicesComplementaires />} />
           
+          {/* Routes spécifiques pour les services d'espaces de travail */}
+          <Route path="/services/coworking-space" element={<ServiceDetail />} />
+          <Route path="/services/formation-room" element={<ServiceDetail />} />
+          <Route path="/services/location-bureau" element={<ServiceDetail />} />
+          
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>

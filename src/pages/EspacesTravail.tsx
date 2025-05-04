@@ -11,6 +11,8 @@ import {
   BreadcrumbList,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
+import { Calendar, Clock } from 'lucide-react';
+import { Card, CardContent } from '@/components/ui/card';
 
 const EspacesTravail = () => {
   return (
@@ -32,6 +34,81 @@ const EspacesTravail = () => {
           </Breadcrumb>
           
           <h1 className="text-3xl md:text-4xl font-bold mb-6 text-center">Nos espaces de travail</h1>
+          
+          {/* Services disponibles - Nouvelle section avec cartes */}
+          <div className="mb-12">
+            <h2 className="text-2xl font-semibold mb-6 text-center text-lysco-turquoise">
+              Réservez dès maintenant nos espaces
+            </h2>
+            
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              {/* Espace de coworking */}
+              <Card className="overflow-hidden">
+                <div className="bg-gray-100 h-48 flex items-center justify-center">
+                  <p className="text-gray-500">Image de l'espace de coworking</p>
+                </div>
+                <CardContent className="p-6">
+                  <h3 className="text-xl font-semibold mb-2">Espace de coworking</h3>
+                  <p className="text-gray-600 mb-4">
+                    Espace de coworking pour 8 personnes avec Wi-Fi et espace calme.
+                  </p>
+                  <div className="flex items-center text-sm text-gray-500 mb-3">
+                    <Clock className="h-4 w-4 mr-2" />
+                    <span>À partir de 5€/heure</span>
+                  </div>
+                  <Link to="/services/coworking-space">
+                    <Button className="w-full bg-lysco-turquoise hover:bg-lysco-turquoise/90">
+                      Réserver maintenant
+                    </Button>
+                  </Link>
+                </CardContent>
+              </Card>
+              
+              {/* Salle de formation */}
+              <Card className="overflow-hidden">
+                <div className="bg-gray-100 h-48 flex items-center justify-center">
+                  <p className="text-gray-500">Image de la salle de formation</p>
+                </div>
+                <CardContent className="p-6">
+                  <h3 className="text-xl font-semibold mb-2">Salle de formation</h3>
+                  <p className="text-gray-600 mb-4">
+                    Salle pour 10 personnes avec équipement pédagogique.
+                  </p>
+                  <div className="flex items-center text-sm text-gray-500 mb-3">
+                    <Calendar className="h-4 w-4 mr-2" />
+                    <span>10€/h, 25€/demi-journée, 45€/journée</span>
+                  </div>
+                  <Link to="/services/formation-room">
+                    <Button className="w-full bg-lysco-pink hover:bg-lysco-pink/90">
+                      Réserver maintenant
+                    </Button>
+                  </Link>
+                </CardContent>
+              </Card>
+              
+              {/* Location de bureau */}
+              <Card className="overflow-hidden">
+                <div className="bg-gray-100 h-48 flex items-center justify-center">
+                  <p className="text-gray-500">Image du bureau privé</p>
+                </div>
+                <CardContent className="p-6">
+                  <h3 className="text-xl font-semibold mb-2">Location de bureau</h3>
+                  <p className="text-gray-600 mb-4">
+                    Espaces privés et calmes pour un travail concentré.
+                  </p>
+                  <div className="flex items-center text-sm text-gray-500 mb-3">
+                    <Calendar className="h-4 w-4 mr-2" />
+                    <span>125€/demi-journée, 250€/journée</span>
+                  </div>
+                  <Link to="/services/location-bureau">
+                    <Button className="w-full bg-lysco-turquoise hover:bg-lysco-turquoise/90">
+                      Réserver maintenant
+                    </Button>
+                  </Link>
+                </CardContent>
+              </Card>
+            </div>
+          </div>
           
           <div className="grid grid-cols-1 md:grid-cols-2 gap-12 mb-12">
             <div>

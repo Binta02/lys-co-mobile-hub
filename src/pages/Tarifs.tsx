@@ -208,37 +208,65 @@ const Tarifs = () => {
               </TableHeader>
               <TableBody>
                 <TableRow>
-                  <TableCell className="font-medium">Espace coworking</TableCell>
+                  <TableCell className="font-medium">
+                    <Link to="/services/coworking-space" className="text-lysco-turquoise hover:underline">
+                      Espace coworking
+                    </Link>
+                  </TableCell>
                   <TableCell>Journée</TableCell>
                   <TableCell>20 €</TableCell>
                 </TableRow>
                 <TableRow>
-                  <TableCell className="font-medium">Espace coworking</TableCell>
+                  <TableCell className="font-medium">
+                    <Link to="/services/coworking-space" className="text-lysco-turquoise hover:underline">
+                      Espace coworking
+                    </Link>
+                  </TableCell>
                   <TableCell>Semaine</TableCell>
                   <TableCell>80 €</TableCell>
                 </TableRow>
                 <TableRow>
-                  <TableCell className="font-medium">Espace coworking</TableCell>
+                  <TableCell className="font-medium">
+                    <Link to="/services/coworking-space" className="text-lysco-turquoise hover:underline">
+                      Espace coworking
+                    </Link>
+                  </TableCell>
                   <TableCell>Mois</TableCell>
                   <TableCell>250 €</TableCell>
                 </TableRow>
                 <TableRow>
-                  <TableCell className="font-medium">Bureau privé</TableCell>
+                  <TableCell className="font-medium">
+                    <Link to="/services/location-bureau" className="text-lysco-turquoise hover:underline">
+                      Bureau privé
+                    </Link>
+                  </TableCell>
                   <TableCell>Journée</TableCell>
                   <TableCell>40 €</TableCell>
                 </TableRow>
                 <TableRow>
-                  <TableCell className="font-medium">Bureau privé</TableCell>
+                  <TableCell className="font-medium">
+                    <Link to="/services/location-bureau" className="text-lysco-turquoise hover:underline">
+                      Bureau privé
+                    </Link>
+                  </TableCell>
                   <TableCell>Mois</TableCell>
                   <TableCell>500 €</TableCell>
                 </TableRow>
                 <TableRow>
-                  <TableCell className="font-medium">Salle de réunion</TableCell>
+                  <TableCell className="font-medium">
+                    <Link to="/services/formation-room" className="text-lysco-turquoise hover:underline">
+                      Salle de réunion
+                    </Link>
+                  </TableCell>
                   <TableCell>Heure</TableCell>
                   <TableCell>30 €</TableCell>
                 </TableRow>
                 <TableRow>
-                  <TableCell className="font-medium">Salle de réunion</TableCell>
+                  <TableCell className="font-medium">
+                    <Link to="/services/formation-room" className="text-lysco-turquoise hover:underline">
+                      Salle de réunion
+                    </Link>
+                  </TableCell>
                   <TableCell>Journée</TableCell>
                   <TableCell>180 €</TableCell>
                 </TableRow>
