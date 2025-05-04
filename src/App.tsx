@@ -14,6 +14,15 @@ import { CartProvider } from './components/cart/CartContext';
 import Checkout from './pages/Checkout';
 import Confirmation from './pages/Confirmation';
 import { Toaster } from './components/ui/toaster';
+import DemandeDevis from './pages/DemandeDevis';
+
+// Import domiciliation pages
+import Domiciliation1AnEntreprise from './pages/domiciliation/Domiciliation1AnEntreprise';
+import Domiciliation3MoisEntreprise from './pages/domiciliation/Domiciliation3MoisEntreprise';
+import Domiciliation3MoisMicroEntreprise from './pages/domiciliation/Domiciliation3MoisMicroEntreprise';
+import Domiciliation6MoisEntreprise from './pages/domiciliation/Domiciliation6MoisEntreprise';
+import Domiciliation6MoisMicroEntreprise from './pages/domiciliation/Domiciliation6MoisMicroEntreprise';
+import PackDomicilie from './pages/domiciliation/PackDomicilie';
 
 // Import communication sub-pages
 import CommunicationSiteInternet from './pages/CommunicationSiteInternet';
@@ -32,6 +41,12 @@ function App() {
         <Routes>
           <Route path="/" element={<Index />} />
           <Route path="/domiciliation" element={<Domiciliation />} />
+          <Route path="/domiciliation/1-an-entreprise" element={<Domiciliation1AnEntreprise />} />
+          <Route path="/domiciliation/3-mois-entreprise" element={<Domiciliation3MoisEntreprise />} />
+          <Route path="/domiciliation/3-mois-micro-entreprise" element={<Domiciliation3MoisMicroEntreprise />} />
+          <Route path="/domiciliation/6-mois-entreprise" element={<Domiciliation6MoisEntreprise />} />
+          <Route path="/domiciliation/6-mois-micro-entreprise" element={<Domiciliation6MoisMicroEntreprise />} />
+          <Route path="/domiciliation/pack-domicilie" element={<PackDomicilie />} />
           <Route path="/communication" element={<Communication />} />
           <Route path="/communication/site-internet" element={<CommunicationSiteInternet />} />
           <Route path="/communication/community-management" element={<CommunicationCommunityManagement />} />
@@ -42,6 +57,7 @@ function App() {
           <Route path="/communication/photos" element={<CommunicationPhotos />} />
           <Route path="/communication/strategie" element={<CommunicationStrategie />} />
           <Route path="/contact" element={<Contact />} />
+          <Route path="/demande-devis" element={<DemandeDevis />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/dashboard/*" element={<Dashboard />} />
