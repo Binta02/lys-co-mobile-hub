@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
@@ -21,6 +20,7 @@ const Domiciliation3MoisMicroEntreprise = () => {
   const [reviews, setReviews] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [session, setSession] = useState(null);
+  const [currentUserId, setCurrentUserId] = useState(null);
   const productName = 'Domiciliation 3 mois – Micro Entreprise';
   const productId = 'domiciliation-3mois-micro';
   
@@ -46,10 +46,12 @@ const Domiciliation3MoisMicroEntreprise = () => {
     // Check auth state
     supabase.auth.getSession().then(({ data: { session } }) => {
       setSession(session);
+      setCurrentUserId(session?.user?.id || null);
     });
 
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
       setSession(session);
+      setCurrentUserId(session?.user?.id || null);
     });
 
     return () => subscription.unsubscribe();
@@ -84,6 +86,34 @@ const Domiciliation3MoisMicroEntreprise = () => {
     };
 
     fetchReviews();
+  };
+
+  // Fonction pour supprimer un avis
+  const handleDeleteReview = async (reviewId) => {
+    try {
+      const { error } = await supabase
+        .from('reviews')
+        .delete()
+        .eq('id', reviewId)
+        .eq('user_id', currentUserId); // S'assurer que l'utilisateur ne peut supprimer que ses propres avis
+      
+      if (error) throw error;
+      
+      toast({
+        title: "Avis supprimé",
+        description: "Votre avis a été supprimé avec succès",
+      });
+      
+      // Recharger les avis après la suppression
+      handleReviewSubmitted();
+    } catch (error) {
+      console.error('Erreur lors de la suppression de l\'avis:', error);
+      toast({
+        title: "Erreur",
+        description: "Impossible de supprimer l'avis",
+        variant: "destructive",
+      });
+    }
   };
 
   return (
@@ -183,7 +213,12 @@ const Domiciliation3MoisMicroEntreprise = () => {
                   </div>
 
                   {reviews.length > 0 && (
-                    <ReviewsList reviews={reviews} isLoading={isLoading} />
+                    <ReviewsList 
+                      reviews={reviews} 
+                      isLoading={isLoading} 
+                      currentUserId={currentUserId}
+                      onDeleteReview={handleDeleteReview}
+                    />
                   )}
 
                   {session ? (

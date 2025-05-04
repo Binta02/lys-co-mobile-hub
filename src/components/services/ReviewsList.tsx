@@ -1,9 +1,10 @@
 
 import React from 'react';
-import { Star } from "lucide-react";
+import { Star, Trash2 } from "lucide-react";
 import { Card, CardContent } from '@/components/ui/card';
 import { formatDistance } from 'date-fns';
 import { fr } from 'date-fns/locale';
+import { Button } from '@/components/ui/button';
 
 interface Review {
   id: string;
@@ -23,9 +24,11 @@ interface Review {
 interface ReviewsListProps {
   reviews: Review[];
   isLoading: boolean;
+  currentUserId?: string | null;
+  onDeleteReview?: (reviewId: string) => void;
 }
 
-const ReviewsList = ({ reviews, isLoading }: ReviewsListProps) => {
+const ReviewsList = ({ reviews, isLoading, currentUserId, onDeleteReview }: ReviewsListProps) => {
   if (isLoading) {
     return <div className="text-center py-8">Chargement des avis...</div>;
   }
@@ -59,9 +62,23 @@ const ReviewsList = ({ reviews, isLoading }: ReviewsListProps) => {
                   })}
                 </p>
               </div>
-              <div className="mt-4 md:mt-0 md:ml-4">
+              <div className="mt-4 md:mt-0 md:ml-4 flex-1">
                 <p className="text-gray-700">{review.comment}</p>
               </div>
+              
+              {/* Bouton de suppression (visible uniquement par l'auteur) */}
+              {currentUserId && currentUserId === review.user_id && onDeleteReview && (
+                <div className="mt-4 md:mt-0 ml-auto">
+                  <Button 
+                    variant="ghost" 
+                    size="sm" 
+                    onClick={() => onDeleteReview(review.id)}
+                    className="text-red-500 hover:text-red-700 hover:bg-red-50"
+                  >
+                    <Trash2 className="h-4 w-4" />
+                  </Button>
+                </div>
+              )}
             </div>
           </CardContent>
         </Card>

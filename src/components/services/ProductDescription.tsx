@@ -8,6 +8,16 @@ import ReviewForm from './ReviewForm';
 import ReviewsList from './ReviewsList';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 
 const ProductDescription = () => {
   const [productName, setProductName] = useState("");
@@ -16,7 +26,10 @@ const ProductDescription = () => {
   const [isLoading, setIsLoading] = useState(true);
   const { toast } = useToast();
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [currentUserId, setCurrentUserId] = useState<string | null>(null);
   const location = useLocation();
+  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
+  const [reviewToDelete, setReviewToDelete] = useState<string | null>(null);
 
   // Fonction pour déterminer le nom et l'ID du produit en fonction de l'URL
   const determineProductInfo = () => {
@@ -109,17 +122,58 @@ const ProductDescription = () => {
     }
   };
 
+  // Fonction pour supprimer un avis
+  const handleDeleteReview = async (reviewId: string) => {
+    setReviewToDelete(reviewId);
+    setIsDeleteDialogOpen(true);
+  };
+
+  // Fonction pour confirmer la suppression d'un avis
+  const confirmDeleteReview = async () => {
+    if (!reviewToDelete) return;
+    
+    try {
+      const { error } = await supabase
+        .from('reviews')
+        .delete()
+        .eq('id', reviewToDelete)
+        .eq('user_id', currentUserId); // S'assurer que l'utilisateur ne peut supprimer que ses propres avis
+      
+      if (error) throw error;
+      
+      toast({
+        title: "Avis supprimé",
+        description: "Votre avis a été supprimé avec succès",
+      });
+      
+      // Recharger les avis après la suppression
+      fetchReviews();
+    } catch (error) {
+      console.error('Erreur lors de la suppression de l\'avis:', error);
+      toast({
+        title: "Erreur",
+        description: "Impossible de supprimer l'avis",
+        variant: "destructive",
+      });
+    } finally {
+      setIsDeleteDialogOpen(false);
+      setReviewToDelete(null);
+    }
+  };
+
   // Vérifier si l'utilisateur est connecté
   useEffect(() => {
     const checkAuthStatus = async () => {
       const { data } = await supabase.auth.getSession();
       setIsLoggedIn(!!data.session);
+      setCurrentUserId(data.session?.user?.id || null);
     };
 
     checkAuthStatus();
 
     const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
       setIsLoggedIn(!!session);
+      setCurrentUserId(session?.user?.id || null);
     });
 
     return () => {
@@ -164,7 +218,12 @@ const ProductDescription = () => {
         <TabsContent value="reviews">
           <Card>
             <CardContent className="p-6">
-              <ReviewsList reviews={reviews} isLoading={isLoading} />
+              <ReviewsList 
+                reviews={reviews} 
+                isLoading={isLoading} 
+                currentUserId={currentUserId}
+                onDeleteReview={handleDeleteReview}
+              />
               
               {isLoggedIn ? (
                 <div className="mt-8 border-t pt-6">
@@ -189,6 +248,27 @@ const ProductDescription = () => {
           </Card>
         </TabsContent>
       </Tabs>
+
+      {/* Boîte de dialogue de confirmation pour la suppression d'un avis */}
+      <AlertDialog open={isDeleteDialogOpen} onOpenChange={setIsDeleteDialogOpen}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Confirmer la suppression</AlertDialogTitle>
+            <AlertDialogDescription>
+              Êtes-vous sûr de vouloir supprimer cet avis ? Cette action est irréversible.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Annuler</AlertDialogCancel>
+            <AlertDialogAction
+              onClick={confirmDeleteReview}
+              className="bg-red-500 hover:bg-red-600"
+            >
+              Supprimer
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 };
