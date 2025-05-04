@@ -1,6 +1,5 @@
 
 import React, { useEffect, useState } from 'react';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Link, useLocation } from 'react-router-dom';
@@ -196,58 +195,39 @@ const ProductDescription = () => {
 
   return (
     <div className="mt-16">
-      <Tabs defaultValue="description" className="space-y-4">
-        <TabsList>
-          <TabsTrigger value="description">Description</TabsTrigger>
-          <TabsTrigger value="reviews">
-            Avis ({reviews.length})
-          </TabsTrigger>
-        </TabsList>
-        
-        <TabsContent value="description">
-          <Card>
-            <CardContent className="prose max-w-none p-6">
-              <h3>Description</h3>
-              <p>Notre service d'accompagnement pour l'ouverture de votre société est spécialement conçu pour simplifier le processus de création et de lancement de votre entreprise. En partenariat avec notre expert-comptable spécialisé dans le domaine, nous vous offrons une assistance professionnelle et personnalisée à chaque étape du processus, garantissant une démarche efficace et conforme à toutes les exigences réglementaires.</p>
-              <p>Nous comprenons que le démarrage d'une entreprise peut être complexe, avec de nombreuses démarches administratives et juridiques à suivre. C'est pourquoi notre équipe dédiée est là pour vous guider à travers toutes les étapes, depuis l'enregistrement de votre société jusqu'à l'obtention des licences et des permis nécessaires. Notre objectif est de vous offrir une assistance complète et de qualité, vous permettant de lancer votre entreprise avec confiance et succès.</p>
-              <p>De plus, pour rendre nos services encore plus accessibles, nous offrons des options de domiciliation pour votre entreprise, vous permettant d'établir une adresse professionnelle prestigieuse sans les coûts d'un espace commercial traditionnel.</p>
-            </CardContent>
-          </Card>
-        </TabsContent>
-        
-        <TabsContent value="reviews">
-          <Card>
-            <CardContent className="p-6">
-              <ReviewsList 
-                reviews={reviews} 
-                isLoading={isLoading} 
-                currentUserId={currentUserId}
-                onDeleteReview={handleDeleteReview}
+      <Card>
+        <CardContent className="p-6">
+          <div className="mb-8">
+            <h3 className="text-xl font-semibold mb-4">Avis ({reviews.length})</h3>
+            <ReviewsList 
+              reviews={reviews} 
+              isLoading={isLoading} 
+              currentUserId={currentUserId}
+              onDeleteReview={handleDeleteReview}
+            />
+          </div>
+          
+          {isLoggedIn ? (
+            <div className="mt-8 border-t pt-6">
+              <ReviewForm 
+                productName={productName}
+                productId={productId} 
+                onReviewSubmitted={handleReviewSubmitted} 
               />
-              
-              {isLoggedIn ? (
-                <div className="mt-8 border-t pt-6">
-                  <ReviewForm 
-                    productName={productName}
-                    productId={productId} 
-                    onReviewSubmitted={handleReviewSubmitted} 
-                  />
-                </div>
-              ) : (
-                <div className="mt-8 border-t pt-6 text-center">
-                  <p className="text-gray-600">Vous devez être connecté pour laisser un avis.</p>
-                  <Button 
-                    className="mt-4 bg-lysco-turquoise hover:bg-lysco-turquoise/90" 
-                    asChild
-                  >
-                    <Link to={`/login?redirect=${encodeURIComponent(location.pathname)}`}>Se connecter</Link>
-                  </Button>
-                </div>
-              )}
-            </CardContent>
-          </Card>
-        </TabsContent>
-      </Tabs>
+            </div>
+          ) : (
+            <div className="mt-8 border-t pt-6 text-center">
+              <p className="text-gray-600">Vous devez être connecté pour laisser un avis.</p>
+              <Button 
+                className="mt-4 bg-lysco-turquoise hover:bg-lysco-turquoise/90" 
+                asChild
+              >
+                <Link to={`/login?redirect=${encodeURIComponent(location.pathname)}`}>Se connecter</Link>
+              </Button>
+            </div>
+          )}
+        </CardContent>
+      </Card>
 
       {/* Boîte de dialogue de confirmation pour la suppression d'un avis */}
       <AlertDialog open={isDeleteDialogOpen} onOpenChange={setIsDeleteDialogOpen}>
