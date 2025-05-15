@@ -1,14 +1,27 @@
 
-import React from 'react';
+import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Home, Mail, Bell, FileText, MessageCircle } from 'lucide-react';
+import { Home, Mail, Bell, FileText, MessageCircle, User } from 'lucide-react';
 import { useUserData } from '@/hooks/useUserData';
 import { format } from 'date-fns';
 import { fr } from 'date-fns/locale';
+import ProfileEditForm from './ProfileEditForm';
 
 const DashboardOverview = () => {
-  const { profile, domiciliation, mails, notifications, activities, loading } = useUserData();
+  const { 
+    profile, 
+    domiciliation, 
+    mails, 
+    notifications, 
+    activities, 
+    loading,
+    updateProfile,
+    markMailAsRead,
+    markNotificationAsRead
+  } = useUserData();
+  
+  const [isEditingProfile, setIsEditingProfile] = useState(false);
 
   if (loading) {
     return (
@@ -21,7 +34,7 @@ const DashboardOverview = () => {
   const formatDate = (dateString: string): string => {
     try {
       const date = new Date(dateString);
-      return format(date, 'dd/MM/yyyy, HH:mm', { locale: fr });
+      return format(date, 'dd/MM/yyyy', { locale: fr });
     } catch (e) {
       return dateString;
     }
@@ -40,10 +53,60 @@ const DashboardOverview = () => {
       return dateString;
     }
   };
+  
+  const handleMailClick = (mailId: string) => {
+    markMailAsRead(mailId);
+  };
+  
+  const handleNotificationClick = (notificationId: string) => {
+    markNotificationAsRead(notificationId);
+  };
+
+  if (isEditingProfile) {
+    return (
+      <ProfileEditForm 
+        profile={profile} 
+        onUpdate={updateProfile} 
+        onCancel={() => setIsEditingProfile(false)} 
+      />
+    );
+  }
 
   return (
     <>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+        <Card className="col-span-1 lg:col-span-3">
+          <CardHeader className="pb-2">
+            <CardTitle className="text-lg flex items-center">
+              <User className="mr-2 h-5 w-5 text-lysco-turquoise" />
+              Mon Profil
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+              <div>
+                <p className="text-sm text-gray-600">
+                  Nom: <span className="font-medium">{profile?.first_name} {profile?.last_name}</span>
+                </p>
+                <p className="text-sm text-gray-600">
+                  Email: <span className="font-medium">{profile?.email}</span>
+                </p>
+              </div>
+              <div>
+                <p className="text-sm text-gray-600">
+                  Entreprise: <span className="font-medium">{profile?.company_name || 'Non renseigné'}</span>
+                </p>
+                <p className="text-sm text-gray-600">
+                  Téléphone: <span className="font-medium">{profile?.phone || 'Non renseigné'}</span>
+                </p>
+              </div>
+            </div>
+            <Button variant="outline" size="sm" onClick={() => setIsEditingProfile(true)}>
+              Modifier mon profil
+            </Button>
+          </CardContent>
+        </Card>
+
         <Card>
           <CardHeader className="pb-2">
             <CardTitle className="text-lg flex items-center">
@@ -62,11 +125,11 @@ const DashboardOverview = () => {
             </p>
             {domiciliation?.renewal_date && (
               <p className="text-sm text-gray-600 mb-4">
-                Renouvellement: {new Date(domiciliation.renewal_date).toLocaleDateString('fr-FR')}
+                Renouvellement: {formatDate(domiciliation.renewal_date)}
               </p>
             )}
             <Button variant="outline" size="sm" className="w-full" asChild>
-              <a href="/domiciliation">Gérer la domiciliation</a>
+              <a href="/dashboard/domiciliation">Gérer la domiciliation</a>
             </Button>
           </CardContent>
         </Card>
@@ -85,11 +148,11 @@ const DashboardOverview = () => {
             {mails.length > 0 && (
               <p className="text-sm text-gray-600 mb-4">
                 Dernière réception: <span className="font-medium">
-                  {new Date(mails[0].received_at).toLocaleDateString('fr-FR')}
+                  {formatDate(mails[0].received_at)}
                 </span>
               </p>
             )}
-            <Button variant="outline" size="sm" className="w-full">
+            <Button variant="outline" size="sm" className="w-full" onClick={() => alert('Fonctionnalité à venir')}>
               Gérer le courrier
             </Button>
           </CardContent>
@@ -106,7 +169,7 @@ const DashboardOverview = () => {
             <p className="text-sm text-gray-600 mb-4">
               Vous avez <span className="font-medium">{notifications.filter(n => !n.read).length}</span> nouvelles notifications
             </p>
-            <Button variant="outline" size="sm" className="w-full">
+            <Button variant="outline" size="sm" className="w-full" onClick={() => alert('Fonctionnalité à venir')}>
               Voir les notifications
             </Button>
           </CardContent>

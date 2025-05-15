@@ -1,6 +1,6 @@
 
 import React, { useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Routes, Route } from 'react-router-dom';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
@@ -15,6 +15,7 @@ const Dashboard: React.FC = () => {
   const navigate = useNavigate();
   const [loading, setLoading] = React.useState(true);
   const [user, setUser] = React.useState<any>(null);
+  const [activeTab, setActiveTab] = React.useState('overview');
 
   useEffect(() => {
     const checkUser = async () => {
@@ -32,6 +33,14 @@ const Dashboard: React.FC = () => {
         }
         
         setUser(session.user);
+
+        // Set active tab based on URL path
+        const path = window.location.pathname;
+        if (path.includes('/domiciliation')) setActiveTab('domiciliation');
+        else if (path.includes('/admin')) setActiveTab('admin');
+        else if (path.includes('/marketing')) setActiveTab('marketing');
+        else setActiveTab('overview');
+
       } catch (error) {
         console.error('Error checking auth status:', error);
         navigate('/login');
@@ -57,6 +66,26 @@ const Dashboard: React.FC = () => {
     };
   }, [navigate]);
 
+  const handleTabChange = (value: string) => {
+    setActiveTab(value);
+    
+    // Update URL based on tab
+    switch (value) {
+      case 'domiciliation':
+        navigate('/dashboard/domiciliation');
+        break;
+      case 'admin':
+        navigate('/dashboard/admin');
+        break;
+      case 'marketing':
+        navigate('/dashboard/marketing');
+        break;
+      default:
+        navigate('/dashboard');
+        break;
+    }
+  };
+
   if (loading) {
     return (
       <div className="flex items-center justify-center h-screen">
@@ -75,7 +104,7 @@ const Dashboard: React.FC = () => {
           <p className="text-gray-600">Bienvenue sur votre espace personnel Lys&Co, {user?.user_metadata?.first_name || user?.email}</p>
         </div>
         
-        <Tabs defaultValue="overview" className="space-y-8">
+        <Tabs value={activeTab} onValueChange={handleTabChange} className="space-y-8">
           <TabsList className="grid grid-cols-2 md:grid-cols-4 lg:w-[600px] mb-8">
             <TabsTrigger value="overview">Vue d'ensemble</TabsTrigger>
             <TabsTrigger value="domiciliation">Domiciliation</TabsTrigger>

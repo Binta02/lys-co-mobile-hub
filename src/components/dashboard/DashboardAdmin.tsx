@@ -2,8 +2,30 @@
 import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/components/ui/table';
+import { useUserData } from '@/hooks/useUserData';
+import { format } from 'date-fns';
+import { fr } from 'date-fns/locale';
 
 const DashboardAdmin = () => {
+  const { adminServices, documents, loading } = useUserData();
+  
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center h-64">
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-lysco-turquoise"></div>
+      </div>
+    );
+  }
+
+  const formatDate = (dateString: string): string => {
+    try {
+      const date = new Date(dateString);
+      return format(date, 'dd/MM/yyyy', { locale: fr });
+    } catch (e) {
+      return dateString;
+    }
+  };
+
   return (
     <div className="space-y-6">
       <Card>
@@ -21,27 +43,23 @@ const DashboardAdmin = () => {
               </TableRow>
             </TableHeader>
             <TableBody>
-              <TableRow>
-                <TableCell>Déclaration TVA</TableCell>
-                <TableCell>05/05/2025</TableCell>
-                <TableCell>
-                  <span className="text-amber-600">En attente</span>
-                </TableCell>
-              </TableRow>
-              <TableRow>
-                <TableCell>Gestion comptable</TableCell>
-                <TableCell>30/04/2025</TableCell>
-                <TableCell>
-                  <span className="text-green-600">À jour</span>
-                </TableCell>
-              </TableRow>
-              <TableRow>
-                <TableCell>Secrétariat juridique</TableCell>
-                <TableCell>15/05/2025</TableCell>
-                <TableCell>
-                  <span className="text-green-600">À jour</span>
-                </TableCell>
-              </TableRow>
+              {adminServices.map(service => (
+                <TableRow key={service.id}>
+                  <TableCell>{service.service}</TableCell>
+                  <TableCell>{formatDate(service.next_processing)}</TableCell>
+                  <TableCell>
+                    <span className={
+                      service.status === 'active' ? 'text-green-600' :
+                      service.status === 'pending' ? 'text-amber-600' :
+                      'text-blue-600'
+                    }>
+                      {service.status === 'active' ? 'À jour' :
+                       service.status === 'pending' ? 'En attente' :
+                       'Terminé'}
+                    </span>
+                  </TableCell>
+                </TableRow>
+              ))}
             </TableBody>
           </Table>
         </CardContent>
@@ -61,16 +79,13 @@ const DashboardAdmin = () => {
               </TableRow>
             </TableHeader>
             <TableBody>
-              <TableRow>
-                <TableCell>Facture_Mars2025.pdf</TableCell>
-                <TableCell>01/04/2025</TableCell>
-                <TableCell>Comptabilité</TableCell>
-              </TableRow>
-              <TableRow>
-                <TableCell>PV_AG_2025.pdf</TableCell>
-                <TableCell>15/03/2025</TableCell>
-                <TableCell>Juridique</TableCell>
-              </TableRow>
+              {documents.map(doc => (
+                <TableRow key={doc.id}>
+                  <TableCell>{doc.name}</TableCell>
+                  <TableCell>{formatDate(doc.created_at)}</TableCell>
+                  <TableCell>{doc.type}</TableCell>
+                </TableRow>
+              ))}
             </TableBody>
           </Table>
         </CardContent>

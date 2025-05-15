@@ -1,18 +1,30 @@
 
-import React from 'react';
+import React, { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/components/ui/table';
 import { useUserData } from '@/hooks/useUserData';
+import DomiciliationEditForm from './DomiciliationEditForm';
 
 const DashboardDomiciliation = () => {
-  const { domiciliation, loading } = useUserData();
+  const { domiciliation, loading, updateDomiciliation } = useUserData();
+  const [isEditing, setIsEditing] = useState(false);
 
   if (loading) {
     return (
       <div className="flex items-center justify-center h-64">
         <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-lysco-turquoise"></div>
       </div>
+    );
+  }
+
+  if (isEditing) {
+    return (
+      <DomiciliationEditForm 
+        domiciliation={domiciliation} 
+        onUpdate={updateDomiciliation} 
+        onCancel={() => setIsEditing(false)} 
+      />
     );
   }
 
@@ -42,7 +54,7 @@ const DashboardDomiciliation = () => {
                 )}
               </div>
             </div>
-            <Button variant="outline">Modifier les informations</Button>
+            <Button variant="outline" onClick={() => setIsEditing(true)}>Modifier les informations</Button>
           </div>
         </CardContent>
       </Card>
