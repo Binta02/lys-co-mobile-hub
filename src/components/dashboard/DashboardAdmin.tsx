@@ -38,6 +38,7 @@ const DashboardAdmin = () => {
             <TableHeader>
               <TableRow>
                 <TableHead>Service</TableHead>
+                <TableHead>Description</TableHead>
                 <TableHead>Prochain traitement</TableHead>
                 <TableHead>Statut</TableHead>
               </TableRow>
@@ -46,6 +47,9 @@ const DashboardAdmin = () => {
               {adminServices.map(service => (
                 <TableRow key={service.id}>
                   <TableCell>{service.service}</TableCell>
+                  <TableCell className="max-w-xs">
+                    {service.description || getServiceDescription(service.service)}
+                  </TableCell>
                   <TableCell>{formatDate(service.next_processing)}</TableCell>
                   <TableCell>
                     <span className={
@@ -92,6 +96,17 @@ const DashboardAdmin = () => {
       </Card>
     </div>
   );
+};
+
+// Helper function to provide descriptions for services
+const getServiceDescription = (serviceName: string): string => {
+  const descriptions: Record<string, string> = {
+    "Déclaration TVA": "Préparation et soumission de vos déclarations TVA aux périodes requises.",
+    "Gestion comptable": "Tenue complète de vos comptes et préparation des documents comptables obligatoires.",
+    "Secrétariat juridique": "Préparation des documents juridiques et conformité avec les obligations légales."
+  };
+  
+  return descriptions[serviceName] || "Description non disponible";
 };
 
 export default DashboardAdmin;
