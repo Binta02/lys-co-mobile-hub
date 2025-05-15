@@ -3,8 +3,44 @@ import React from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Home, Mail, Bell, FileText, MessageCircle } from 'lucide-react';
+import { useUserData } from '@/hooks/useUserData';
+import { format } from 'date-fns';
+import { fr } from 'date-fns/locale';
 
 const DashboardOverview = () => {
+  const { profile, domiciliation, mails, notifications, activities, loading } = useUserData();
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center h-64">
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-lysco-turquoise"></div>
+      </div>
+    );
+  }
+
+  const formatDate = (dateString: string): string => {
+    try {
+      const date = new Date(dateString);
+      return format(date, 'dd/MM/yyyy, HH:mm', { locale: fr });
+    } catch (e) {
+      return dateString;
+    }
+  };
+
+  const getRelativeDate = (dateString: string): string => {
+    try {
+      const date = new Date(dateString);
+      const now = new Date();
+      const diffInDays = Math.floor((now.getTime() - date.getTime()) / (1000 * 60 * 60 * 24));
+      
+      if (diffInDays === 0) return "Aujourd'hui";
+      if (diffInDays === 1) return "Hier";
+      return format(date, 'dd/MM/yyyy', { locale: fr });
+    } catch (e) {
+      return dateString;
+    }
+  };
+
   return (
     <>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
@@ -17,11 +53,18 @@ const DashboardOverview = () => {
           </CardHeader>
           <CardContent>
             <p className="text-sm text-gray-600 mb-4">
-              Statut: <span className="font-medium text-green-600">Actif</span>
+              Statut: <span className={`font-medium ${domiciliation?.status === 'active' ? 'text-green-600' : 'text-amber-600'}`}>
+                {domiciliation?.status === 'active' ? 'Actif' : 'En attente'}
+              </span>
             </p>
             <p className="text-sm text-gray-600 mb-4">
-              Adresse: 14 Avenue de l'Opéra, 75001 Paris
+              Adresse: {domiciliation?.address || 'Non définie'}
             </p>
+            {domiciliation?.renewal_date && (
+              <p className="text-sm text-gray-600 mb-4">
+                Renouvellement: {new Date(domiciliation.renewal_date).toLocaleDateString('fr-FR')}
+              </p>
+            )}
             <Button variant="outline" size="sm" className="w-full" asChild>
               <a href="/domiciliation">Gérer la domiciliation</a>
             </Button>
@@ -37,11 +80,15 @@ const DashboardOverview = () => {
           </CardHeader>
           <CardContent>
             <p className="text-sm text-gray-600 mb-4">
-              Nouveaux courriers: <span className="font-medium">5</span>
+              Nouveaux courriers: <span className="font-medium">{mails.filter(mail => mail.status === 'new').length}</span>
             </p>
-            <p className="text-sm text-gray-600 mb-4">
-              Dernière réception: <span className="font-medium">23/04/2025</span>
-            </p>
+            {mails.length > 0 && (
+              <p className="text-sm text-gray-600 mb-4">
+                Dernière réception: <span className="font-medium">
+                  {new Date(mails[0].received_at).toLocaleDateString('fr-FR')}
+                </span>
+              </p>
+            )}
             <Button variant="outline" size="sm" className="w-full">
               Gérer le courrier
             </Button>
@@ -57,7 +104,7 @@ const DashboardOverview = () => {
           </CardHeader>
           <CardContent>
             <p className="text-sm text-gray-600 mb-4">
-              Vous avez <span className="font-medium">3</span> nouvelles notifications
+              Vous avez <span className="font-medium">{notifications.filter(n => !n.read).length}</span> nouvelles notifications
             </p>
             <Button variant="outline" size="sm" className="w-full">
               Voir les notifications
@@ -72,38 +119,26 @@ const DashboardOverview = () => {
         </CardHeader>
         <CardContent>
           <div className="space-y-4">
-            <div className="flex items-start gap-4 pb-4 border-b">
-              <div className="w-8 h-8 rounded-full bg-lysco-turquoise/10 flex items-center justify-center">
-                <Mail className="h-4 w-4 text-lysco-turquoise" />
+            {activities.map(activity => (
+              <div key={activity.id} className="flex items-start gap-4 pb-4 border-b">
+                <div className={`w-8 h-8 rounded-full ${
+                  activity.type === 'mail' 
+                    ? 'bg-lysco-turquoise/10' 
+                    : activity.type === 'document' 
+                    ? 'bg-lysco-pink/10' 
+                    : 'bg-lysco-turquoise/10'
+                } flex items-center justify-center`}>
+                  {activity.type === 'mail' && <Mail className="h-4 w-4 text-lysco-turquoise" />}
+                  {activity.type === 'document' && <FileText className="h-4 w-4 text-lysco-pink" />}
+                  {activity.type === 'message' && <MessageCircle className="h-4 w-4 text-lysco-turquoise" />}
+                </div>
+                <div>
+                  <p className="font-medium">{activity.title}</p>
+                  <p className="text-sm text-gray-600">{activity.description}</p>
+                  <p className="text-xs text-gray-500">{getRelativeDate(activity.created_at)}, {format(new Date(activity.created_at), 'HH:mm')}</p>
+                </div>
               </div>
-              <div>
-                <p className="font-medium">Nouveau courrier reçu</p>
-                <p className="text-sm text-gray-600">Impôts - Déclaration TVA</p>
-                <p className="text-xs text-gray-500">Aujourd'hui, 11:30</p>
-              </div>
-            </div>
-
-            <div className="flex items-start gap-4 pb-4 border-b">
-              <div className="w-8 h-8 rounded-full bg-lysco-pink/10 flex items-center justify-center">
-                <FileText className="h-4 w-4 text-lysco-pink" />
-              </div>
-              <div>
-                <p className="font-medium">Document numérisé</p>
-                <p className="text-sm text-gray-600">Contrat_Prestation_2025.pdf</p>
-                <p className="text-xs text-gray-500">Hier, 15:20</p>
-              </div>
-            </div>
-
-            <div className="flex items-start gap-4">
-              <div className="w-8 h-8 rounded-full bg-lysco-turquoise/10 flex items-center justify-center">
-                <MessageCircle className="h-4 w-4 text-lysco-turquoise" />
-              </div>
-              <div>
-                <p className="font-medium">Message de votre assistant</p>
-                <p className="text-sm text-gray-600">Mise à jour de vos documents légaux</p>
-                <p className="text-xs text-gray-500">22/04/2025, 09:45</p>
-              </div>
-            </div>
+            ))}
           </div>
         </CardContent>
       </Card>

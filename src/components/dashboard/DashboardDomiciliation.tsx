@@ -3,8 +3,19 @@ import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/components/ui/table';
+import { useUserData } from '@/hooks/useUserData';
 
 const DashboardDomiciliation = () => {
+  const { domiciliation, loading } = useUserData();
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center h-64">
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-lysco-turquoise"></div>
+      </div>
+    );
+  }
+
   return (
     <div className="space-y-6">
       <Card>
@@ -17,13 +28,18 @@ const DashboardDomiciliation = () => {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
                 <h4 className="font-medium text-sm">Adresse de domiciliation</h4>
-                <p className="text-gray-600">14 Avenue de l'Opéra</p>
-                <p className="text-gray-600">75001 Paris</p>
+                <p className="text-gray-600">{domiciliation?.address || 'Non définie'}</p>
               </div>
               <div>
                 <h4 className="font-medium text-sm">Statut du contrat</h4>
-                <p className="text-green-600">Actif</p>
-                <p className="text-sm text-gray-600">Renouvellement: 01/01/2026</p>
+                <p className={domiciliation?.status === 'active' ? 'text-green-600' : 'text-amber-600'}>
+                  {domiciliation?.status === 'active' ? 'Actif' : 'En attente'}
+                </p>
+                {domiciliation?.renewal_date && (
+                  <p className="text-sm text-gray-600">
+                    Renouvellement: {new Date(domiciliation.renewal_date).toLocaleDateString('fr-FR')}
+                  </p>
+                )}
               </div>
             </div>
             <Button variant="outline">Modifier les informations</Button>
