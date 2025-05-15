@@ -125,7 +125,7 @@ const serviceData: Record<string, ServiceData> = {
   'bank-account': {
     title: 'Accompagnement ouverture de compte bancaire en ligne',
     price: '150,00',
-    description: "Service d'assistance personnalisée pour l'ouverture de votre compte bancaire professionnel en ligne."
+    description: "Notre service d’Accompagnement à l’Ouverture de Compte est conçu pour faciliter et accélérer le processus d’ouverture de compte bancaire pour les entreprises et les particuliers. Grâce à une assistance personnalisée, nous guidons nos clients à travers chaque étape, depuis la préparation des documents nécessaires jusqu’à l’obtention de leur nouveau compte bancaire, en veillant à simplifier les démarches et à répondre à toutes les exigences des institutions financières."
   },
   'company-creation': {
     title: 'Accompagnement ouverture de votre société',
