@@ -11,10 +11,9 @@ const CommunicationHero = () => {
           <h1 className="text-3xl md:text-4xl font-bold mb-6">NOS PRESTATIONS DE COMMUNICATION</h1>
           <div className="space-y-4 mb-8 text-gray-600">
             <p>
-              Experts en communication pour TPE/PME, nous vous accompagnons dans tous les aspects de votre communication (digitale, print, orale, image de marque) à des tarifs accessibles.
-            </p>
-            <p>
+              Experts en communication pour TPE/PME, nous vous accompagnons dans tous les aspects de votre communication (digitale, print, orale, image de marque) à des tarifs accessibles.<br />
               Notre équipe (rédacteurs, graphistes, webmasters, vidéastes…) analyse vos besoins et pilote votre projet de A à Z.
+
             </p>
           </div>
           <Link to="/contact">
