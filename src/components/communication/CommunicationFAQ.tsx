@@ -19,7 +19,7 @@ const CommunicationFAQ = () => {
             <h2 className="text-3xl font-bold">Questions & Réponses</h2>
           </div>
           
-          <Accordion type="single" collapsible className="space-y-4">
+          {/* <Accordion type="single" collapsible className="space-y-4">
             {communicationFAQ.map((faq, index) => (
               <AccordionItem 
                 key={index} 
@@ -34,7 +34,30 @@ const CommunicationFAQ = () => {
                 </AccordionContent>
               </AccordionItem>
             ))}
-          </Accordion>
+          </Accordion> */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+  {communicationFAQ.map((faq, index) => (
+    <Accordion
+      type="single"
+      collapsible
+      key={index}
+      className="w-full"
+    >
+      <AccordionItem
+        value={`item-${index}`}
+        className="bg-white rounded-lg border p-4"
+      >
+        <AccordionTrigger className="text-left hover:no-underline">
+          <span className="text-lg font-medium">{faq.question}</span>
+        </AccordionTrigger>
+        <AccordionContent className="text-gray-600 pt-2">
+          {faq.answer}
+        </AccordionContent>
+      </AccordionItem>
+    </Accordion>
+  ))}
+</div>
+
         </div>
       </div>
     </div>
