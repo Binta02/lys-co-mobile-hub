@@ -192,14 +192,6 @@ const services = [
   'company-modification'
 ];
 
-interface OfferProps {
-  id: string;
-  title: string;
-  price: string;
-  originalPrice?: string;
-  isPromo?: boolean;
-  link: string;
-}
 const AdminServiceOffers = () => {
   const { addItem } = useCart();
   const { toast } = useToast();
