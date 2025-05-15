@@ -454,11 +454,12 @@ const ServiceDetail = () => {
               {/* Right column: Tabs for Description and Reviews */}
               <div className="bg-gray-50 p-6 rounded-lg">
                 <Tabs defaultValue="description" onValueChange={setActiveTab} className="w-full">
-                  <TabsList className="grid w-full grid-cols-2 mb-4">
+                  {/* <TabsList className="grid w-full grid-cols-2 mb-4">
                     <TabsTrigger value="description">Description</TabsTrigger>
-                    {/* <TabsTrigger value="reviews">Avis ({reviews.length})</TabsTrigger> */}
-                  </TabsList>
-                  
+                    <TabsTrigger value="reviews">Avis ({reviews.length})</TabsTrigger>
+                  </TabsList> */}
+                  <TabsTrigger value="description">Description</TabsTrigger>
+
                   <TabsContent value="description" className="focus-visible:outline-none focus-visible:ring-0">
                     <h2 className="text-xl font-semibold mb-4">Description</h2>
                     <div className="prose max-w-none">
