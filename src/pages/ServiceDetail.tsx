@@ -456,7 +456,7 @@ const ServiceDetail = () => {
                 <Tabs defaultValue="description" onValueChange={setActiveTab} className="w-full">
                   <TabsList className="grid w-full grid-cols-2 mb-4">
                     <TabsTrigger value="description">Description</TabsTrigger>
-                    <TabsTrigger value="reviews">Avis ({reviews.length})</TabsTrigger>
+                    {/* <TabsTrigger value="reviews">Avis ({reviews.length})</TabsTrigger> */}
                   </TabsList>
                   
                   <TabsContent value="description" className="focus-visible:outline-none focus-visible:ring-0">
