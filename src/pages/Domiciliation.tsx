@@ -43,7 +43,7 @@ const Domiciliation = () => {
           <div className="container mx-auto px-4">
             <div className="max-w-4xl mx-auto space-y-12">
               {/* Liens rapides vers les offres de domiciliation */}
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              {/* <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <Link to="/domiciliation/1-an-entreprise" className="bg-gradient-to-r from-lysco-turquoise/10 to-lysco-pink/10 p-4 rounded-lg text-center hover:shadow-md transition-shadow">
                   <h3 className="font-semibold">Domiciliation 1 an</h3>
                   <p className="text-sm text-gray-600">Entreprise</p>
@@ -68,7 +68,7 @@ const Domiciliation = () => {
                   <h3 className="font-semibold">Pack domicilié</h3>
                   <p className="text-sm text-gray-600">Offre complète</p>
                 </Link>
-              </div>
+              </div> */}
 
               {/* Add DomiciliationOffers before other sections */}
               <DomiciliationOffers />
@@ -188,7 +188,7 @@ const Domiciliation = () => {
                   </Link>
 
                   <div className="text-center">
-                    <Link to="/contact">
+                    <Link to="/espaces-travail">
                       <Button variant="outline" className="flex items-center justify-center mx-auto">
                         Plus d'infos ou réserver <ChevronRight className="ml-2 h-4 w-4" />
                       </Button>
