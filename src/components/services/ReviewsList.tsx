@@ -4,9 +4,11 @@ import React from 'react';
 export interface ReviewsListProps {
   reviews: any[];
   isLoading: boolean;
+  currentUserId?: string | null;
+  onDeleteReview?: (reviewId: string) => Promise<void>;
 }
 
-const ReviewsList = ({ reviews, isLoading }: ReviewsListProps) => {
+const ReviewsList = ({ reviews, isLoading, currentUserId, onDeleteReview }: ReviewsListProps) => {
   if (isLoading) {
     return <div>Chargement des avis...</div>;
   }
@@ -37,6 +39,16 @@ const ReviewsList = ({ reviews, isLoading }: ReviewsListProps) => {
             </span>
           </div>
           <p className="mt-2">{review.comment}</p>
+          
+          {/* Add delete button for user's own reviews */}
+          {currentUserId && review.user_id === currentUserId && onDeleteReview && (
+            <button 
+              onClick={() => onDeleteReview(review.id)}
+              className="mt-2 text-sm text-red-500 hover:text-red-700"
+            >
+              Supprimer
+            </button>
+          )}
         </div>
       ))}
     </div>
