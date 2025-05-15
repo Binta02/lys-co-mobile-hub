@@ -213,7 +213,7 @@ const AdminServiceOffers = () => {
     });
   };
 
-  return (
+ return (
     <div className="py-12">
       <div className="container mx-auto px-4">
         <div className="text-center mb-8">
@@ -235,7 +235,7 @@ const AdminServiceOffers = () => {
                   <div className="space-y-2">
                     <p className="text-2xl font-semibold text-lysco-turquoise">{service.price} €</p>
                     {service.note && <p className="text-sm text-gray-500 italic">{service.note}</p>}
-                    <p className="text-sm text-gray-700 whitespace-pre-line line-clamp-4">{service.description}</p>
+                    <p className="text-sm text-gray-700 whitespace-pre-line line-clamp-3">{service.description}</p>
                   </div>
                   <div className="flex flex-col gap-2 mt-4">
                     <Button
