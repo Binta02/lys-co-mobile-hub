@@ -1,4 +1,3 @@
-
 import { useEffect, useState } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from '@/components/ui/use-toast';
@@ -59,7 +58,6 @@ export interface UserAdminService {
   id: string;
   user_id?: string;
   service: string;
-  description?: string;
   next_processing: string;
   status: 'pending' | 'active' | 'completed';
 }
@@ -160,30 +158,9 @@ export function useUserData() {
       ]);
 
       setAdminServices([
-        { 
-          id: '1', 
-          user_id: session.user.id, 
-          service: 'Déclaration TVA', 
-          description: 'Préparation et soumission de vos déclarations TVA aux périodes requises.',
-          next_processing: '2025-05-05T00:00:00Z', 
-          status: 'pending' 
-        },
-        { 
-          id: '2', 
-          user_id: session.user.id, 
-          service: 'Gestion comptable', 
-          description: 'Tenue complète de vos comptes et préparation des documents comptables obligatoires.',
-          next_processing: '2025-04-30T00:00:00Z', 
-          status: 'active' 
-        },
-        { 
-          id: '3', 
-          user_id: session.user.id, 
-          service: 'Secrétariat juridique', 
-          description: 'Préparation des documents juridiques et conformité avec les obligations légales.',
-          next_processing: '2025-05-15T00:00:00Z', 
-          status: 'active' 
-        },
+        { id: '1', user_id: session.user.id, service: 'Déclaration TVA', next_processing: '2025-05-05T00:00:00Z', status: 'pending' },
+        { id: '2', user_id: session.user.id, service: 'Gestion comptable', next_processing: '2025-04-30T00:00:00Z', status: 'active' },
+        { id: '3', user_id: session.user.id, service: 'Secrétariat juridique', next_processing: '2025-05-15T00:00:00Z', status: 'active' },
       ]);
 
     } catch (err: any) {
