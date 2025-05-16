@@ -86,7 +86,7 @@ const CommunicationCreations = () => {
                 <img
                   src="https://lys-and-co.com/wp-content/uploads/2025/03/IMG_1221.jpg"
                   alt="Site 3"
-                />
+                /> 
               </SwiperSlide>
               <SwiperSlide>
                 <img
