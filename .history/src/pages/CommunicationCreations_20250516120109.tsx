@@ -3,8 +3,6 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
-import { Swiper, SwiperSlide } from "swiper/react";
-import "swiper/css";
 
 const CommunicationCreations = () => {
   return (
@@ -21,42 +19,28 @@ const CommunicationCreations = () => {
             <h2 className="text-2xl font-semibold text-lysco-turquoise mb-4">
               Les logos
             </h2>
-            <Swiper
-              spaceBetween={20}
-              slidesPerView={1}
-              breakpoints={{ 768: { slidesPerView: 3 } }}
-            >
-              <SwiperSlide>
-                <img
-                  src="https://lys-and-co.com/wp-content/uploads/2025/03/Capture-decran-2025-03-04-105723.png"
-                  alt="Logo 1"
-                />
-              </SwiperSlide>
-              <SwiperSlide>
-                <img
-                  src="https://lys-and-co.com/wp-content/uploads/2025/03/Capture-decran-2025-03-04-105730.png"
-                  alt="Logo 2"
-                />
-              </SwiperSlide>
-              <SwiperSlide>
-                <img
-                  src="https://lys-and-co.com/wp-content/uploads/2025/03/Capture-decran-2025-03-04-105710.png"
-                  alt="Logo 3"
-                />
-              </SwiperSlide>
-              <SwiperSlide>
-                <img
-                  src="https://lys-and-co.com/wp-content/uploads/2025/03/logo-.jpg"
-                  alt="Logo 4"
-                />
-              </SwiperSlide>
-              <SwiperSlide>
-                <img
-                  src="https://lys-and-co.com/wp-content/uploads/2025/03/Capture-decran-2025-03-04-105649.png"
-                  alt="Logo 5"
-                />
-              </SwiperSlide>
-            </Swiper>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              <img
+                src="https://lys-and-co.com/wp-content/uploads/2025/03/Capture-decran-2025-03-04-105723.png"
+                alt="Logo 1"
+              />
+              <img
+                src="https://lys-and-co.com/wp-content/uploads/2025/03/Capture-decran-2025-03-04-105730.png"
+                alt="Logo 2"
+              />
+              <img
+                src="https://lys-and-co.com/wp-content/uploads/2025/03/Capture-decran-2025-03-04-105710.png"
+                alt="Logo 3"
+              />
+              <img
+                src="https://lys-and-co.com/wp-content/uploads/2025/03/logo-.jpg"
+                alt="Logo 4"
+              />
+              <img
+                src="https://lys-and-co.com/wp-content/uploads/2025/03/Capture-decran-2025-03-04-105649.png"
+                alt="Logo 5"
+              />
+            </div>
           </section>
 
           {/* Sites web */}
@@ -64,85 +48,56 @@ const CommunicationCreations = () => {
             <h2 className="text-2xl font-semibold text-lysco-turquoise mb-4">
               Les sites web
             </h2>
-            <Swiper
-              spaceBetween={20}
-              slidesPerView={1}
-              breakpoints={{ 768: { slidesPerView: 3 } }}
-              className="mb-6"
-            >
-              <SwiperSlide>
-                <img
-                  src="https://lys-and-co.com/wp-content/uploads/2025/03/Capture-decran-2025-03-04-105754-1.png"
-                  alt="Site 1"
-                />
-              </SwiperSlide>
-              <SwiperSlide>
-                <img
-                  src="https://lys-and-co.com/wp-content/uploads/2025/03/Capture-decran-2025-03-04-105810-1.png"
-                  alt="Site 2"
-                />
-              </SwiperSlide>
-              <SwiperSlide>
-                <img
-                  src="https://lys-and-co.com/wp-content/uploads/2025/03/IMG_1221.jpg"
-                  alt="Site 3"
-                />
-              </SwiperSlide>
-              <SwiperSlide>
-                <img
-                  src="https://lys-and-co.com/wp-content/uploads/2025/03/Capture-decran-2025-03-04-105827-1.png"
-                  alt="Site 4"
-                />
-              </SwiperSlide>
-              <SwiperSlide>
-                <img
-                  src="https://lys-and-co.com/wp-content/uploads/2025/03/Capture-decran-2025-03-04-105838.png"
-                  alt="Site 5"
-                />
-              </SwiperSlide>
-              <SwiperSlide>
-                <img
-                  src="https://lys-and-co.com/wp-content/uploads/2025/03/Capture-decran-2025-03-04-105854.png"
-                  alt="Site 6"
-                />
-              </SwiperSlide>
-              <SwiperSlide>
-                <img
-                  src="https://lys-and-co.com/wp-content/uploads/2025/03/Capture-decran-2025-03-04-105908.png"
-                  alt="Site 7"
-                />
-              </SwiperSlide>
-              <SwiperSlide>
-                <img
-                  src="https://lys-and-co.com/wp-content/uploads/2025/03/Capture-decran-2025-03-04-105922.png"
-                  alt="Site 8"
-                />
-              </SwiperSlide>
-              <SwiperSlide>
-                <img
-                  src="https://lys-and-co.com/wp-content/uploads/2025/03/Capture-decran-2025-03-04-105933.png"
-                  alt="Site 9"
-                />
-              </SwiperSlide>
-              <SwiperSlide>
-                <img
-                  src="https://lys-and-co.com/wp-content/uploads/2025/03/IMG_1220.jpg"
-                  alt="Site 10"
-                />
-              </SwiperSlide>
-              <SwiperSlide>
-                <img
-                  src="https://lys-and-co.com/wp-content/uploads/2025/03/IMG_1222.jpg"
-                  alt="Site 11"
-                />
-              </SwiperSlide>
-              <SwiperSlide>
-                <img
-                  src="https://lys-and-co.com/wp-content/uploads/2025/03/Capture-decran-2025-03-04-105746-1.png"
-                  alt="Site 12"
-                />
-              </SwiperSlide>
-            </Swiper>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+              <img
+                src="https://lys-and-co.com/wp-content/uploads/2025/03/Capture-decran-2025-03-04-105754-1.png"
+                alt="Site 1"
+              />
+              <img
+                src="https://lys-and-co.com/wp-content/uploads/2025/03/Capture-decran-2025-03-04-105810-1.png"
+                alt="Site 2"
+              />
+              <img
+                src="https://lys-and-co.com/wp-content/uploads/2025/03/IMG_1221.jpg"
+                alt="Site 3"
+              />
+              <img
+                src="https://lys-and-co.com/wp-content/uploads/2025/03/Capture-decran-2025-03-04-105827-1.png"
+                alt="Site 4"
+              />
+              <img
+                src="https://lys-and-co.com/wp-content/uploads/2025/03/Capture-decran-2025-03-04-105838.png"
+                alt="Site 5"
+              />
+              <img
+                src="https://lys-and-co.com/wp-content/uploads/2025/03/Capture-decran-2025-03-04-105854.png"
+                alt="Site 6"
+              />
+              <img
+                src="https://lys-and-co.com/wp-content/uploads/2025/03/Capture-decran-2025-03-04-105908.png"
+                alt="Site 7"
+              />
+              <img
+                src="https://lys-and-co.com/wp-content/uploads/2025/03/Capture-decran-2025-03-04-105922.png"
+                alt="Site 8"
+              />
+              <img
+                src="https://lys-and-co.com/wp-content/uploads/2025/03/Capture-decran-2025-03-04-105933.png"
+                alt="Site 9"
+              />
+              <img
+                src="https://lys-and-co.com/wp-content/uploads/2025/03/IMG_1220.jpg"
+                alt="Site 10"
+              />
+              <img
+                src="https://lys-and-co.com/wp-content/uploads/2025/03/IMG_1222.jpg"
+                alt="Site 11"
+              />
+              <img
+                src="https://lys-and-co.com/wp-content/uploads/2025/03/Capture-decran-2025-03-04-105746-1.png"
+                alt="Site 12"
+              />
+            </div>
             <ul className="text-gray-700 list-disc list-inside">
               <li>
                 Praticienne :{" "}
