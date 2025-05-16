@@ -135,7 +135,19 @@ export function useUserData() {
 
       // Si un enregistrement de domiciliation est trouvé, utilisez-le
       if (domiciliationData) {
-        setDomiciliation(domiciliationData);
+        // Assurons-nous que le statut correspond aux valeurs attendues
+        const typedStatus = domiciliationData.status as 'active' | 'inactive' | 'pending';
+        
+        setDomiciliation({
+          id: domiciliationData.id,
+          user_id: domiciliationData.user_id,
+          status: typedStatus,
+          address: domiciliationData.address,
+          renewal_date: domiciliationData.renewal_date,
+          plan_type: domiciliationData.plan_type,
+          duration: domiciliationData.duration,
+          created_at: domiciliationData.created_at
+        });
       } else {
         // Sinon, utilisez des valeurs par défaut
         console.log('Aucune information de domiciliation trouvée, utilisation des valeurs par défaut');
@@ -159,7 +171,19 @@ export function useUserData() {
 
       // Si des services sont trouvés, utilisez-les
       if (servicesData && servicesData.length > 0) {
-        setUserServices(servicesData);
+        setUserServices(servicesData.map(service => ({
+          id: service.id,
+          user_id: service.user_id,
+          name: service.name,
+          // Assurons-nous que le statut correspond aux valeurs attendues
+          status: service.status as 'active' | 'inactive' | 'pending' | 'option',
+          price: service.price || undefined,
+          renewal_date: service.renewal_date,
+          // Assurons-nous que la catégorie correspond aux valeurs attendues
+          category: service.category as 'domiciliation' | 'admin' | 'marketing' | 'complementary',
+          created_at: service.created_at,
+          updated_at: service.updated_at
+        })));
       } else {
         // Loggez que nous n'avons pas trouvé de services
         console.log('Aucun service trouvé pour cet utilisateur');
@@ -292,6 +316,7 @@ export function useUserData() {
           .from('user_domiciliations')
           .insert({
             ...updatedDomiciliation,
+            address: updatedDomiciliation.address || 'En attente de validation',
             user_id: profile?.id
           });
 
@@ -334,7 +359,9 @@ export function useUserData() {
         const { error } = await supabase
           .from('user_services')
           .insert({
-            ...service,
+            name: service.name || '',
+            category: service.category || 'domiciliation',
+            status: service.status || 'active',
             user_id: profile?.id
           });
 
