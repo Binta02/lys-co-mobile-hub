@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { Routes, Route } from 'react-router-dom';
 import Index from './pages/Index';
@@ -12,14 +13,14 @@ import Register from './pages/Register';
 import ResetPassword from './pages/ResetPassword';
 import Dashboard from './pages/Dashboard';
 import Communication from './pages/Communication';
-import CommunicationStrategie from './pages/communication/CommunicationStrategie';
-import CommunicationSiteInternet from './pages/communication/CommunicationSiteInternet';
-import CommunicationPrint from './pages/communication/CommunicationPrint';
-import CommunicationPhotos from './pages/communication/CommunicationPhotos';
-import CommunicationCreations from './pages/communication/CommunicationCreations';
-import CommunicationCommunityManagement from './pages/communication/CommunicationCommunityManagement';
-import CommunicationMediaTraining from './pages/communication/CommunicationMediaTraining';
-import CommunicationPacks from './pages/communication/CommunicationPacks';
+import CommunicationStrategie from './pages/CommunicationStrategie';
+import CommunicationSiteInternet from './pages/CommunicationSiteInternet';
+import CommunicationPrint from './pages/CommunicationPrint';
+import CommunicationPhotos from './pages/CommunicationPhotos';
+import CommunicationCreations from './pages/CommunicationCreations';
+import CommunicationCommunityManagement from './pages/CommunicationCommunityManagement';
+import CommunicationMediaTraining from './pages/CommunicationMediaTraining';
+import CommunicationPacks from './pages/CommunicationPacks';
 import ServiceDetail from './pages/ServiceDetail';
 import Checkout from './pages/Checkout';
 import Confirmation from './pages/Confirmation';
