@@ -8,6 +8,8 @@ import DomiciliationOffers from '@/components/domiciliation/DomiciliationOffers'
 import ComplementaryServices from '@/components/domiciliation/ComplementaryServices';
 import { Button } from '@/components/ui/button';
 import { Link } from 'react-router-dom';
+import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/card';
+import { ChevronRight } from 'lucide-react';
 import {
   Breadcrumb,
   BreadcrumbItem,
