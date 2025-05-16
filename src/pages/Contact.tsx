@@ -98,7 +98,6 @@ const Contact = () => {
               {/* Contact Information */}
               <div className="space-y-8">
                 <h2 className="text-2xl font-bold mb-6">Nos coordonnées</h2>
-                
                 <div className="flex items-start space-x-4">
                   <MapPin className="w-6 h-6 text-lysco-turquoise mt-1" />
                   <div>
@@ -106,7 +105,6 @@ const Contact = () => {
                     <p className="text-gray-600">28 Rue de l'Eglise, 95210 Deuil-la-Barre</p>
                   </div>
                 </div>
-
                 <div className="flex items-start space-x-4">
                   <Phone className="w-6 h-6 text-lysco-turquoise mt-1" />
                   <div>
@@ -114,12 +112,13 @@ const Contact = () => {
                     <p className="text-gray-600">09 53 42 11 63 / 07 56 85 37 02 </p>
                   </div>
                 </div>
-
                 <div className="flex items-start space-x-4">
                   <Mail className="w-6 h-6 text-lysco-turquoise mt-1" />
                   <div>
                     <h3 className="font-semibold mb-1">Email</h3>
+                    <a href="mailto:contact@lys-and-co.com" target="_blank" rel="noopener noreferrer" className="text-gray-600 hover:text-lysco-turquoise transition-colors">
                     <p className="text-gray-600">contact@lys-and-co.com</p>
+                    </a>
                   </div>
                 </div>
               </div>

@@ -41,10 +41,10 @@ const Domiciliation = () => {
           <div className="container mx-auto px-4">
             <div className="text-center mb-12">
               <h1 className="text-4xl md:text-5xl font-bold mb-6 text-gray-800">
-                Domiciliation d'entreprise à Béthune
+                Domiciliation d'entreprise à Deuil-la-Barre
               </h1>
               <p className="text-gray-600 max-w-2xl mx-auto text-lg">
-                Domiciliez votre entreprise à Béthune et bénéficiez de nombreux
+                Domiciliez votre entreprise à Deuil-la-Barre et bénéficiez de nombreux
                 services pour faciliter votre gestion administrative.
               </p>
             </div>

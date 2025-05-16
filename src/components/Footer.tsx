@@ -58,15 +58,17 @@ const Footer: React.FC = () => {
           
           <div>
             <h3 className="text-lg font-semibold mb-4">Contact</h3>
+            <a href="mailto:contact@lys-and-co.com" target="_blank" rel="noopener noreferrer" className="text-gray-600 hover:text-lysco-turquoise transition-colors">
             <p className="text-gray-600 mb-2">
               contact@lys-and-co.com
             </p>
+            </a>
             <p className="text-gray-600">
-              +33 (0)1 23 45 67 89
+              +33 (0)9 53 42 11 63<br />
+              +33 (0)7 56 85 37 02
             </p>
           </div>
         </div>
-        
         <div className="border-t border-gray-200 mt-8 pt-8 text-center text-gray-600">
           <p>&copy; {new Date().getFullYear()} Lys&Co. Tous droits réservés.</p>
         </div>
