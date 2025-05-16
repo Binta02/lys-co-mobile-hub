@@ -13,13 +13,21 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '
 import { z } from 'zod';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { Textarea } from '@/components/ui/textarea';
 
 const formSchema = z.object({
-  fullName: z.string().min(3, { message: "Nom complet requis" }),
   email: z.string().email({ message: "Email invalide" }),
+  firstName: z.string().min(2, { message: "Prénom requis" }),
+  lastName: z.string().min(2, { message: "Nom requis" }),
+  companyName: z.string().min(2, { message: "Nom de l'entreprise requis" }),
+  businessActivity: z.string().min(2, { message: "Activité de l'entreprise requise" }),
+  siretNumber: z.string().min(14, { message: "Numéro SIRET requis (14 chiffres)" }).max(14),
   address: z.string().min(5, { message: "Adresse requise" }),
+  addressDetails: z.string().optional(),
   city: z.string().min(2, { message: "Ville requise" }),
   postalCode: z.string().regex(/^\d{5}$/, { message: "Code postal à 5 chiffres requis" }),
+  phone: z.string().optional(),
+  country: z.string().default("France"),
   cardNumber: z.string().regex(/^\d{16}$/, { message: "Numéro de carte à 16 chiffres requis" }),
   expiryDate: z.string().regex(/^\d{2}\/\d{2}$/, { message: "Format MM/AA requis" }),
   cvv: z.string().regex(/^\d{3,4}$/, { message: "CVV à 3 ou 4 chiffres requis" }),
@@ -36,11 +44,18 @@ const Checkout = () => {
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      fullName: "",
       email: "",
+      firstName: "",
+      lastName: "",
+      companyName: "",
+      businessActivity: "",
+      siretNumber: "",
       address: "",
+      addressDetails: "",
       city: "",
       postalCode: "",
+      phone: "",
+      country: "France",
       cardNumber: "",
       expiryDate: "",
       cvv: "",
@@ -74,66 +89,87 @@ const Checkout = () => {
           <h1 className="text-3xl font-bold mb-8 text-center">Finaliser votre commande</h1>
           
           <div className="grid md:grid-cols-2 gap-8">
-            {/* Informations de paiement */}
+            {/* Informations de facturation et paiement */}
             <div>
               <Card>
                 <CardHeader>
-                  <CardTitle>Vos informations</CardTitle>
+                  <CardTitle>Informations de facturation</CardTitle>
                 </CardHeader>
                 <CardContent>
                   <Form {...form}>
                     <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-4">
                       <FormField
                         control={form.control}
-                        name="fullName"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel>Nom complet</FormLabel>
-                            <FormControl>
-                              <Input placeholder="Jean Dupont" {...field} />
-                            </FormControl>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-
-                      <FormField
-                        control={form.control}
                         name="email"
                         render={({ field }) => (
                           <FormItem>
-                            <FormLabel>Email</FormLabel>
+                            <FormLabel>E-mail</FormLabel>
                             <FormControl>
-                              <Input type="email" placeholder="jean.dupont@exemple.com" {...field} />
+                              <Input type="email" placeholder="votre@email.com" {...field} />
                             </FormControl>
                             <FormMessage />
                           </FormItem>
                         )}
                       />
                       
-                      <FormField
-                        control={form.control}
-                        name="address"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel>Adresse</FormLabel>
-                            <FormControl>
-                              <Input placeholder="123 Rue de Paris" {...field} />
-                            </FormControl>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-
-                      <div className="grid grid-cols-2 gap-4">
+                      <div className="pt-4 border-t mt-2">
+                        <h3 className="font-medium mb-4">Adresse de facturation</h3>
+                        <p className="text-sm text-gray-600 mb-4">
+                          Entrez l'adresse de facturation qui correspond à votre moyen de paiement.
+                        </p>
+                      
                         <FormField
                           control={form.control}
-                          name="city"
+                          name="country"
                           render={({ field }) => (
                             <FormItem>
-                              <FormLabel>Ville</FormLabel>
+                              <FormLabel>Pays / Région</FormLabel>
                               <FormControl>
-                                <Input placeholder="Paris" {...field} />
+                                <Input value="France" disabled {...field} />
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+
+                        <div className="grid grid-cols-2 gap-4 mt-4">
+                          <FormField
+                            control={form.control}
+                            name="firstName"
+                            render={({ field }) => (
+                              <FormItem>
+                                <FormLabel>Prénom</FormLabel>
+                                <FormControl>
+                                  <Input placeholder="Jean" {...field} />
+                                </FormControl>
+                                <FormMessage />
+                              </FormItem>
+                            )}
+                          />
+
+                          <FormField
+                            control={form.control}
+                            name="lastName"
+                            render={({ field }) => (
+                              <FormItem>
+                                <FormLabel>Nom</FormLabel>
+                                <FormControl>
+                                  <Input placeholder="Dupont" {...field} />
+                                </FormControl>
+                                <FormMessage />
+                              </FormItem>
+                            )}
+                          />
+                        </div>
+
+                        <FormField
+                          control={form.control}
+                          name="companyName"
+                          render={({ field }) => (
+                            <FormItem className="mt-4">
+                              <FormLabel>Nom de l'entreprise</FormLabel>
+                              <FormControl>
+                                <Input placeholder="Entreprise SAS" {...field} />
                               </FormControl>
                               <FormMessage />
                             </FormItem>
@@ -142,12 +178,98 @@ const Checkout = () => {
 
                         <FormField
                           control={form.control}
-                          name="postalCode"
+                          name="businessActivity"
                           render={({ field }) => (
-                            <FormItem>
-                              <FormLabel>Code postal</FormLabel>
+                            <FormItem className="mt-4">
+                              <FormLabel>Activité de l'entreprise</FormLabel>
                               <FormControl>
-                                <Input placeholder="75001" {...field} />
+                                <Input placeholder="Conseil informatique" {...field} />
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+
+                        <FormField
+                          control={form.control}
+                          name="siretNumber"
+                          render={({ field }) => (
+                            <FormItem className="mt-4">
+                              <FormLabel>Numéro SIRET</FormLabel>
+                              <FormControl>
+                                <Input placeholder="12345678901234" {...field} />
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+
+                        <FormField
+                          control={form.control}
+                          name="address"
+                          render={({ field }) => (
+                            <FormItem className="mt-4">
+                              <FormLabel>Adresse postale</FormLabel>
+                              <FormControl>
+                                <Input placeholder="123 Rue de Paris" {...field} />
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+
+                        <FormField
+                          control={form.control}
+                          name="addressDetails"
+                          render={({ field }) => (
+                            <FormItem className="mt-4">
+                              <FormLabel>Complément d'adresse (optionnel)</FormLabel>
+                              <FormControl>
+                                <Input placeholder="Appartement, étage, etc." {...field} />
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+
+                        <div className="grid grid-cols-2 gap-4 mt-4">
+                          <FormField
+                            control={form.control}
+                            name="city"
+                            render={({ field }) => (
+                              <FormItem>
+                                <FormLabel>Ville</FormLabel>
+                                <FormControl>
+                                  <Input placeholder="Paris" {...field} />
+                                </FormControl>
+                                <FormMessage />
+                              </FormItem>
+                            )}
+                          />
+
+                          <FormField
+                            control={form.control}
+                            name="postalCode"
+                            render={({ field }) => (
+                              <FormItem>
+                                <FormLabel>Code postal</FormLabel>
+                                <FormControl>
+                                  <Input placeholder="75001" {...field} />
+                                </FormControl>
+                                <FormMessage />
+                              </FormItem>
+                            )}
+                          />
+                        </div>
+
+                        <FormField
+                          control={form.control}
+                          name="phone"
+                          render={({ field }) => (
+                            <FormItem className="mt-4">
+                              <FormLabel>Téléphone (optionnel)</FormLabel>
+                              <FormControl>
+                                <Input type="tel" placeholder="0612345678" {...field} />
                               </FormControl>
                               <FormMessage />
                             </FormItem>
@@ -183,7 +305,7 @@ const Checkout = () => {
                               <FormItem>
                                 <FormLabel>Date d'expiration</FormLabel>
                                 <FormControl>
-                                  <Input placeholder="MM/YY" {...field} />
+                                  <Input placeholder="MM/AA" {...field} />
                                 </FormControl>
                                 <FormMessage />
                               </FormItem>
