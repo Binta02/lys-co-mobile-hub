@@ -6,6 +6,7 @@ import Footer from '@/components/Footer';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Check, ShoppingBag } from 'lucide-react';
+import ContractGenerator from '@/components/contract/ContractGenerator';
 
 const Confirmation = () => {
   const location = useLocation();
@@ -17,6 +18,17 @@ const Confirmation = () => {
 
   const { order } = location.state;
   const { orderId, items, subtotal, tax, total, clientInfo } = order;
+
+  // Check if the order contains domiciliation items
+  const domiciliationItems = items.filter(item => 
+    item.title.toLowerCase().includes('domiciliation') || 
+    item.title.toLowerCase().includes('entreprise') ||
+    item.title.toLowerCase().includes('auto-entrepreneur') ||
+    item.title.toLowerCase().includes('association')
+  );
+
+  // Get first domiciliation item for the contract
+  const domiciliationItem = domiciliationItems.length > 0 ? domiciliationItems[0] : null;
 
   return (
     <div className="min-h-screen flex flex-col">
@@ -81,6 +93,23 @@ const Confirmation = () => {
                   <p className="text-gray-600">{clientInfo.city}, {clientInfo.postalCode}</p>
                 </div>
               </div>
+
+              {domiciliationItem && (
+                <div className="mt-6 pt-6 border-t">
+                  <h3 className="font-semibold mb-4">Votre contrat de domiciliation</h3>
+                  <p className="text-sm text-gray-600 mb-4">
+                    Votre contrat de domiciliation est prêt ! Téléchargez-le ci-dessous, imprimez-le 
+                    en deux exemplaires, signez-les et envoyez-les à notre adresse.
+                  </p>
+                  <ContractGenerator 
+                    clientInfo={clientInfo} 
+                    planDetails={{
+                      name: domiciliationItem.title,
+                      price: domiciliationItem.price
+                    }}
+                  />
+                </div>
+              )}
             </CardContent>
           </Card>
 

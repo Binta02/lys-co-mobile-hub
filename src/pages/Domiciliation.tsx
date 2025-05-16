@@ -9,7 +9,7 @@ import ComplementaryServices from '@/components/domiciliation/ComplementaryServi
 import { Button } from '@/components/ui/button';
 import { Link } from 'react-router-dom';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/card';
-import { ChevronRight } from 'lucide-react';
+import { ChevronRight, MapPin, Clock, ShieldCheck, CheckCircle, PiggyBank } from 'lucide-react';
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -24,8 +24,61 @@ const Domiciliation = () => {
       <Navbar />
       
       <main className="flex-1">
-        <div className="container mx-auto px-4 py-8">
-          <Breadcrumb className="mb-6">
+        {/* Hero Section with Background */}
+        <div className="bg-gradient-to-r from-lysco-turquoise/20 to-lysco-pink/20 py-16">
+          <div className="container mx-auto px-4">
+            <div className="text-center mb-12">
+              <h1 className="text-4xl md:text-5xl font-bold mb-6 text-gray-800">
+                Domiciliation d'entreprise à Béthune
+              </h1>
+              <p className="text-gray-600 max-w-2xl mx-auto text-lg">
+                Domiciliez votre entreprise à Béthune et bénéficiez de nombreux services 
+                pour faciliter votre gestion administrative.
+              </p>
+            </div>
+            
+            <div className="grid gap-8 md:grid-cols-3 max-w-4xl mx-auto">
+              <Card className="bg-white shadow-md hover:shadow-lg transition-shadow border-t-4 border-lysco-turquoise">
+                <CardContent className="pt-6">
+                  <div className="flex items-center justify-center w-12 h-12 rounded-full bg-lysco-turquoise/10 mb-4 mx-auto">
+                    <MapPin className="h-6 w-6 text-lysco-turquoise" />
+                  </div>
+                  <h3 className="font-bold text-center mb-2">Adresse professionnelle</h3>
+                  <p className="text-gray-600 text-center text-sm">
+                    Une adresse commerciale valorisante pour votre entreprise
+                  </p>
+                </CardContent>
+              </Card>
+              
+              <Card className="bg-white shadow-md hover:shadow-lg transition-shadow border-t-4 border-lysco-pink">
+                <CardContent className="pt-6">
+                  <div className="flex items-center justify-center w-12 h-12 rounded-full bg-lysco-pink/10 mb-4 mx-auto">
+                    <Clock className="h-6 w-6 text-lysco-pink" />
+                  </div>
+                  <h3 className="font-bold text-center mb-2">Installation rapide</h3>
+                  <p className="text-gray-600 text-center text-sm">
+                    Votre domiciliation mise en place en 24h
+                  </p>
+                </CardContent>
+              </Card>
+              
+              <Card className="bg-white shadow-md hover:shadow-lg transition-shadow border-t-4 border-lysco-turquoise">
+                <CardContent className="pt-6">
+                  <div className="flex items-center justify-center w-12 h-12 rounded-full bg-lysco-turquoise/10 mb-4 mx-auto">
+                    <ShieldCheck className="h-6 w-6 text-lysco-turquoise" />
+                  </div>
+                  <h3 className="font-bold text-center mb-2">Conformité légale</h3>
+                  <p className="text-gray-600 text-center text-sm">
+                    Service agréé avec le numéro 04_95_2023
+                  </p>
+                </CardContent>
+              </Card>
+            </div>
+          </div>
+        </div>
+        
+        <div className="container mx-auto px-4 py-12">
+          <Breadcrumb className="mb-8">
             <BreadcrumbList>
               <BreadcrumbItem>
                 <BreadcrumbLink to="/">Accueil</BreadcrumbLink>
@@ -38,29 +91,27 @@ const Domiciliation = () => {
           </Breadcrumb>
           
           <section className="mb-16">
-            <div className="text-center mb-10">
-              <h1 className="text-3xl md:text-4xl font-bold mb-4">Domiciliation d'entreprise à Béthune</h1>
-              <p className="text-gray-600 max-w-2xl mx-auto">
-                Domiciliez votre entreprise à Béthune et bénéficiez de nombreux services pour faciliter votre gestion administrative.
-              </p>
-            </div>
-            
-            <div className="bg-gradient-to-r from-lysco-turquoise/10 to-lysco-pink/10 rounded-lg p-8 text-center mb-8">
-              <h2 className="text-2xl font-semibold mb-4">Nos formules d'abonnement mensuel</h2>
-              <p className="mb-8">Choisissez la formule qui correspond le mieux à votre statut et à vos besoins</p>
+            <div className="bg-gradient-to-r from-lysco-turquoise/10 to-lysco-pink/10 rounded-lg p-8 text-center mb-12">
+              <h2 className="text-2xl font-semibold mb-6">Nos formules d'abonnement mensuel</h2>
+              <p className="mb-8 text-gray-600">Choisissez la formule qui correspond le mieux à votre statut et à vos besoins</p>
               
               <DomiciliationPricing />
             </div>
             
-            <div className="bg-white rounded-lg p-8 text-center mb-8">
-              <h2 className="text-2xl font-semibold mb-4">Nos offres prépayées</h2>
-              <p className="mb-8">Pour plus de flexibilité, optez pour nos forfaits prépayés de 3 mois, 6 mois ou 1 an</p>
+            <div className="bg-white rounded-lg border shadow-sm p-8 text-center mb-12">
+              <h2 className="text-2xl font-semibold mb-6">Nos offres prépayées</h2>
+              <p className="mb-8 text-gray-600">Pour plus de flexibilité, optez pour nos forfaits prépayés de 3 mois, 6 mois ou 1 an</p>
               
               <DomiciliationOffers />
             </div>
-            <Card>
+            
+            <div className="grid gap-8 md:grid-cols-2 mb-12">
+              <Card className="bg-white shadow-sm">
                 <CardHeader>
-                  <CardTitle>Pourquoi se domicilier chez Lys&Co ?</CardTitle>
+                  <CardTitle className="flex items-center gap-2">
+                    <CheckCircle className="h-5 w-5 text-lysco-turquoise" />
+                    Pourquoi se domicilier chez Lys&Co ?
+                  </CardTitle>
                   <CardDescription>Une solution flexible et sans engagement</CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-4">
@@ -68,56 +119,81 @@ const Domiciliation = () => {
                     Vous n'avez pas encore de locaux pour votre entreprise et vous ne souhaitez pas divulguer votre adresse personnelle ? 
                     Domiciliez-vous chez Lys&Co en donnant à votre entreprise une adresse sûre et une boîte aux lettres ouverte du lundi au vendredi !
                   </p>
-                  <ul className="list-disc list-inside space-y-2 text-gray-600">
-                    <li>Offre flexible et sans engagement</li>
-                    <li>Mise en place rapide et sans tracas</li>
-                    <li>Paiement sécurisé en ligne</li>
-                    <li>Pas de dépôt de garantie ni frais de dossier</li>
-                    <li>-5% sur l'abonnement annuel pour tout paiement anticipé de 12 mois</li>
+                  <ul className="grid gap-2">
+                    {[
+                      'Offre flexible et sans engagement',
+                      'Mise en place rapide et sans tracas',
+                      'Paiement sécurisé en ligne',
+                      'Pas de dépôt de garantie ni frais de dossier',
+                      '-5% sur l'abonnement annuel pour tout paiement anticipé de 12 mois'
+                    ].map((item, idx) => (
+                      <li key={idx} className="flex items-start gap-2 text-gray-600">
+                        <CheckCircle className="h-5 w-5 text-green-500 shrink-0 mt-0.5" />
+                        <span>{item}</span>
+                      </li>
+                    ))}
                   </ul>
-                  <div className="bg-green-50 p-4 rounded-lg">
-                    <p className="text-green-800 font-medium">
+                  <div className="bg-green-50 p-4 rounded-lg mt-4">
+                    <p className="text-green-800 font-medium flex items-center">
+                      <PiggyBank className="h-5 w-5 mr-2" />
                       -50% sur vos 3 premiers mois pour tout engagement de 6 mois !
                     </p>
                   </div>
                 </CardContent>
               </Card>
 
-{/* Pack Exclusif Section */}
-              <Card className="bg-gradient-to-r from-lysco-turquoise/5 to-lysco-pink/5">
+              {/* Pack Exclusif Card with modern styling */}
+              <Card className="bg-gradient-to-br from-white to-lysco-turquoise/5 border border-lysco-turquoise/20 shadow-sm overflow-hidden">
+                <div className="absolute top-0 right-0">
+                  <div className="bg-lysco-pink text-white text-xs font-bold px-3 py-1 transform rotate-45 translate-x-6 translate-y-3">
+                    EXCLUSIF
+                  </div>
+                </div>
                 <CardHeader>
                   <CardTitle>Pack domicilié à 1514,00€</CardTitle>
                   <CardDescription>Pack Exclusif pour Nouveaux Domiciliés : Boostez votre entreprise !</CardDescription>
                 </CardHeader>
                 <CardContent>
                   <ul className="space-y-4">
-                    <li className="flex items-start gap-2">
-                      <span className="text-lysco-turquoise">✓</span>
+                    <li className="flex items-start gap-3">
+                      <span className="text-lysco-turquoise bg-lysco-turquoise/10 p-1 rounded-full">
+                        <CheckCircle className="h-4 w-4" />
+                      </span>
                       <span>Site Internet sur Mesure : Conception professionnelle incluse (hébergement à part)</span>
                     </li>
-                    <li className="flex items-start gap-2">
-                      <span className="text-lysco-turquoise">✓</span>
+                    <li className="flex items-start gap-3">
+                      <span className="text-lysco-turquoise bg-lysco-turquoise/10 p-1 rounded-full">
+                        <CheckCircle className="h-4 w-4" />
+                      </span>
                       <span>100 Cartes de Visite Professionnelles personnalisées</span>
                     </li>
-                    <li className="flex items-start gap-2">
-                      <span className="text-lysco-turquoise">✓</span>
+                    <li className="flex items-start gap-3">
+                      <span className="text-lysco-turquoise bg-lysco-turquoise/10 p-1 rounded-full">
+                        <CheckCircle className="h-4 w-4" />
+                      </span>
                       <span>Création et optimisation de pages Instagram et LinkedIn</span>
                     </li>
-                    <li className="flex items-start gap-2">
-                      <span className="text-lysco-turquoise">✓</span>
+                    <li className="flex items-start gap-3">
+                      <span className="text-lysco-turquoise bg-lysco-turquoise/10 p-1 rounded-full">
+                        <CheckCircle className="h-4 w-4" />
+                      </span>
                       <span>3 Mois de Domiciliation Gratuite (engagement 6 mois)</span>
                     </li>
                   </ul>
                   <div className="mt-6">
                     <Link to="/domiciliation/pack-domicilie">
-                      <Button className="w-full flex items-center justify-center">
+                      <Button className="w-full bg-lysco-turquoise hover:bg-lysco-turquoise/90 flex items-center justify-center">
                         Je profite de l'offre <ChevronRight className="ml-2 h-4 w-4" />
                       </Button>
                     </Link>
                   </div>
                 </CardContent>
               </Card>
-            <div className="bg-gradient-to-r from-lysco-pink/10 to-lysco-turquoise/10 rounded-lg p-8 text-center mb-8">
+            </div>
+            
+            <div className="bg-gradient-to-r from-lysco-pink/10 to-lysco-turquoise/10 rounded-lg p-8 text-center mb-12">
+              <h2 className="text-2xl font-semibold mb-6">Nos services complémentaires</h2>
+              <p className="text-gray-600 mb-8">Optimisez votre temps avec nos services supplémentaires</p>
               <ComplementaryServices />
             </div>
             
@@ -137,48 +213,109 @@ const Domiciliation = () => {
               </div>
             </div>
           </section>
-          {/* Location de bureaux Section */}
-              <Card>
-                <CardHeader>
-                  <CardTitle>Nos espaces de travail à Deuil-la-Barre</CardTitle>
+
+          {/* Location de bureaux Section with improved styling */}
+          <section className="mb-16">
+            <h2 className="text-2xl font-semibold mb-8 text-center">Nos espaces de travail à Deuil-la-Barre</h2>
+            
+            <div className="grid gap-6 md:grid-cols-3">
+              <Card className="bg-white hover:shadow-md transition-shadow">
+                <CardHeader className="pb-2">
+                  <CardTitle className="text-xl">Espace Coworking</CardTitle>
+                  <CardDescription>Espace de travail partagé, idéal pour les freelances</CardDescription>
                 </CardHeader>
-                <CardContent className="space-y-6">
-                  <div className="grid gap-6 md:grid-cols-2">
-                    <Link to="/service/coworking-space" className="block hover:bg-gray-50 p-4 rounded transition">
-                      <h3 className="font-bold mb-2">Espace Coworking</h3>
-                      <p className="text-gray-600 mb-2">Capacité : 8 personnes</p>
-                      <p className="text-2xl font-bold">5€<span className="text-base font-normal">/heure</span></p>
-                    </Link>
-
-                    <Link to="/service/formation-room" className="block hover:bg-gray-50 p-4 rounded transition">
-                      <h3 className="font-bold mb-2">Salle de Formation</h3>
-                      <p className="text-gray-600 mb-2">Capacité : 10 personnes</p>
-                      <ul className="space-y-1">
-                        <li>10€/heure</li>
-                        <li>25€/demi-journée</li>
-                        <li>45€/journée</li>
-                      </ul>
-                    </Link>
+                <CardContent>
+                  <div className="mb-4">
+                    <span className="text-sm text-gray-500">Capacité</span>
+                    <p className="font-semibold">8 personnes</p>
                   </div>
-
-                  <Link to="/service/location-bureau" className="block hover:bg-gray-50 p-4 rounded transition">
-                    <h3 className="font-bold mb-2">Location de Bureau (2 places)</h3>
-                    <ul className="space-y-1">
-                      <li>125€/mois (demi-journée)</li>
-                      <li>250€/mois (journée complète)</li>
-                    </ul>
+                  <div className="mb-4">
+                    <span className="text-sm text-gray-500">Tarif</span>
+                    <p className="text-2xl font-bold text-lysco-turquoise">5€<span className="text-base font-normal text-gray-600">/heure</span></p>
+                  </div>
+                  <Link to="/service/coworking-space">
+                    <Button variant="outline" className="w-full mt-2">
+                      Plus d'infos
+                    </Button>
                   </Link>
-
-                  <div className="text-center">
-                    <Link to="/espaces-travail">
-                      <Button variant="outline" className="flex items-center justify-center mx-auto">
-                        Plus d'infos ou réserver <ChevronRight className="ml-2 h-4 w-4" />
-                      </Button>
-                    </Link>
-                  </div>
                 </CardContent>
               </Card>
-          {/* <DomiciliationServices /> */}
+
+              <Card className="bg-white hover:shadow-md transition-shadow">
+                <CardHeader className="pb-2">
+                  <CardTitle className="text-xl">Salle de Formation</CardTitle>
+                  <CardDescription>Salle équipée pour formations et réunions</CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <div className="mb-4">
+                    <span className="text-sm text-gray-500">Capacité</span>
+                    <p className="font-semibold">10 personnes</p>
+                  </div>
+                  <div className="mb-4">
+                    <span className="text-sm text-gray-500">Tarifs</span>
+                    <ul className="space-y-1">
+                      <li className="flex justify-between">
+                        <span>À l'heure</span>
+                        <span className="font-medium">10€</span>
+                      </li>
+                      <li className="flex justify-between">
+                        <span>Demi-journée</span>
+                        <span className="font-medium">25€</span>
+                      </li>
+                      <li className="flex justify-between">
+                        <span>Journée</span>
+                        <span className="font-medium">45€</span>
+                      </li>
+                    </ul>
+                  </div>
+                  <Link to="/service/formation-room">
+                    <Button variant="outline" className="w-full mt-2">
+                      Plus d'infos
+                    </Button>
+                  </Link>
+                </CardContent>
+              </Card>
+
+              <Card className="bg-white hover:shadow-md transition-shadow">
+                <CardHeader className="pb-2">
+                  <CardTitle className="text-xl">Bureau Privé</CardTitle>
+                  <CardDescription>Bureau fermé pour 2 personnes</CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <div className="mb-4">
+                    <span className="text-sm text-gray-500">Capacité</span>
+                    <p className="font-semibold">2 personnes</p>
+                  </div>
+                  <div className="mb-4">
+                    <span className="text-sm text-gray-500">Tarifs mensuels</span>
+                    <ul className="space-y-1">
+                      <li className="flex justify-between">
+                        <span>Demi-journée</span>
+                        <span className="font-medium">125€</span>
+                      </li>
+                      <li className="flex justify-between">
+                        <span>Journée complète</span>
+                        <span className="font-medium">250€</span>
+                      </li>
+                    </ul>
+                  </div>
+                  <Link to="/service/location-bureau">
+                    <Button variant="outline" className="w-full mt-2">
+                      Plus d'infos
+                    </Button>
+                  </Link>
+                </CardContent>
+              </Card>
+            </div>
+            
+            <div className="mt-8 text-center">
+              <Link to="/espaces-travail">
+                <Button className="bg-lysco-turquoise hover:bg-lysco-turquoise/90">
+                  Découvrir tous nos espaces
+                </Button>
+              </Link>
+            </div>
+          </section>
         </div>
       </main>
       
