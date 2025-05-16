@@ -1,3 +1,4 @@
+
 import { useEffect, useState } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from '@/components/ui/use-toast';
@@ -19,6 +20,20 @@ export interface UserDomiciliation {
   address: string;
   renewal_date: string;
   created_at?: string;
+  plan_type?: string; // Type de plan: 'société', 'auto-entrepreneur', 'association'
+  duration?: string; // '1 mois', '3 mois', '6 mois', '1 an'
+}
+
+export interface UserService {
+  id: string;
+  user_id?: string;
+  name: string;
+  status: 'active' | 'inactive' | 'pending' | 'option';
+  price?: number;
+  renewal_date?: string;
+  category: 'domiciliation' | 'admin' | 'marketing' | 'complementary';
+  created_at?: string;
+  updated_at?: string;
 }
 
 export interface UserMail {
@@ -65,6 +80,7 @@ export interface UserAdminService {
 export function useUserData() {
   const [profile, setProfile] = useState<UserProfile | null>(null);
   const [domiciliation, setDomiciliation] = useState<UserDomiciliation | null>(null);
+  const [userServices, setUserServices] = useState<UserService[]>([]);
   const [mails, setMails] = useState<UserMail[]>([]);
   const [notifications, setNotifications] = useState<UserNotification[]>([]);
   const [activities, setActivities] = useState<UserActivity[]>([]);
@@ -105,15 +121,53 @@ export function useUserData() {
         created_at: profileData?.created_at || session.user.created_at
       });
 
-      // For now, we'll use placeholder data until we create those tables
-      // In a production app, we would fetch this data from Supabase
-      setDomiciliation({
-        user_id: session.user.id,
-        status: 'active',
-        address: '14 Avenue de l\'Opéra, 75001 Paris',
-        renewal_date: '2026-01-01'
-      });
+      // Récupérer les informations de domiciliation depuis Supabase
+      const { data: domiciliationData, error: domiciliationError } = await supabase
+        .from('user_domiciliations')
+        .select('*')
+        .eq('user_id', session.user.id)
+        .single();
 
+      if (domiciliationError && domiciliationError.code !== 'PGRST116') {
+        // Si c'est une erreur autre que "No rows found"
+        console.error('Erreur lors de la récupération des informations de domiciliation:', domiciliationError);
+      }
+
+      // Si un enregistrement de domiciliation est trouvé, utilisez-le
+      if (domiciliationData) {
+        setDomiciliation(domiciliationData);
+      } else {
+        // Sinon, utilisez des valeurs par défaut
+        console.log('Aucune information de domiciliation trouvée, utilisation des valeurs par défaut');
+        setDomiciliation({
+          user_id: session.user.id,
+          status: 'pending',
+          address: 'En attente de validation',
+          renewal_date: new Date().toISOString()
+        });
+      }
+
+      // Récupérer les services de l'utilisateur depuis Supabase
+      const { data: servicesData, error: servicesError } = await supabase
+        .from('user_services')
+        .select('*')
+        .eq('user_id', session.user.id);
+
+      if (servicesError) {
+        console.error('Erreur lors de la récupération des services:', servicesError);
+      }
+
+      // Si des services sont trouvés, utilisez-les
+      if (servicesData && servicesData.length > 0) {
+        setUserServices(servicesData);
+      } else {
+        // Loggez que nous n'avons pas trouvé de services
+        console.log('Aucun service trouvé pour cet utilisateur');
+        setUserServices([]);
+      }
+
+      // Pour les fonctionnalités qui ne sont pas encore implémentées dans la base de données,
+      // nous utilisons des données temporaires
       setMails([
         { id: '1', user_id: session.user.id, subject: 'Impôts - Déclaration TVA', received_at: new Date().toISOString(), status: 'new' },
         { id: '2', user_id: session.user.id, subject: 'Facture Électricité', received_at: new Date(Date.now() - 86400000).toISOString(), status: 'new' },
@@ -157,7 +211,18 @@ export function useUserData() {
         { id: '2', user_id: session.user.id, name: 'PV_AG_2025.pdf', created_at: '2025-03-15T14:30:00Z', type: 'Juridique' },
       ]);
 
-      setAdminServices([
+      // Filtrer les services administratifs depuis les userServices
+      const adminServicesList = userServices
+        .filter(service => service.category === 'admin')
+        .map(service => ({
+          id: service.id,
+          user_id: service.user_id,
+          service: service.name,
+          next_processing: service.renewal_date || new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString(),
+          status: service.status as 'pending' | 'active' | 'completed'
+        }));
+
+      setAdminServices(adminServicesList.length > 0 ? adminServicesList : [
         { id: '1', user_id: session.user.id, service: 'Déclaration TVA', next_processing: '2025-05-05T00:00:00Z', status: 'pending' },
         { id: '2', user_id: session.user.id, service: 'Gestion comptable', next_processing: '2025-04-30T00:00:00Z', status: 'active' },
         { id: '3', user_id: session.user.id, service: 'Secrétariat juridique', next_processing: '2025-05-15T00:00:00Z', status: 'active' },
@@ -210,23 +275,83 @@ export function useUserData() {
   // Function to update domiciliation information
   const updateDomiciliation = async (updatedDomiciliation: Partial<UserDomiciliation>) => {
     try {
-      // In a production app, we would update the domiciliation in Supabase
-      // For now, we'll just update the state
-      setDomiciliation(prev => {
-        if (!prev) return null;
-        return { ...prev, ...updatedDomiciliation };
-      });
+      if (domiciliation?.id) {
+        // Mise à jour d'une domiciliation existante
+        const { error } = await supabase
+          .from('user_domiciliations')
+          .update({
+            ...updatedDomiciliation,
+            updated_at: new Date().toISOString()
+          })
+          .eq('id', domiciliation.id);
 
+        if (error) throw error;
+      } else {
+        // Création d'une nouvelle domiciliation
+        const { error } = await supabase
+          .from('user_domiciliations')
+          .insert({
+            ...updatedDomiciliation,
+            user_id: profile?.id
+          });
+
+        if (error) throw error;
+      }
+      
       toast({
         title: "Succès",
         description: "Informations de domiciliation mises à jour",
       });
       
+      await fetchUserData();
       return true;
     } catch (err: any) {
       toast({
         title: "Erreur",
-        description: "Impossible de mettre à jour les informations de domiciliation",
+        description: err.message || "Impossible de mettre à jour les informations de domiciliation",
+        variant: "destructive"
+      });
+      return false;
+    }
+  };
+
+  // Add or update a user service
+  const updateUserService = async (service: Partial<UserService>) => {
+    try {
+      if (service.id) {
+        // Mise à jour d'un service existant
+        const { error } = await supabase
+          .from('user_services')
+          .update({
+            ...service,
+            updated_at: new Date().toISOString()
+          })
+          .eq('id', service.id);
+
+        if (error) throw error;
+      } else {
+        // Création d'un nouveau service
+        const { error } = await supabase
+          .from('user_services')
+          .insert({
+            ...service,
+            user_id: profile?.id
+          });
+
+        if (error) throw error;
+      }
+      
+      toast({
+        title: "Succès",
+        description: "Service mis à jour avec succès",
+      });
+      
+      await fetchUserData();
+      return true;
+    } catch (err: any) {
+      toast({
+        title: "Erreur",
+        description: err.message || "Impossible de mettre à jour le service",
         variant: "destructive"
       });
       return false;
@@ -276,6 +401,7 @@ export function useUserData() {
   return {
     profile,
     domiciliation,
+    userServices,
     mails,
     notifications,
     activities,
@@ -285,6 +411,7 @@ export function useUserData() {
     error,
     updateProfile,
     updateDomiciliation,
+    updateUserService,
     markMailAsRead,
     markNotificationAsRead,
     refreshUserData: fetchUserData

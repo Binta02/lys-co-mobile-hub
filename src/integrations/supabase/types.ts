@@ -72,6 +72,78 @@ export type Database = {
         }
         Relationships: []
       }
+      user_domiciliations: {
+        Row: {
+          address: string
+          created_at: string
+          duration: string | null
+          id: string
+          plan_type: string | null
+          renewal_date: string | null
+          status: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          address: string
+          created_at?: string
+          duration?: string | null
+          id?: string
+          plan_type?: string | null
+          renewal_date?: string | null
+          status?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          address?: string
+          created_at?: string
+          duration?: string | null
+          id?: string
+          plan_type?: string | null
+          renewal_date?: string | null
+          status?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      user_services: {
+        Row: {
+          category: string
+          created_at: string
+          id: string
+          name: string
+          price: number | null
+          renewal_date: string | null
+          status: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          category: string
+          created_at?: string
+          id?: string
+          name: string
+          price?: number | null
+          renewal_date?: string | null
+          status?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          category?: string
+          created_at?: string
+          id?: string
+          name?: string
+          price?: number | null
+          renewal_date?: string | null
+          status?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never

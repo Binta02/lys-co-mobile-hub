@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -12,6 +11,7 @@ const DashboardOverview = () => {
   const { 
     profile, 
     domiciliation, 
+    userServices,
     mails, 
     notifications, 
     activities, 
@@ -30,6 +30,11 @@ const DashboardOverview = () => {
       </div>
     );
   }
+
+  // Filtrer les services par catégorie
+  const domiciliationServices = userServices.filter(service => service.category === 'domiciliation');
+  const adminServices = userServices.filter(service => service.category === 'admin');
+  const marketingServices = userServices.filter(service => service.category === 'marketing');
 
   const formatDate = (dateString: string): string => {
     try {
@@ -117,7 +122,7 @@ const DashboardOverview = () => {
           <CardContent>
             <p className="text-sm text-gray-600 mb-4">
               Statut: <span className={`font-medium ${domiciliation?.status === 'active' ? 'text-green-600' : 'text-amber-600'}`}>
-                {domiciliation?.status === 'active' ? 'Actif' : 'En attente'}
+                {domiciliation?.status === 'active' ? 'Actif' : domiciliation?.status === 'pending' ? 'En attente' : 'Inactif'}
               </span>
             </p>
             <p className="text-sm text-gray-600 mb-4">
@@ -128,6 +133,9 @@ const DashboardOverview = () => {
                 Renouvellement: {formatDate(domiciliation.renewal_date)}
               </p>
             )}
+            <p className="text-sm text-gray-600 mb-4">
+              Services actifs: <span className="font-medium">{domiciliationServices.filter(s => s.status === 'active').length}</span>
+            </p>
             <Button variant="outline" size="sm" className="w-full" asChild>
               <a href="/dashboard/domiciliation">Gérer la domiciliation</a>
             </Button>
