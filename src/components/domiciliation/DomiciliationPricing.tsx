@@ -47,11 +47,11 @@ const DomiciliationPricing = () => {
               >
                 Ajouter au panier
               </Button>
-              <Link to="/service/domiciliation-societe" className="block w-full">
+              {/* <Link to="/service/domiciliation-societe" className="block w-full">
                 <Button variant="outline" className="w-full flex items-center justify-center">
                   Voir les détails <ChevronRight className="ml-2 h-4 w-4" />
                 </Button>
-              </Link>
+              </Link> */}
             </div>
           </div>
         </CardContent>
@@ -77,11 +77,11 @@ const DomiciliationPricing = () => {
               >
                 Ajouter au panier
               </Button>
-              <Link to="/service/domiciliation-auto-entrepreneur" className="block w-full">
+              {/* <Link to="/service/domiciliation-auto-entrepreneur" className="block w-full">
                 <Button variant="outline" className="w-full flex items-center justify-center">
                   Voir les détails <ChevronRight className="ml-2 h-4 w-4" />
                 </Button>
-              </Link>
+              </Link> */}
             </div>
           </div>
         </CardContent>
@@ -106,11 +106,11 @@ const DomiciliationPricing = () => {
               >
                 Ajouter au panier
               </Button>
-              <Link to="/service/domiciliation-association" className="block w-full">
+              {/* <Link to="/service/domiciliation-association" className="block w-full">
                 <Button variant="outline" className="w-full flex items-center justify-center">
                   Voir les détails <ChevronRight className="ml-2 h-4 w-4" />
                 </Button>
-              </Link>
+              </Link> */}
             </div>
           </div>
         </CardContent>

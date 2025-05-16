@@ -114,7 +114,7 @@ const ComplementaryServices = () => {
                 <p className="text-sm text-gray-700">
                   Réception et gestion de vos colis professionnels.
                 </p>
-                <p className="text-2xl font-semibold text-lysco-turquoise">15€<span className="text-base font-normal">/mois</span></p>
+                <p className="text-2xl font-semibold text-lysco-turquoise">6€<span className="text-base font-normal">/mois</span></p>
               </div>
               <div className="space-y-2 mt-4">
                 <Button 
@@ -122,7 +122,7 @@ const ComplementaryServices = () => {
                   onClick={() => handleAddToCart({
                     id: 'service-colis',
                     title: 'Service de gestion de colis',
-                    price: '15,00'
+                    price: '6,00'
                   })}
                 >
                   Ajouter au panier
@@ -140,7 +140,7 @@ const ComplementaryServices = () => {
       <div className="mt-8 text-center">
             <Link to="/services-complementaires">
               <Button className="bg-lysco-turquoise hover:bg-lysco-turquoise/90">
-                Découvrir tous nos espaces
+                Découvrir tous nos services supplémentaires
               </Button>
             </Link>
           </div>
