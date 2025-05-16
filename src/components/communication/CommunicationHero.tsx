@@ -17,11 +17,18 @@ const CommunicationHero = () => {
               Notre équipe (rédacteurs, graphistes, webmasters, vidéastes…) analyse vos besoins et pilote votre projet de A à Z.
             </p>
           </div>
-          <Link to="/contact">
-            <Button className="bg-lysco-turquoise hover:bg-lysco-turquoise/90">
-              Prenez RDV !
-            </Button>
-          </Link>
+          <div className="flex justify-center flex-wrap gap-4">
+            <Link to="/contact">
+              <Button className="bg-lysco-turquoise hover:bg-lysco-turquoise/90">
+                Prenez RDV !
+              </Button>
+            </Link>
+            <Link to="/communication-packs">
+              <Button variant="outline" className="border-lysco-turquoise text-lysco-turquoise hover:bg-lysco-turquoise/10">
+                Nos packs de communication
+              </Button>
+            </Link>
+          </div>
         </div>
       </div>
     </section>
