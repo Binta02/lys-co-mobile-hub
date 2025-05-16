@@ -121,11 +121,11 @@ const Domiciliation = () => {
                   </p>
                   <ul className="grid gap-2">
                     {[
-                      'Offre flexible et sans engagement',
-                      'Mise en place rapide et sans tracas',
-                      'Paiement sécurisé en ligne',
-                      'Pas de dépôt de garantie ni frais de dossier',
-                      '-5% sur l'abonnement annuel pour tout paiement anticipé de 12 mois'
+                      "Offre flexible et sans engagement",
+                      "Mise en place rapide et sans tracas",
+                      "Paiement sécurisé en ligne",
+                      "Pas de dépôt de garantie ni frais de dossier",
+                      "-5% sur l'abonnement annuel pour tout paiement anticipé de 12 mois"
                     ].map((item, idx) => (
                       <li key={idx} className="flex items-start gap-2 text-gray-600">
                         <CheckCircle className="h-5 w-5 text-green-500 shrink-0 mt-0.5" />
