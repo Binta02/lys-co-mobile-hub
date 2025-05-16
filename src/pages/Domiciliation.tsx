@@ -192,8 +192,6 @@ const Domiciliation = () => {
             </div>
             
             <div className="bg-gradient-to-r from-lysco-pink/10 to-lysco-turquoise/10 rounded-lg p-8 text-center mb-12">
-              <h2 className="text-2xl font-semibold mb-6">Nos services complémentaires</h2>
-              <p className="text-gray-600 mb-8">Optimisez votre temps avec nos services supplémentaires</p>
               <ComplementaryServices />
             </div>
             
