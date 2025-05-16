@@ -96,7 +96,7 @@ const Domiciliation = () => {
         </div>
 
         <div className="container mx-auto px-4 py-12">
-          <Breadcrumb className="mb-8">
+          {/* <Breadcrumb className="mb-8">
             <BreadcrumbList>
               <BreadcrumbItem>
                 <BreadcrumbLink to="/">Accueil</BreadcrumbLink>
@@ -108,7 +108,7 @@ const Domiciliation = () => {
                 </BreadcrumbLink>
               </BreadcrumbItem>
             </BreadcrumbList>
-          </Breadcrumb>
+          </Breadcrumb> */}
 
           <section className="mb-16">
             <div className="bg-gradient-to-r from-lysco-turquoise/10 to-lysco-pink/10 rounded-lg p-8 text-center mb-12">
