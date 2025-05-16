@@ -3,6 +3,10 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
+import { Swiper, SwiperSlide } from 'swiper/react'
+import 'swiper/css'
+import 'swiper/css/pagination'
+import { Pagination } from 'swiper/modules'
 
 const CommunicationCreations = () => {
   return (
@@ -16,6 +20,21 @@ const CommunicationCreations = () => {
 
           {/* Logos */}
           <section className="mb-16">
+            <Swiper
+  modules={[Pagination]}
+  pagination={{ clickable: true }}
+  spaceBetween={20}
+  slidesPerView={1}
+  breakpoints={{
+    768: { slidesPerView: 2 },
+    1024: { slidesPerView: 3 },
+  }}
+>
+  <SwiperSlide><img src="https://lys-and-co.com/wp-content/uploads/2025/03/Capture-decran-2025-03-04-105723.png" alt="Logo 1" /></SwiperSlide>
+  <SwiperSlide><img src="https://lys-and-co.com/wp-content/uploads/2025/03/Capture-decran-2025-03-04-105730.png" alt="Logo 2" /></SwiperSlide>
+  <SwiperSlide><img src="https://lys-and-co.com/wp-content/uploads/2025/03/Capture-decran-2025-03-04-105710.png" alt="Logo 3" /></SwiperSlide>
+  {/* ...et ainsi de suite */}
+</Swiper>
             <h2 className="text-2xl font-semibold text-lysco-turquoise mb-4">
               Les logos
             </h2>
