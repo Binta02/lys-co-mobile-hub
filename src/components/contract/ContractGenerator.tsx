@@ -2,7 +2,7 @@
 import React from 'react';
 import { Document, Page, Text, View, StyleSheet, PDFDownloadLink, Font } from '@react-pdf/renderer';
 import { saveAs } from 'file-saver';
-import { FilePdf } from 'lucide-react';
+import { FileText } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
 // Define contract styles
@@ -371,7 +371,7 @@ const ContractGenerator = ({ clientInfo, planDetails }: ContractGeneratorProps) 
           className="w-full bg-lysco-turquoise hover:bg-lysco-turquoise/90"
           disabled={loading}
         >
-          <FilePdf className="mr-2 h-4 w-4" />
+          <FileText className="mr-2 h-4 w-4" />
           {loading ? "Préparation du contrat..." : "Télécharger votre contrat"}
         </Button>
       )}
