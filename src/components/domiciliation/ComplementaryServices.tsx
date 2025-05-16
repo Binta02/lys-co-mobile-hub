@@ -61,7 +61,7 @@ const ComplementaryServices = () => {
                 >
                   Ajouter au panier
                 </Button>
-                <Link to="/services-complementaires#reexpedition" className="block w-full">
+                <Link to="/service/reexpedition-courrier" className="block w-full">
                   <Button variant="outline" className="w-full">
                     En savoir plus
                   </Button>
@@ -94,7 +94,7 @@ const ComplementaryServices = () => {
                 >
                   Ajouter au panier
                 </Button>
-                <Link to="/services-complementaires#scan" className="block w-full">
+                <Link to="/service/scan-courrier" className="block w-full">
                   <Button variant="outline" className="w-full">
                     En savoir plus
                   </Button>
@@ -127,7 +127,7 @@ const ComplementaryServices = () => {
                 >
                   Ajouter au panier
                 </Button>
-                <Link to="/services-complementaires#colis" className="block w-full">
+                <Link to="/service/reception-colis" className="block w-full">
                   <Button variant="outline" className="w-full">
                     En savoir plus
                   </Button>
@@ -135,6 +135,13 @@ const ComplementaryServices = () => {
               </div>
             </CardContent>
           </Card>
+          <div className="mt-8 text-center">
+            <Link to="/services-complementaires">
+              <Button className="bg-lysco-turquoise hover:bg-lysco-turquoise/90">
+                Découvrir tous nos espaces
+              </Button>
+            </Link>
+          </div>
         </div>
       </div>
     </div>
