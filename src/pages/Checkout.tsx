@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Navbar from '@/components/Navbar';
@@ -36,7 +35,7 @@ const formSchema = z.object({
 type FormValues = z.infer<typeof formSchema>;
 
 const Checkout = () => {
-  const { items, total, clearCart } = useCart();
+  const { items, total, subtotal, tax, clearCart } = useCart();
   const navigate = useNavigate();
   
   const [isProcessing, setIsProcessing] = useState(false);
@@ -73,6 +72,8 @@ const Checkout = () => {
       state: { 
         order: {
           items,
+          subtotal,
+          tax,
           total,
           clientInfo: data,
           orderId: `ORD-${Math.floor(Math.random() * 1000000)}`
@@ -359,9 +360,19 @@ const Checkout = () => {
                       </div>
                     ))}
                     
-                    <div className="flex justify-between pt-4 font-bold">
-                      <span>Total</span>
-                      <span>{total.toFixed(2)} €</span>
+                    <div className="pt-4">
+                      <div className="flex justify-between">
+                        <span>Sous-total</span>
+                        <span>{subtotal.toFixed(2)} €</span>
+                      </div>
+                      <div className="flex justify-between mt-2">
+                        <span>TVA (20%)</span>
+                        <span>{tax.toFixed(2)} €</span>
+                      </div>
+                      <div className="flex justify-between pt-4 mt-2 border-t font-bold">
+                        <span>Total</span>
+                        <span>{total.toFixed(2)} €</span>
+                      </div>
                     </div>
                   </div>
                 </CardContent>

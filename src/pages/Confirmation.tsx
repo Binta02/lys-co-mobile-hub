@@ -16,7 +16,7 @@ const Confirmation = () => {
   }
 
   const { order } = location.state;
-  const { orderId, items, total, clientInfo } = order;
+  const { orderId, items, subtotal, tax, total, clientInfo } = order;
 
   return (
     <div className="min-h-screen flex flex-col">
@@ -55,16 +55,29 @@ const Confirmation = () => {
                   ))}
                 </div>
 
-                <div className="flex justify-between pt-4 font-bold">
-                  <span>Total</span>
-                  <span>{total.toFixed(2)} €</span>
+                <div className="pt-4">
+                  <div className="flex justify-between">
+                    <span>Sous-total</span>
+                    <span>{subtotal.toFixed(2)} €</span>
+                  </div>
+                  <div className="flex justify-between mt-2">
+                    <span>TVA (20%)</span>
+                    <span>{tax.toFixed(2)} €</span>
+                  </div>
+                  <div className="flex justify-between pt-4 mt-2 border-t font-bold">
+                    <span>Total</span>
+                    <span>{total.toFixed(2)} €</span>
+                  </div>
                 </div>
 
                 <div className="pt-4 border-t">
                   <h3 className="font-semibold mb-2">Informations client</h3>
-                  <p className="text-gray-800">{clientInfo.fullName}</p>
+                  <p className="text-gray-800">{clientInfo.firstName} {clientInfo.lastName}</p>
                   <p className="text-gray-600">{clientInfo.email}</p>
+                  <p className="text-gray-600">{clientInfo.companyName}</p>
+                  <p className="text-gray-600">SIRET: {clientInfo.siretNumber}</p>
                   <p className="text-gray-600">{clientInfo.address}</p>
+                  {clientInfo.addressDetails && <p className="text-gray-600">{clientInfo.addressDetails}</p>}
                   <p className="text-gray-600">{clientInfo.city}, {clientInfo.postalCode}</p>
                 </div>
               </div>

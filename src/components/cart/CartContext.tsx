@@ -1,3 +1,4 @@
+
 import React, { createContext, useContext, useEffect, useState } from "react";
 
 export interface CartItem {
@@ -10,6 +11,8 @@ export interface CartItem {
 interface CartContextType {
   items: CartItem[];
   total: number;
+  subtotal: number;
+  tax: number;
   addItem: (item: CartItem) => void;
   removeItem: (id: string) => void;
   updateQuantity: (id: string, quantity: number) => void;
@@ -62,10 +65,17 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
     localStorage.removeItem("lysco-cart");
   };
 
-  const total = items.reduce((acc, item) => acc + item.price * item.quantity, 0);
+  // Calcul des différents montants
+  const subtotal = items.reduce((acc, item) => acc + item.price * item.quantity, 0);
+  
+  // Calcul de la TVA (20% en France)
+  const tax = subtotal * 0.2; 
+  
+  // Total incluant les taxes
+  const total = subtotal + tax;
 
   return (
-    <CartContext.Provider value={{ items, addItem, removeItem, updateQuantity, clearCart, total }}>
+    <CartContext.Provider value={{ items, addItem, removeItem, updateQuantity, clearCart, total, subtotal, tax }}>
       {children}
     </CartContext.Provider>
   );

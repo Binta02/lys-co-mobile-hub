@@ -15,7 +15,7 @@ import { Badge } from "@/components/ui/badge";
 import { ScrollArea } from "@/components/ui/scroll-area";
 
 export function CartDrawer() {
-  const { items, removeItem, updateQuantity, total } = useCart();
+  const { items, removeItem, updateQuantity, total, subtotal, tax } = useCart();
 
   return (
     <Sheet>
@@ -83,7 +83,15 @@ export function CartDrawer() {
               </ScrollArea>
               
               <div className="pt-4 mt-4 border-t sticky bottom-0 bg-background">
-                <div className="flex justify-between font-medium">
+                <div className="flex justify-between text-sm">
+                  <span>Sous-total</span>
+                  <span>{subtotal.toFixed(2)} €</span>
+                </div>
+                <div className="flex justify-between text-sm mt-2">
+                  <span>TVA (20%)</span>
+                  <span>{tax.toFixed(2)} €</span>
+                </div>
+                <div className="flex justify-between font-medium mt-2 pt-2 border-t">
                   <span>Total</span>
                   <span>{total.toFixed(2)} €</span>
                 </div>
