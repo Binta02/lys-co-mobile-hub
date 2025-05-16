@@ -97,11 +97,7 @@ const Domiciliation = () => {
               
               <DomiciliationPricing />
             </div>
-            
             <div className="bg-white rounded-lg border shadow-sm p-8 text-center mb-12">
-              <h2 className="text-2xl font-semibold mb-6">Nos offres prépayées</h2>
-              <p className="mb-8 text-gray-600">Pour plus de flexibilité, optez pour nos forfaits prépayés de 3 mois, 6 mois ou 1 an</p>
-              
               <DomiciliationOffers />
             </div>
             

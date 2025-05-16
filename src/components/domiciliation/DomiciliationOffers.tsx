@@ -85,6 +85,7 @@ const DomiciliationOffers = () => {
       <div className="container mx-auto px-4">
         <div className="text-center mb-8">
           <h2 className="text-3xl font-bold mb-4">Nos offres de domiciliation</h2>
+          <p className="mb-8 text-gray-600">Pour plus de flexibilité, optez pour nos forfaits prépayés de 3 mois, 6 mois ou 1 an</p>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {offers.map((offer, index) => (
