@@ -103,7 +103,7 @@ const CommunicationCreations = () => {
             <h2 className="text-2xl font-semibold text-lysco-turquoise mb-4">Créations Prints</h2>
 
             {/* Métiers divers */}
-            <h3 className="text-lg font-medium mb-2">Métiers de divers</h3>
+            <h3 className="text-lg font-medium mb-2 text-pink-600">Métiers de divers</h3>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
               <img src="https://lys-and-co.com/wp-content/uploads/2025/03/image-restaurant.jpeg" alt="Menu 1" />
               <img src="https://lys-and-co.com/wp-content/uploads/2025/03/Capture-decran-2025-03-04-110210.png" alt="Menu 2" />
@@ -116,7 +116,7 @@ const CommunicationCreations = () => {
             </div>
 
             {/* Cartes de visite */}
-            <h3 className="text-lg font-medium mb-2">Cartes de visite</h3>
+            <h3 className="text-lg font-medium mb-2 text-pink-600">Cartes de visite</h3>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
               <img src="https://lys-conseil.com/wp-content/uploads/2024/03/WhatsApp-Image-2024-03-07-at-11.51.39.jpeg" alt="Carte 1" />
               <img src="https://lys-conseil.com/wp-content/uploads/2024/03/WhatsApp-Image-2024-03-07-at-11.57.31.jpeg" alt="Carte 2" />
@@ -127,13 +127,13 @@ const CommunicationCreations = () => {
             </div>
 
             {/* Présentoirs */}
-            <h3 className="text-lg font-medium mb-2">Présentoirs</h3>
+            <h3 className="text-lg font-medium mb-2 text-pink-600">Présentoirs</h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
               <img src="http://lys-conseil.com/wp-content/uploads/2024/01/p.jpg" alt="Présentoir" />
             </div>
 
             {/* Réseaux sociaux */}
-            <h3 className="text-lg font-medium mb-2">Post réseaux sociaux</h3>
+            <h3 className="text-lg font-medium mb-2 text-pink-600">Post réseaux sociaux</h3>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               <img src="https://lys-conseil.com/wp-content/uploads/2024/03/WhatsApp-Image-2024-03-07-at-11.52.27.jpeg" alt="Réseau 1" />
               <img src="https://lys-conseil.com/wp-content/uploads/2024/03/WhatsApp-Image-2024-03-07-at-11.56.05.jpeg" alt="Réseau 2" />
