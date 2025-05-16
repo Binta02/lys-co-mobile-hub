@@ -175,7 +175,7 @@ const Domiciliation = () => {
               {/* Pack Exclusif Card with modern styling */}
               <Card className="relative bg-gradient-to-br from-white to-lysco-turquoise/5 border border-lysco-turquoise/20 shadow-sm overflow-hidden">
                 {/* Ruban EXCLUSIF en haut à droite */}
-                <div className="absolute top-4 right-[-40px] z-10">
+                <div className="absolute top-4 right-[-10px] z-10">
                   <div className="bg-lysco-pink text-white text-xs font-bold px-3 py-1 transform rotate-45">
                     EXCLUSIF
                   </div>
