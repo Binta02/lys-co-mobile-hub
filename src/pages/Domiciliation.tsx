@@ -140,8 +140,8 @@ const Domiciliation = () => {
 
               {/* Pack Exclusif Card with modern styling */}
               <Card className="bg-gradient-to-br from-white to-lysco-turquoise/5 border border-lysco-turquoise/20 shadow-sm overflow-hidden">
-                <div className="absolute top-0 right-0">
-                  <div className="bg-lysco-pink text-white text-xs font-bold px-3 py-1 transform rotate-45 translate-x-3 translate-y-3">
+                <div className="absolute right-0">
+                  <div className="bg-lysco-pink text-white text-xs font-bold px-3 py-1 transform rotate-45 translate-x-6 translate-y-3">
                     EXCLUSIF
                   </div>
                 </div>
