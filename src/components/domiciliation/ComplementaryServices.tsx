@@ -135,15 +135,15 @@ const ComplementaryServices = () => {
               </div>
             </CardContent>
           </Card>
-          <div className="mt-8 text-center">
+        </div>
+      </div>
+      <div className="mt-8 text-center">
             <Link to="/services-complementaires">
               <Button className="bg-lysco-turquoise hover:bg-lysco-turquoise/90">
                 Découvrir tous nos espaces
               </Button>
             </Link>
           </div>
-        </div>
-      </div>
     </div>
   );
 };
