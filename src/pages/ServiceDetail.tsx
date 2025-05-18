@@ -413,39 +413,34 @@ const ServiceDetail: React.FC = () => {
 
               {/* Colonne droite */}
               <div className="bg-gray-50 p-6 rounded-lg">
-                <Tabs
-                  defaultValue="description"
-                  onValueChange={setActiveTab}
-                  className="w-full"
-                >
-                  <TabsList className="grid grid-cols-2 mb-4">
-                    <TabsTrigger value="description">
-                      Description
-                    </TabsTrigger>
-                    <TabsTrigger value="reviews">
-                      Avis ({reviews.length})
-                    </TabsTrigger>
-                  </TabsList>
-
-                  <TabsContent value="description">
-                    <ProductDescription />
+                <Tabs defaultValue="description" onValueChange={setActiveTab} className="w-full">                  
+                  <TabsContent value="description" className="focus-visible:outline-none focus-visible:ring-0">
+                    <h2 className="text-xl font-semibold mb-4">Description</h2>
+                    <div className="prose max-w-none">
+                      <p className="whitespace-pre-line">{service.description}</p>
+                      
+                      {service.note && (
+                        <p className="mt-4 italic text-gray-600">{service.note}</p>
+                      )}
+                    </div>
                   </TabsContent>
-                  <TabsContent value="reviews">
-                    <ReviewsList
-                      reviews={reviews}
-                      isLoading={loadingReviews}
-                    />
-                    <ReviewForm
-                      productId={id!}
-                      productName={service.title}
-                      onReviewSubmitted={handleReviewSubmitted}
-                    />
+                  
+                  <TabsContent value="reviews" className="focus-visible:outline-none focus-visible:ring-0 space-y-6">
+                    {id && (
+                      <>
+                        <ReviewsList reviews={reviews} isLoading={loadingReviews} />
+                        <ReviewForm 
+                          productId={id} 
+                          productName={service.title}
+                          onReviewSubmitted={handleReviewSubmitted}
+                        />
+                      </>
+                    )}
                   </TabsContent>
                 </Tabs>
               </div>
             </div>
           </div>
-
           <ProductDescription />
           <RelatedProducts />
         </div>
