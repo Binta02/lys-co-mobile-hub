@@ -241,14 +241,19 @@ export default function DashboardOverview() {
   );
   const [endDate, setEndDate] = useState<Date>(new Date());
 
-  const { data, isLoading, error, refetch } = useQuery<Stat[]>({
-    queryKey: ["overviewStats", startDate, endDate],
-    queryFn: () => fetchOverviewStats(startDate, endDate),
-    refetchInterval: 1000 * 60 * 5, // toutes les 5 minutes
-    // keepPreviousData: true, // <-- Supprimez cette ligne, non supportée dans votre version
-  });
-
-  const chartData: Stat[] = data ?? [];
+  const {
+    data = [],
+    isLoading,
+    error,
+    refetch,
+  } = useQuery<Stat[]>(
+    ["overviewStats", startDate, endDate],
+    () => fetchOverviewStats(startDate, endDate),
+    {
+      refetchInterval: 1000 * 60 * 5, // toutes les 5 minutes
+      keepPreviousData: true,
+    }
+  );
 
   if (isLoading) return <div>Chargement des statistiques…</div>;
   if (error) return <div>Impossible de charger les données.</div>;
@@ -290,7 +295,7 @@ export default function DashboardOverview() {
       {/* Graphique */}
       <div className="w-full h-80">
         <ResponsiveContainer width="100%" height="100%">
-          <LineChart data={chartData}>
+          <LineChart data={data}>
             <XAxis dataKey="date" />
             <YAxis />
             <Tooltip />

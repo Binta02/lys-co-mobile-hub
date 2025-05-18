@@ -241,12 +241,19 @@ export default function DashboardOverview() {
   );
   const [endDate, setEndDate] = useState<Date>(new Date());
 
-  const { data, isLoading, error, refetch } = useQuery<Stat[]>({
-    queryKey: ["overviewStats", startDate, endDate],
-    queryFn: () => fetchOverviewStats(startDate, endDate),
-    refetchInterval: 1000 * 60 * 5, // toutes les 5 minutes
-    // keepPreviousData: true, // <-- Supprimez cette ligne, non supportée dans votre version
-  });
+  const {
+    data,
+    isLoading,
+    error,
+    refetch,
+  } = useQuery<Stat[]>(
+    ["overviewStats", startDate, endDate],
+    () => fetchOverviewStats(startDate, endDate),
+    {
+      refetchInterval: 1000 * 60 * 5, // toutes les 5 minutes
+      keepPreviousData: true,
+    }
+  );
 
   const chartData: Stat[] = data ?? [];
 

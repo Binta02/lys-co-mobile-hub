@@ -1,0 +1,18 @@
+{
+    "sourceFile": "src/integrations/api/dashboard.ts",
+    "activeCommit": 0,
+    "commits": [
+        {
+            "activePatchIndex": 0,
+            "patches": [
+                {
+                    "date": 1747586093398,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n"
+                }
+            ],
+            "date": 1747586093398,
+            "name": "Commit-0",
+            "content": "// src/integrations/api/dashboard.ts\r\nexport interface Stat {\r\n  date: string\r\n  value: number\r\n}\r\n\r\nexport async function fetchOverviewStats(start: Date, end: Date): Promise<Stat[]> {\r\n  const res = await fetch(\r\n    `/api/dashboard/overview?start=${start.toISOString()}&end=${end.toISOString()}`\r\n  )\r\n  if (!res.ok) {\r\n    throw new Error('Erreur lors de la récupération des statistiques')\r\n  }\r\n  return res.json()\r\n}\r\n"
+        }
+    ]
+}

@@ -245,7 +245,7 @@ export default function DashboardOverview() {
     queryKey: ["overviewStats", startDate, endDate],
     queryFn: () => fetchOverviewStats(startDate, endDate),
     refetchInterval: 1000 * 60 * 5, // toutes les 5 minutes
-    // keepPreviousData: true, // <-- Supprimez cette ligne, non supportée dans votre version
+    keepPreviousData: true,
   });
 
   const chartData: Stat[] = data ?? [];

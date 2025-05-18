@@ -1,0 +1,18 @@
+{
+    "sourceFile": "src/main.tsx",
+    "activeCommit": 0,
+    "commits": [
+        {
+            "activePatchIndex": 0,
+            "patches": [
+                {
+                    "date": 1747586034367,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n"
+                }
+            ],
+            "date": 1747586034367,
+            "name": "Commit-0",
+            "content": "import { createRoot } from 'react-dom/client'\r\nimport { BrowserRouter } from 'react-router-dom'\r\nimport { QueryClient, QueryClientProvider } from '@tanstack/react-query'\r\nimport App from './App.tsx'\r\nimport './index.css'\r\nimport 'react-datepicker/dist/react-datepicker.css'\r\nimport { CartProvider } from './components/cart/CartContext'\r\n\r\nconst queryClient = new QueryClient()\r\n\r\ncreateRoot(document.getElementById('root')!).render(\r\n  <BrowserRouter>\r\n    <QueryClientProvider client={queryClient}>\r\n      <CartProvider>\r\n        <App />\r\n      </CartProvider>\r\n    </QueryClientProvider>\r\n  </BrowserRouter>\r\n)\r\n"
+        }
+    ]
+}
