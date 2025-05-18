@@ -354,7 +354,7 @@
 // };
 
 // export default Dashboard;
-
+// src/components/dashboard/Dashboard.tsx
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -502,10 +502,9 @@ const Dashboard: React.FC = () => {
           <CardHeader className="flex items-center justify-between">
             <div className="flex items-center space-x-4">
               <Avatar>
-                {/* Correction: Utiliser profile.avatarUrl si c'est le bon champ, sinon retirez l'image */}
-                {profile?.avatarUrl ? (
+                {profile?.avatar_url ? (
                   <AvatarImage
-                    src={profile.avatarUrl}
+                    src={profile.avatar_url}
                     alt="Avatar utilisateur"
                   />
                 ) : (
