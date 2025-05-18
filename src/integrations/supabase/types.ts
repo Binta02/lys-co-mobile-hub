@@ -72,6 +72,43 @@ export type Database = {
         }
         Relationships: []
       }
+            reservations: {
+        Row: {
+          id: string
+          user_id: string
+          space_id: string
+          reservation_date: string           // DATE renvoyé au format ISO
+          start_time: string | null          // TIME renvoyé en "HH:MM:SS"
+          end_time: string | null
+          reservation_type: 'hour' | 'morning' | 'afternoon' | 'full_day'
+          status: 'pending' | 'confirmed' | 'cancelled'
+          price: number
+          created_at: string                 // TIMESTAMP ISO
+          updated_at: string                 // TIMESTAMP ISO
+          period: unknown                    // si tu as cette colonne TSRANGE
+        }
+        Insert: {
+          user_id: string
+          space_id: string
+          reservation_date: string
+          start_time?: string
+          end_time?: string
+          reservation_type: 'hour' | 'morning' | 'afternoon' | 'full_day'
+          status?: 'pending' | 'confirmed' | 'cancelled'
+          price: number
+        }
+        Update: {
+          user_id?: string
+          space_id?: string
+          reservation_date?: string
+          start_time?: string | null
+          end_time?: string | null
+          reservation_type?: 'hour' | 'morning' | 'afternoon' | 'full_day'
+          status?: 'pending' | 'confirmed' | 'cancelled'
+          price?: number
+        }
+        Relationships: []
+      }
       user_domiciliations: {
         Row: {
           address: string
