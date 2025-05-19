@@ -61,7 +61,7 @@ const ComplementaryServices = () => {
                 >
                   Ajouter au panier
                 </Button>
-                <Link to="/service/reexpedition-courrier" className="block w-full">
+                <Link to="/services/reexpedition-courrier" className="block w-full">
                   <Button variant="outline" className="w-full">
                     En savoir plus
                   </Button>
@@ -94,7 +94,7 @@ const ComplementaryServices = () => {
                 >
                   Ajouter au panier
                 </Button>
-                <Link to="/service/scan-courrier" className="block w-full">
+                <Link to="/services/scan-courrier" className="block w-full">
                   <Button variant="outline" className="w-full">
                     En savoir plus
                   </Button>
@@ -127,7 +127,7 @@ const ComplementaryServices = () => {
                 >
                   Ajouter au panier
                 </Button>
-                <Link to="/service/reception-colis" className="block w-full">
+                <Link to="/services/reception-colis" className="block w-full">
                   <Button variant="outline" className="w-full">
                     En savoir plus
                   </Button>

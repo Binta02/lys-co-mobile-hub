@@ -45,7 +45,8 @@ const EspacesTravail = () => {
               {/* Espace de coworking */}
               <Card className="overflow-hidden">
                 <div className="bg-gray-100 h-48 flex items-center justify-center">
-                  <p className="text-gray-500">Image de l'espace de coworking</p>
+                  {/* <p className="text-gray-500">Image de l'espace de coworking</p> */}
+                  <img src="https://lys-and-co.com/wp-content/uploads/2024/02/ad1bff_a915053597e240a9baa31a00123ab7afmv2.webp" alt="espace de coworking" className="w-full h-full object-cover rounded-lg" />
                 </div>
                 <CardContent className="p-6">
                   <h3 className="text-xl font-semibold mb-2">Espace de coworking</h3>
@@ -67,7 +68,8 @@ const EspacesTravail = () => {
               {/* Salle de formation */}
               <Card className="overflow-hidden">
                 <div className="bg-gray-100 h-48 flex items-center justify-center">
-                  <p className="text-gray-500">Image de la salle de formation</p>
+                  {/* <p className="text-gray-500">Image de la salle de formation</p> */}
+                  <img src="https://lys-and-co.com/wp-content/uploads/2024/02/ad1bff_701844a302db4d7babbfbd3ff9bdbabemv2.webp" alt="Salle de formation" className="w-full h-full object-cover rounded-lg" />
                 </div>
                 <CardContent className="p-6">
                   <h3 className="text-xl font-semibold mb-2">Salle de formation</h3>
@@ -89,7 +91,8 @@ const EspacesTravail = () => {
               {/* Location de bureau */}
               <Card className="overflow-hidden">
                 <div className="bg-gray-100 h-48 flex items-center justify-center">
-                  <p className="text-gray-500">Image du bureau privé</p>
+                  {/* <p className="text-gray-500">Image du bureau privé</p> */}
+                  <img src="https://lys-and-co.com/wp-content/uploads/2024/02/ad1bff_d5ce529552664ec3b89f4e4099e76269mv2.webp" alt="Bureau privé" className="w-full h-full object-cover rounded-lg" />
                 </div>
                 <CardContent className="p-6">
                   <h3 className="text-xl font-semibold mb-2">Location de bureau</h3>
@@ -125,20 +128,22 @@ const EspacesTravail = () => {
                 <li>Connexion internet haut débit sécurisée</li>
                 <li>Imprimantes et scanners accessibles</li>
               </ul>
-              <Link to="/contact">
+              <Link to="/services/coworking-space">
                 <Button className="bg-lysco-turquoise hover:bg-lysco-turquoise/90 text-white">
                   Réserver un espace
                 </Button>
               </Link>
             </div>
             <div className="bg-gray-100 rounded-lg h-80 flex items-center justify-center">
-              <p className="text-gray-500">Image de l'espace de coworking</p>
+              {/* <p className="text-gray-500">Image de l'espace de coworking</p> */}
+              <img src="https://lys-and-co.com/wp-content/uploads/2024/02/ad1bff_a915053597e240a9baa31a00123ab7afmv2.webp" alt="Salle de réunion" className="w-full h-full object-cover rounded-lg" />
             </div>
           </div>
           
           <div className="grid grid-cols-1 md:grid-cols-2 gap-12 mb-12">
             <div className="order-2 md:order-1 bg-gray-100 rounded-lg h-80 flex items-center justify-center">
-              <p className="text-gray-500">Image des bureaux privés</p>
+              {/* <p className="text-gray-500">Image des bureaux privés</p> */}
+              <img src="https://lys-and-co.com/wp-content/uploads/2024/02/ad1bff_d5ce529552664ec3b89f4e4099e76269mv2.webp" alt="Salle de réunion" className="w-full h-full object-cover rounded-lg" />
             </div>
             <div className="order-1 md:order-2">
               <h2 className="text-2xl font-semibold mb-4 text-lysco-pink">Bureaux privés</h2>
@@ -154,9 +159,9 @@ const EspacesTravail = () => {
                 <li>Services de réception</li>
                 <li>Forfaits flexibles : journalier, hebdomadaire ou mensuel</li>
               </ul>
-              <Link to="/contact">
+              <Link to="/services/location-bureau">
                 <Button className="bg-lysco-pink hover:bg-lysco-pink/90 text-white">
-                  Demander un devis
+                  Réserver un bureau
                 </Button>
               </Link>
             </div>
@@ -177,14 +182,15 @@ const EspacesTravail = () => {
                 <li>Service de restauration sur demande</li>
                 <li>Assistance technique disponible</li>
               </ul>
-              <Link to="/contact">
+              <Link to="/services/formation-room ">
                 <Button className="bg-lysco-turquoise hover:bg-lysco-turquoise/90 text-white">
                   Réserver une salle
                 </Button>
               </Link>
             </div>
             <div className="bg-gray-100 rounded-lg h-80 flex items-center justify-center">
-              <p className="text-gray-500">Image des salles de réunion</p>
+              <img src="https://lys-and-co.com/wp-content/uploads/2024/02/ad1bff_701844a302db4d7babbfbd3ff9bdbabemv2.webp" alt="Salle de réunion" className="w-full h-full object-cover rounded-lg" />
+              {/* <p className="text-gray-500">Image des salles de réunion</p> */}
             </div>
           </div>
           
