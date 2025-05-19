@@ -125,7 +125,7 @@ const EspacesTravail = () => {
                 <li>Connexion internet haut débit sécurisée</li>
                 <li>Imprimantes et scanners accessibles</li>
               </ul>
-              <Link to="/contact">
+              <Link to="/services/coworking-space">
                 <Button className="bg-lysco-turquoise hover:bg-lysco-turquoise/90 text-white">
                   Réserver un espace
                 </Button>
@@ -154,9 +154,9 @@ const EspacesTravail = () => {
                 <li>Services de réception</li>
                 <li>Forfaits flexibles : journalier, hebdomadaire ou mensuel</li>
               </ul>
-              <Link to="/contact">
+              <Link to="/services/location-bureau">
                 <Button className="bg-lysco-pink hover:bg-lysco-pink/90 text-white">
-                  Demander un devis
+                  Réserver un bureau
                 </Button>
               </Link>
             </div>
@@ -177,14 +177,15 @@ const EspacesTravail = () => {
                 <li>Service de restauration sur demande</li>
                 <li>Assistance technique disponible</li>
               </ul>
-              <Link to="/contact">
+              <Link to="/services/formation-room ">
                 <Button className="bg-lysco-turquoise hover:bg-lysco-turquoise/90 text-white">
                   Réserver une salle
                 </Button>
               </Link>
             </div>
             <div className="bg-gray-100 rounded-lg h-80 flex items-center justify-center">
-              <p className="text-gray-500">Image des salles de réunion</p>
+              <img src="https://lys-and-co.com/wp-content/uploads/2024/02/ad1bff_a915053597e240a9baa31a00123ab7afmv2.webp" alt="Salle de réunion" className="w-full h-full object-cover rounded-lg" />
+              {/* <p className="text-gray-500">Image des salles de réunion</p> */}
             </div>
           </div>
           
