@@ -1,6 +1,6 @@
 // src/components/contract/ContractGenerator.tsx
 import React from "react"
-import { Document, Page, Text, View, StyleSheet, pdf } from "@react-pdf/renderer"
+import { Document, Page, Text, View, StyleSheet, pdf, Image } from "@react-pdf/renderer"
 import { saveAs } from "file-saver"
 import { FileText } from "lucide-react"
 import { Button } from "@/components/ui/button"
@@ -11,93 +11,98 @@ const styles = StyleSheet.create({
     padding: 40,
     fontFamily: "Helvetica",
     fontSize: 12,
-    color: "#333",
-    lineHeight: 1.5,
+    color: "#0F172A",
+    lineHeight: 1.6,
   },
   header: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
     marginBottom: 30,
-    textAlign: "center",
   },
   logo: {
-    fontSize: 20,
-    fontWeight: "bold",
-    color: "#059669",
+    width: 80,
+    height: 80,
   },
   address: {
     fontSize: 10,
-    color: "#666",
-    marginTop: 4,
+    color: "#374151",
   },
   title: {
-    fontSize: 16,
-    fontWeight: "bold",
-    marginVertical: 10,
     textAlign: "center",
-    textDecoration: "underline",
+    fontSize: 18,
+    fontWeight: "bold",
+    marginBottom: 20,
     textTransform: "uppercase",
-    color: "#0F172A",
   },
   card: {
     backgroundColor: "#F8FAFC",
-    borderLeft: "5px solid #059669",
-    borderRadius: 4,
-    padding: 12,
-    marginBottom: 16,
+    borderRadius: 8,
+    padding: 16,
+    marginBottom: 24,
   },
-  sectionTitleTitle: {
-    fontSize: 14,
-    fontWeight: "bold",
-    marginBottom: 6,
-    color: "#0F172A",
+  sectionTitle: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginBottom: 12,
   },
-  subsectionTitleTitle: {
-    fontSize: 12,
+  sectionMarker: {
+    width: 4,
+    height: 24,
+    backgroundColor: "#4ADE80",
+    marginRight: 8,
+    borderRadius: 2,
+  },
+  sectionTitleText: {
+    fontSize: 16,
     fontWeight: "bold",
-    marginTop: 8,
-    marginBottom: 4,
-    color: "#0F172A",
+  },
+  label: {
+    fontWeight: "bold",
   },
   text: {
-    fontSize: 11,
-    marginBottom: 4,
-    color: "#333",
+    marginBottom: 6,
+  },
+  list: {
+    paddingLeft: 16,
+    marginBottom: 12,
   },
   listItem: {
     flexDirection: "row",
     marginBottom: 4,
   },
   bullet: {
-    width: 10,
-    fontSize: 12,
-    color: "#059669",
+    width: 6,
+    marginRight: 6,
   },
-  listItemText: {
+  listText: {
     flex: 1,
-    fontSize: 11,
+  },
+  row: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    marginTop: 24,
+  },
+  column: {
+    width: "48%",
   },
   footer: {
     position: "absolute",
     bottom: 30,
     left: 40,
     right: 40,
-    textAlign: "center",
+    borderTopWidth: 1,
+    borderColor: "#E5E7EB",
+    paddingTop: 8,
     fontSize: 9,
-    color: "#999",
+    color: "#6B7280",
+    textAlign: "center",
   },
-  row: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    marginTop: 24,
-    marginBottom: 24,
-  },
-  column: {
-    flex: 1,
-    flexDirection: "column",
-    alignItems: "flex-start",
-    marginHorizontal: 8,
+  highlight: {
+    color: "#16A34A",
+    fontWeight: "bold",
   },
 })
-
 
 interface ContractData {
   companyName: string
@@ -117,77 +122,113 @@ export const ContractDocument: React.FC<{ data: ContractData }> = ({ data }) => 
     const today = new Date().toLocaleDateString("fr-FR");
 
   return (
-    <Document>
+<Document>
       <Page size="A4" style={styles.page}>
+        {/* En-tête avec logo et adresse */}
         <View style={styles.header}>
-          <Text style={styles.logo}>Lys & Co</Text>
+          <Image
+            src="/assets/lys-co-logo.png"
+            style={styles.logo}
+          />
           <Text style={styles.address}>
-            28 Rue de l'église, 95170 Deuil-la-Barre
+            Lys&amp;Co{"\n"}
+            28 Rue de l’église, 95170 Deuil-la-Barre
           </Text>
         </View>
 
-        <Text style={styles.title}>CONTRAT DE DOMICILIATION COMMERCIALE</Text>
+        {/* Titre */}
+        <Text style={styles.title}>
+          CONTRAT DE DOMICILIATION COMMERCIALE
+        </Text>
 
-        <View style={styles.sectionTitleTitle}>
-          <Text style={styles.text}>Entre les soussignés :</Text>
+        {/* Bloc "Entre les soussignés" */}
+        <View style={styles.card}>
+          <View style={styles.sectionTitle}>
+            <View style={styles.sectionMarker} />
+            <Text style={styles.sectionTitleText}>
+              Entre les soussignés :
+            </Text>
+          </View>
 
-          <Text style={styles.subsectionTitleTitle}>
-            La Société de Domiciliation :
-          </Text>
-          <Text style={styles.text}>Nom : Europe Domiciliation</Text>
+          {/* Société de domiciliation */}
+          <Text style={styles.label}>La Société de Domiciliation :</Text>
           <Text style={styles.text}>
-            Adresse : 28 Rue de l'Eglise – 95170 Deuil la Barre
+            <Text style={styles.label}>Nom :</Text> Europe Domiciliation
           </Text>
-          <Text style={styles.text}>Numéro SIRET : 804 180 792</Text>
-          <Text style={styles.text}>Agrément Préfectoral : 04_95_2023</Text>
           <Text style={styles.text}>
-            Représenté par : Barbara EZELIS, gérante
+            <Text style={styles.label}>Adresse :</Text> 28 Rue de l’Église – 95170 Deuil-la Barre
+          </Text>
+          <Text style={styles.text}>
+            <Text style={styles.label}>SIRET :</Text> 804 180 792
+          </Text>
+          <Text style={styles.text}>
+            <Text style={styles.label}>Agrément préfectoral :</Text> 04_95_2023
+          </Text>
+          <Text style={styles.text}>
+            <Text style={styles.label}>Représenté par :</Text> Barbara EZELIS, gérante
           </Text>
 
-          <Text style={styles.subsectionTitleTitle}>ET</Text>
+          <Text style={[styles.label, { marginTop: 12 }]}>ET</Text>
 
-          <Text style={styles.subsectionTitleTitle}>Le Domicilié :</Text>
-          <Text style={styles.text}>Société : {data.companyName}</Text>
-          <Text style={styles.text}>Nom et Prénom : {data.fullName}</Text>
-          <Text style={styles.text}>Adresse : {data.address}</Text>
+          {/* Le Domicilié */}
+          <Text style={styles.label}>Le Domicilié :</Text>
+          <Text style={styles.text}>
+            <Text style={styles.label}>Société :</Text> {data.companyName}
+          </Text>
+          <Text style={styles.text}>
+            <Text style={styles.label}>Nom et Prénom :</Text> {data.fullName}
+          </Text>
+          <Text style={styles.text}>
+            <Text style={styles.label}>Adresse :</Text> {data.address}
+          </Text>
           {data.addressDetails && (
             <Text style={styles.text}>{data.addressDetails}</Text>
           )}
           <Text style={styles.text}>
             {data.postalCode} {data.city}
           </Text>
-          <Text style={styles.text}>Numéro SIRET : {data.siretNumber}</Text>
           <Text style={styles.text}>
-            Activité de l'entreprise : {data.businessActivity}
+            <Text style={styles.label}>SIRET :</Text> {data.siretNumber}
           </Text>
-          <Text style={styles.text}>Représenté par : {data.fullName}</Text>
+          <Text style={styles.text}>
+            <Text style={styles.label}>Activité :</Text> {data.businessActivity}
+          </Text>
+          <Text style={styles.text}>
+            <Text style={styles.label}>Représenté par :</Text> {data.fullName}
+          </Text>
         </View>
         </Page>
       <Page size="A4" style={styles.page}>
-        <View style={styles.sectionTitleTitle}>
-          <Text style={styles.subsectionTitleTitle}>Préambule</Text>
+        {/* Préambule */}
+        <View style={styles.card}>
+          <View style={styles.sectionTitle}>
+            <View style={styles.sectionMarker} />
+            <Text style={styles.sectionTitleText}>Préambule</Text>
+          </View>
           <Text style={styles.text}>
-            Le Domiciliaire, en sa qualité d'entreprise agréée (n° préfectoral
-            d'agrément : 04_95_2023) conformément aux dispositions du Code du
-            commerce et aux articles R.123-167 à R.123-168, propose des services
-            de domiciliation d'entreprise.
+            Le Domiciliaire, en sa qualité d’entreprise agréée (n° préfectoral d’agrément : 04_95_2023) …
           </Text>
           <Text style={styles.text}>
-            Le Domicilié souhaite bénéficier de ces services pour y établir son
-            siège social.
+            Le Domicilié souhaite bénéficier de ces services pour y établir son siège social.
           </Text>
           <Text style={styles.text}>
             Les parties conviennent de ce qui suit :
           </Text>
         </View>
-        <View style={styles.sectionTitleTitle}>
-          <Text style={styles.subsectionTitleTitle}>
-            Article 1 : Objet du contrat
-          </Text>
+{/* Exemple Article 1 */}
+        <View style={styles.card}>
+          <View style={styles.sectionTitle}>
+            <View style={styles.sectionMarker} />
+            <Text style={styles.sectionTitleText}>
+              Article 1 – Objet du contrat
+            </Text>
+          </View>
           <Text style={styles.text}>
             Le présent contrat a pour objet de permettre au Domicilié d'établir
-            son siège social à l'adresse suivante :<br />
-            28 Rue de l'Eglise, 95170 Deuil-la-Barre
+            son siège social à l'adresse suivante :
+          </Text>
+          <Text style={[styles.text, { fontWeight: "bold" }]}>
+            28 Rue de l’Église – 95170 Deuil-la Barre
           </Text>
           <Text style={styles.text}>
             Cette adresse sera utilisée par le Domicilié pour ses démarches
@@ -208,335 +249,291 @@ export const ContractDocument: React.FC<{ data: ContractData }> = ({ data }) => 
             commerciale.
           </Text>
         </View>
-        <View style={styles.sectionTitleTitle}>
-          <Text style={styles.subsectionTitleTitle}>
-            Article 2 – Obligations du Domiciliaire
-          </Text>
-          <Text style={styles.text}>Le Domiciliaire s'engage à :</Text>
-          <View style={styles.listItem}>
-            <Text style={styles.bullet}>•</Text>
-            <Text style={styles.listItemText}>
-              Mettre à disposition l'adresse mentionnée à l'article 1 pour
-              l'établissement du siège social du Domicilié.
-            </Text>
-          </View>
-          <View style={styles.listItem}>
-            <Text style={styles.bullet}>•</Text>
-            <Text style={styles.listItemText}>
-              Assurer la réception, la conservation et, le cas échéant, la mise
-              à disposition ou l'envoi des courriers du Domicilié selon les
-              modalités définies à l'Article 4.
-            </Text>
-          </View>
-          <View style={styles.listItem}>
-            <Text style={styles.bullet}>•</Text>
-            <Text style={styles.listItemText}>
-              Tenir à disposition les documents nécessaires en cas de contrôle
-              par les autorités compétentes.
-            </Text>
-          </View>
-        </View>
-        </Page>
-       <Page size="A4" style={styles.page}>
-        <View style={styles.sectionTitleTitle}>
-          <Text style={styles.sectionTitleTitle}>
-            Article 3 – Obligations du Domicilié
-          </Text>
-          <Text style={styles.text}>Le Domicilié s'engage à :</Text>
-          <View style={styles.listItem}>
-            <Text style={styles.bullet}>•</Text>
-            <Text style={styles.listItemText}>
-              Utiliser l'adresse exclusivement pour son activité
-              professionnelle.
-            </Text>
-          </View>
-          <View style={styles.listItem}>
-            <Text style={styles.bullet}>•</Text>
-            <Text style={styles.listItemText}>
-              Communiquer au Domiciliaire toute modification concernant sa
-              situation administrative ou légale (changement de statut, de
-              gérant, cessation d'activité, etc.) et devra le notifier par écrit
-              au Domiciliaire et fournir tout nouveau document justificatif dès
-              que ce changement aura été pris en compte par l'organisme
-              d'immatriculation concerné.
-            </Text>
-          </View>
-          <View style={styles.listItem}>
-            <Text style={styles.bullet}>•</Text>
-            <Text style={styles.listItemText}>
-              Fournir les documents requis lors de la signature du contrat,
-              notamment :
-            </Text>
-          </View>
-          <View style={styles.listItem}>
-            <Text style={styles.bullet}> -</Text>
-            <Text style={styles.listItemText}>
-              Un justificatif d'identité du gérant
-            </Text>
-          </View>
-          <View style={styles.listItem}>
-            <Text style={styles.bullet}> -</Text>
-            <Text style={styles.listItemText}>
-              Un justificatif de domicile personnel du gérant (de moins de 6
-              mois)
-            </Text>
-          </View>
-          <View style={styles.listItem}>
-            <Text style={styles.bullet}> -</Text>
-            <Text style={styles.listItemText}>
-              Adresse du comptable (si comptable)
-            </Text>
-          </View>
-          <View style={styles.listItem}>
-            <Text style={styles.bullet}> -</Text>
-            <Text style={styles.listItemText}>
-              Un extrait Kbis pour les sociétés immatriculées (ou preuve de
-              dépôt de dossier pour une immatriculation en cours) ou un avis de
-              situation Sirene pour ceux qui n'ont pas de Kbis
-            </Text>
-          </View>
-          <View style={styles.listItem}>
-            <Text style={styles.bullet}> -</Text>
-            <Text style={styles.listItemText}>
-              Une copie des statuts pour les entreprises
-            </Text>
-          </View>
-          <View style={styles.listItem}>
-            <Text style={styles.bullet}> -</Text>
-            <Text style={styles.listItemText}>
-              La procuration postale (à faire à La Poste) qui autorise le
-              Domiciliaire à signer les recommandés.
-            </Text>
-          </View>
-
-          <Text style={styles.text}>
-            Le Domicilié certifie sur l'honneur l'exactitude des renseignements
-            fournis au Domiciliaire et nécessaires à la conclusion du contrat.
-            Le contrat est ferme et définitif à la signature et aucun
-            remboursement partiel ou total ne pourra être revendiqué par le
-            Domicilié pour quelque motif que ce soit.
-          </Text>
-        </View>
-
-        <View style={styles.sectionTitleTitle}>
-          <Text style={styles.sectionTitleTitle}>
-            Article 4 – Description des prestations de services
-          </Text>
-          <Text style={styles.text}>
-            En regard des sommes versées à la conclusion du contrat, le
-            Domiciliaire s'engage à fournir les prestations suivantes :
-          </Text>
-          <View style={styles.listItem}>
-            <Text style={styles.bullet}>•</Text>
-            <Text style={styles.listItemText}>
-              Domiciliation commerciale dans les locaux sis : 28 Rue de l'Eglise
-              – 95170 Deuil la Barre
-            </Text>
-          </View>
-          <View style={styles.listItem}>
-            <Text style={styles.bullet}>•</Text>
-            <Text style={styles.listItemText}>
-              Réception, tri et mise à disposition du courrier destiné au
-              Domicilié chaque jour ouvré pendant les horaires définis par le
-              Domiciliaire. La garde du courrier ne peut excéder 21 (vingt et
-              un) jours. Concernant l'option « Réexpédition », elle sera faite
-              une fois par semaine. Un surcoût sera demandé en cas de
-              dépassement de 14€ de timbres.
-            </Text>
-          </View>
-          <Text style={styles.text}>
-            Le Domiciliataire met à la disposition du Domicilié un bureau
-            permettant une réunion régulière des organes chargés de la
-            direction, de l'administration ou de la surveillance de l'entreprise
-            et l'installation des services nécessaires à la tenue, conservation
-            et la consultation de leurs registres et documents prescrits par les
-            lois et règlements (Décret N.85.1280du 5 décembre 1985, modifié par
-            le décret N°2007.750 du 9 Mai)
-          </Text>
-          <Text style={styles.text}>
-            En aucun cas, la location de bureau ne peut être utilisée par le
-            Domicilié pour le recrutement de personnel. « France Travail » devra
-            diriger les postulants à l'adresse d'activité du Domicilié et non à
-            l'adresse de son siège social.
-          </Text>
-          <Text style={styles.text}>
-            Le Domicilié doit donner procuration au Domiciliaire pour le retrait
-            de lettres recommandées. Celles-ci seront acheminées par courrier
-            ordinaire. Le Domiciliaire se dégage de toute responsabilité en cas
-            de perte ou de transmission tardive de tous courriers.
-          </Text>
-        </View>
-      </Page>
-
+         </Page>
       <Page size="A4" style={styles.page}>
-        <View style={styles.sectionTitleTitle}>
-          <Text style={styles.sectionTitleTitle}>Article 5 – Durée du contrat</Text>
-          <Text style={styles.text}>
-            Le présent contrat est conclu pour une durée de 6 mois, à compter du{" "}
-            {today}, renouvelable par tacite reconduction, sauf dénonciation par
-            l'une des parties avec un préavis de 15 (quinze) jours.
-          </Text>
-        </View>
+{/* Article 2 – Obligations du Domiciliaire */}
+<View style={styles.card}>
+  <View style={styles.sectionTitle}>
+    <View style={styles.sectionMarker} />
+    <Text style={styles.sectionTitleText}>
+      Article 2 – Obligations du Domiciliaire
+    </Text>
+  </View>
+  <Text style={styles.text}>Le Domiciliaire s’engage à :</Text>
+  <View style={styles.list}>
+    <View style={styles.listItem}>
+      <Text style={styles.bullet}>•</Text>
+      <Text style={styles.listText}>
+        Mettre à disposition l’adresse mentionnée à l’article 1 pour l’établissement du siège social du Domicilié.
+      </Text>
+    </View>
+    <View style={styles.listItem}>
+      <Text style={styles.bullet}>•</Text>
+      <Text style={styles.listText}>
+        Assurer la réception, la conservation et, le cas échéant, la mise à disposition ou l’envoi des courriers du Domicilié selon les modalités définies à l’Article 4.
+      </Text>
+    </View>
+    <View style={styles.listItem}>
+      <Text style={styles.bullet}>•</Text>
+      <Text style={styles.listText}>
+        Tenir à disposition les documents nécessaires en cas de contrôle par les autorités compétentes.
+      </Text>
+    </View>
+  </View>
+</View>
 
-        <View style={styles.sectionTitleTitle}>
-          <Text style={styles.sectionTitleTitle}>
-            Article 6 – Tarifs et conditions de paiement
-          </Text>
-          <Text style={styles.text}>
-            Le montant de la domiciliation est fixé à {data.planPrice} € par
-            mois pour la formule "{data.planName}".
-          </Text>
-          <Text style={styles.text}>
-            Les paiements devront être effectués par virement bancaire, espèce
-            ou carte bleu.
-          </Text>
-          <Text style={styles.text}>
-            En cas de retard de paiement, des pénalités équivalentes à 10%
-            pourront être appliquées.
-          </Text>
-        </View>
-
-        <View style={styles.sectionTitleTitle}>
-          <Text style={styles.sectionTitleTitle}>
-            Article 7 – Résiliation du contrat
-          </Text>
-          <Text style={styles.text}>
-            Le contrat pourra être résilié dans les conditions suivantes :
-          </Text>
-          <View style={styles.listItem}>
-            <Text style={styles.bullet}>•</Text>
-            <Text style={styles.listItemText}>
-              Par le Domicilié, avec un préavis de 15 (quinze) jours.
-            </Text>
-          </View>
-          <View style={styles.listItem}>
-            <Text style={styles.bullet}>•</Text>
-            <Text style={styles.listItemText}>
-              Par le Domiciliaire, en cas de non-respect des obligations
-              contractuelles du Domicilié ou de non-paiement des sommes dues.
-            </Text>
-          </View>
-          <Text style={styles.text}>
-            À l'expiration ou la résiliation du contrat, le Domicilié s'engage à
-            procéder immédiatement au changement de son adresse de siège social.
-          </Text>
-          <Text style={styles.text}>
-            Conformément au décret n°5.12.85, le Domiciliaire s'oblige à
-            informer le greffier du Tribunal de Commerce, à l'expiration du
-            contrat ou en cas de résiliation de celui-ci, de la cessation de la
-            domiciliation de l'entreprise dans ses locaux. De plus, les ordres
-            de réexpédition des sociétés domiciliées donnés à la poste, ne
-            seront pas acceptés conformément à l'instruction du 26/01/2001.
-          </Text>
-        </View>
-
-        <View style={styles.sectionTitleTitle}>
-          <Text style={styles.sectionTitleTitle}>Article 8 – Responsabilité</Text>
-          <Text style={styles.text}>
-            Le Domiciliaire ne pourra être tenu responsable des conséquences
-            liées à un retard ou à une perte de courrier imputable à des tiers
-            (ex : service postal) ou à un cas de force majeure.
-          </Text>
-          <Text style={styles.text}>
-            Le Domicilié dégage le Domiciliataire de toute responsabilité quant
-            à la transmission du courrier effectuée par la Poste ou par des
-            entreprises assimilées ainsi que pour tout envoi mal libellé
-            (adresse incomplète ou illisible, absence de cédex, ou tout autre
-            nom, etc.) reçu à l'intention du Domicilié.
-          </Text>
-          <Text style={styles.text}>
-            Étant précisé que l'autorisation que le Domiciliaire lui accorde ne
-            saurait en aucun cas engager sa responsabilité, sous quelque forme
-            que ce soit, présente et à venir.
-          </Text>
-          <Text style={styles.text}>
-            Le Domiciliaire ne saurait être tenu en aucune façon responsable du
-            rejet du Domicilié par les différents organismes administratifs
-            nécessaires à son inscription ou pour tout autre motif et ne
-            procédera donc à aucun remboursement.
-          </Text>
-        </View>
-
-        <View style={styles.sectionTitleTitle}>
-          <Text style={styles.sectionTitleTitle}>Article 9 – Confidentialité</Text>
-          <Text style={styles.text}>
-            Les parties s'engagent à préserver la confidentialité des
-            informations échangées dans le cadre du présent contrat.
-          </Text>
-        </View>
-      </Page>
-
+{/* Article 3 – Obligations du Domicilié */}
+<View style={styles.card}>
+  <View style={styles.sectionTitle}>
+    <View style={styles.sectionMarker} />
+    <Text style={styles.sectionTitleText}>
+      Article 3 – Obligations du Domicilié
+    </Text>
+  </View>
+  <Text style={styles.text}>Le Domicilié s’engage à :</Text>
+  <View style={styles.list}>
+    <View style={styles.listItem}>
+      <Text style={styles.bullet}>•</Text>
+      <Text style={styles.listText}>
+        Utiliser l’adresse exclusivement pour son activité professionnelle.
+      </Text>
+    </View>
+    <View style={styles.listItem}>
+      <Text style={styles.bullet}>•</Text>
+      <Text style={styles.listText}>
+        Communiquer au Domiciliaire toute modification concernant sa situation administrative ou légale (changement de statut, de gérant, cessation d’activité, etc.) et fournir tout document justificatif dès que ce changement aura été pris en compte.
+      </Text>
+    </View>
+    <View style={styles.listItem}>
+      <Text style={styles.bullet}>•</Text>
+      <Text style={styles.listText}>
+        Fournir les documents requis lors de la signature du contrat, notamment :
+      </Text>
+    </View>
+    {[
+      "Un justificatif d’identité du gérant",
+      "Un justificatif de domicile personnel du gérant (de moins de 6 mois)",
+      "Adresse du comptable (si comptable)",
+      "Un extrait Kbis ou avis de situation Sirene",
+      "Une copie des statuts",
+      "La procuration postale autorisant la signature des recommandés",
+    ].map((item, i) => (
+      <View key={i} style={styles.listItem}>
+        <Text style={styles.bullet}>–</Text>
+        <Text style={styles.listText}>{item}</Text>
+      </View>
+    ))}
+  </View>
+  <Text style={styles.text}>
+    Le Domicilié certifie sur l’honneur l’exactitude des renseignements fournis et reconnaît que le contrat est ferme et définitif à la signature.
+  </Text>
+</View>
+</Page>
       <Page size="A4" style={styles.page}>
-        <View style={styles.sectionTitleTitle}>
-          <Text style={styles.sectionTitleTitle}>
-            Article 10 – Clauses résolutoires
-          </Text>
-          <Text style={styles.text}>
-            A défaut de paiement d'une seule facture à son échéance ou en cas
-            d'inexécution d'une des clauses du présent engagement, la prestation
-            de tous les services sera suspendue après mise en demeure. A défaut
-            de règlement d'une ou plusieurs factures, rappelé par les soins du
-            Domiciliaire, le courrier ne pourra être réexpédié au domicilié. Il
-            sera tenu à sa disposition dans nos locaux comme stipulé à l'article
-            4 du contrat, dans la limite de 21 (vingt et un) jours. Au-delà, il
-            sera renvoyé à l'expéditeur.
-          </Text>
-          <Text style={styles.text}>
-            Le contrat pourra être dénoncé de plein droit par le Domiciliaire
-            sans notification en respectant un préavis de 30 jours et la carence
-            du Domicilié sera signalée au greffe du Tribunal de Commerce ou au
-            Registre des Métiers afin de procéder à la radiation d'office de
-            l'entreprise.
-          </Text>
-          <Text style={styles.text}>
-            En cas de contestation liée aux présentes, seul le Tribunal de
-            Commerce concerné sera compétent.
-          </Text>
-        </View>
 
-        <View style={styles.sectionTitleTitle}>
-          <Text style={styles.sectionTitleTitle}>Litiges</Text>
-          <Text style={styles.text}>
-            En cas de litige relatif à l'exécution ou l'interprétation du
-            présent contrat, les parties s'efforceront de le résoudre à
-            l'amiable. À défaut, le litige sera soumis aux juridictions
-            compétentes du ressort du siège du Domiciliaire.
-          </Text>
-        </View>
+{/* Article 4 – Description des prestations de services */}
+<View style={styles.card}>
+  <View style={styles.sectionTitle}>
+    <View style={styles.sectionMarker} />
+    <Text style={styles.sectionTitleText}>
+      Article 4 – Description des prestations de services
+    </Text>
+  </View>
+  <Text style={styles.text}>
+    En regard des sommes versées à la conclusion du contrat, le Domiciliaire s’engage à fournir les prestations suivantes :
+  </Text>
+  <View style={styles.list}>
+    <View style={styles.listItem}>
+      <Text style={styles.bullet}>•</Text>
+      <Text style={styles.listText}>
+        Domiciliation commerciale dans les locaux sis : 28 Rue de l’Église – 95170 Deuil-la-Barre
+      </Text>
+    </View>
+    <View style={styles.listItem}>
+      <Text style={styles.bullet}>•</Text>
+      <Text style={styles.listText}>
+        Réception, tri et mise à disposition du courrier chaque jour ouvré selon les horaires du Domiciliaire (garde ≤ 21 jours, réexpédition hebdomadaire, timbres en sus &gt;14 €).
+      </Text>
+    </View>
+  </View>
+  <Text style={styles.text}>
+    Le Domiciliaire met à disposition un bureau pour les réunions de direction et l’accès aux registres légaux (Décret n°85‐1280 mod. n°2007‐750).
+  </Text>
+  <Text style={styles.text}>
+    En aucun cas, la location de bureau ne peut servir au recrutement de personnel.
+  </Text>
+  <Text style={styles.text}>
+    Le Domicilié doit donner procuration pour le retrait du courrier recommandé ; le Domiciliaire décline toute responsabilité en cas de perte ou retard.
+  </Text>
+</View>
 
-        <View style={styles.sectionTitleTitle}>
-          <Text style={styles.sectionTitleTitle}>Signature</Text>
+{/* Article 5 – Durée du contrat */}
+<View style={styles.card}>
+  <View style={styles.sectionTitle}>
+    <View style={styles.sectionMarker} />
+    <Text style={styles.sectionTitleText}>
+      Article 5 – Durée du contrat
+    </Text>
+  </View>
+  <Text style={styles.text}>
+    Le présent contrat est conclu pour 6 mois à compter du {today}, renouvelable par tacite reconduction, sauf dénonciation par l’une des parties avec un préavis de 15 jours.
+  </Text>
+</View>
+
+{/* Article 6 – Tarifs et conditions de paiement */}
+<View style={styles.card}>
+  <View style={styles.sectionTitle}>
+    <View style={styles.sectionMarker} />
+    <Text style={styles.sectionTitleText}>
+      Article 6 – Tarifs et conditions de paiement
+    </Text>
+  </View>
+  <Text style={styles.text}>
+    Le montant de la domiciliation est fixé à <Text style={styles.highlight}>{data.planPrice} €</Text> par mois pour la formule « {data.planName} ».
+  </Text>
+  <Text style={styles.text}>
+    Paiements par virement, espèce ou carte bancaire.
+  </Text>
+  <Text style={styles.text}>
+    Retard de paiement : pénalités de 10 % du montant dû.
+  </Text>
+</View>
+</Page>
+
+<Page size="A4" style={styles.page}>
+
+{/* Article 7 – Résiliation du contrat */}
+<View style={styles.card}>
+  <View style={styles.sectionTitle}>
+    <View style={styles.sectionMarker} />
+    <Text style={styles.sectionTitleText}>
+      Article 7 – Résiliation du contrat
+    </Text>
+  </View>
+  <Text style={styles.text}>
+    Le contrat pourra être résilié dans les conditions suivantes :
+  </Text>
+  <View style={styles.list}>
+    <View style={styles.listItem}>
+      <Text style={styles.bullet}>•</Text>
+      <Text style={styles.listText}>
+        Par le Domicilié, avec un préavis de 15 jours.
+      </Text>
+    </View>
+    <View style={styles.listItem}>
+      <Text style={styles.bullet}>•</Text>
+      <Text style={styles.listText}>
+        Par le Domiciliaire, en cas de non-respect des obligations contractuelles ou de non-paiement.
+      </Text>
+    </View>
+  </View>
+  <Text style={styles.text}>
+    À l’expiration ou la résiliation, le Domicilié s’engage à changer immédiatement son siège social.
+  </Text>
+  <Text style={styles.text}>
+    Le Domiciliaire informera le greffier du Tribunal de Commerce de la cessation de domiciliation et n’acceptera plus les réexpéditions postales (instr. 26/01/2001).
+  </Text>
+</View>
+
+{/* Article 8 – Responsabilité */}
+<View style={styles.card}>
+  <View style={styles.sectionTitle}>
+    <View style={styles.sectionMarker} />
+    <Text style={styles.sectionTitleText}>
+      Article 8 – Responsabilité
+    </Text>
+  </View>
+  <Text style={styles.text}>
+    Le Domiciliaire ne saurait être tenu responsable des retards ou pertes de courrier imputables à des tiers ou à un cas de force majeure.
+  </Text>
+  <Text style={styles.text}>
+    Le Domicilié décharge le Domiciliaire de toute responsabilité pour tout envoi mal libellé.
+  </Text>
+  <Text style={styles.text}>
+    Cette autorisation n’engage en rien la responsabilité du Domiciliaire, présentement ou à venir.
+  </Text>
+  <Text style={styles.text}>
+    En cas de rejet par un organisme, le Domiciliaire n’effectuera aucun remboursement.
+  </Text>
+</View>
+
+{/* Article 9 – Confidentialité */}
+<View style={styles.card}>
+  <View style={styles.sectionTitle}>
+    <View style={styles.sectionMarker} />
+    <Text style={styles.sectionTitleText}>
+      Article 9 – Confidentialité
+    </Text>
+  </View>
+  <Text style={styles.text}>
+    Les parties s’engagent à conserver la confidentialité des informations échangées dans le cadre du présent contrat.
+  </Text>
+</View>
+
+{/* Article 10 – Clauses résolutoires */}
+<View style={styles.card}>
+  <View style={styles.sectionTitle}>
+    <View style={styles.sectionMarker} />
+    <Text style={styles.sectionTitleText}>
+      Article 10 – Clauses résolutoires
+    </Text>
+  </View>
+  <Text style={styles.text}>
+    En cas de non-paiement ou d’inexécution, la fourniture des services sera suspendue après mise en demeure. Passé 21 jours de garde, le courrier sera retourné à l’expéditeur.
+  </Text>
+  <Text style={styles.text}>
+    Le contrat pourra être dénoncé de plein droit par le Domiciliaire sans préavis de 30 jours et la carence sera signalée au greffe pour radiation.
+  </Text>
+  <Text style={styles.text}>
+    Tout litige sera soumis au Tribunal de Commerce compétent.
+  </Text>
+</View>
+
+{/* Litiges */}
+<View style={styles.card}>
+  <View style={styles.sectionTitle}>
+    <View style={styles.sectionMarker} />
+    <Text style={styles.sectionTitleText}>
+      Litiges
+    </Text>
+  </View>
+  <Text style={styles.text}>
+    En cas de litige relatif à l’exécution ou à l’interprétation du contrat, les parties tenteront d’abord une résolution à l’amiable, sinon les juridictions compétentes du siège du Domiciliaire seront saisies.
+  </Text>
+</View>
+
+{/* Signature */}
+        <View style={styles.card}>
+          <View style={styles.sectionTitle}>
+            <View style={styles.sectionMarker} />
+            <Text style={styles.sectionTitleText}>Signature</Text>
+          </View>
           <Text style={styles.text}>
             Fait en double exemplaire, à Deuil-la-Barre le {today}
           </Text>
-
           <View style={styles.row}>
             <View style={styles.column}>
-              <Text style={styles.subsectionTitleTitle}>Pour le Domiciliaire :</Text>
+              <Text style={styles.label}>Pour le Domiciliaire :</Text>
               <Text style={styles.text}>Nom : EZELIS</Text>
               <Text style={styles.text}>Fonction : GÉRANTE</Text>
               <Text style={styles.text}>Signature :</Text>
             </View>
-
             <View style={styles.column}>
-              <Text style={styles.subsectionTitleTitle}>Pour le Domicilié :</Text>
-              <Text style={styles.text}>Nom : {data.fullName}</Text>
+              <Text style={styles.label}>Pour le Domicilié :</Text>
+              <Text style={styles.text}>Nom : ________________________</Text>
               <Text style={styles.text}>Signature :</Text>
-              <Text style={styles.text}>
+              <Text style={{ fontStyle: "italic", fontSize: 10 }}>
                 (Précédée de la mention « Lu et Approuvé »)
               </Text>
             </View>
           </View>
         </View>
 
-        <View style={styles.footer}>
-          <Text>28 Rue de l'église, 95170 Deuil-la-Barre</Text>
-          <Text>
-            lys-and-co.com – tél : 09.53.42.11.63 / 07.56.85.37.02 –
-            contact@lys-and-co.com
-          </Text>
-          <Text>© 2025 Lys & Co – Tous droits réservés</Text>
-        </View>
+        {/* Pied de page */}
+        <Text style={styles.footer}>
+          lys-and-co.com – tél : 09.53.42.11.63 / 07.56.85.37.02 – contact@lys-and-co.com{"\n"}
+          © 2025 Lys & Co – Tous droits réservés.
+        </Text>
       </Page>
     </Document>
   )
