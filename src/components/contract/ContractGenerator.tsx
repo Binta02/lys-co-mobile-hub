@@ -4,7 +4,6 @@ import { Document, Page, Text, View, StyleSheet, pdf, Image } from "@react-pdf/r
 import { saveAs } from "file-saver"
 import { FileText } from "lucide-react"
 import { Button } from "@/components/ui/button"
-import LogoSrc from "@/assets/lys-co-logo.jpg"; // selon votre config alias
 
 
 // --- Styles identiques ---
@@ -128,7 +127,10 @@ export const ContractDocument: React.FC<{ data: ContractData }> = ({ data }) => 
       <Page size="A4" style={styles.page}>
         {/* En-tête avec logo et adresse */}
         <View style={styles.header}>
-          <Image src={LogoSrc} style={styles.logo} />
+          <Image
+            src="/assets/lys-co-logo.jpg"
+            style={styles.logo}
+          />
           <Text style={styles.address}>
             Lys&amp;Co{"\n"}
             28 Rue de l’église, 95170 Deuil-la-Barre
