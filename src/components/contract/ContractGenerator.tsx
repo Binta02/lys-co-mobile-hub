@@ -1,6 +1,6 @@
 // src/components/contract/ContractGenerator.tsx
 import React from "react"
-import { Document, Page, Text, View, StyleSheet, Font, pdf } from "@react-pdf/renderer"
+import { Document, Page, Text, View, StyleSheet, pdf } from "@react-pdf/renderer"
 import { saveAs } from "file-saver"
 import { FileText } from "lucide-react"
 import { Button } from "@/components/ui/button"
@@ -9,7 +9,8 @@ import { Button } from "@/components/ui/button"
 const styles = StyleSheet.create({
   page: {
     padding: 30,
-    fontFamily: "Inter",
+    // fontFamily: "Inter",
+    fontFamily: "Helvetica",
     fontSize: 10,
   },
   header: {
@@ -85,23 +86,6 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
 });
-
-Font.register({
-  family: "Inter",
-  fonts: [
-    {
-      src: "https://fonts.gstatic.com/s/inter/v12/UcCO3FwrK3iLTeHuS_fvQtMwCp50KnMw2boKoduKmMEVuLyfAZ9hiJ-Ek-_EeA.ttf",
-      fontWeight: "normal",
-      fontStyle: "normal",
-    },
-    // si tu as besoin d’une variante bold :
-    {
-      src: "https://fonts.gstatic.com/s/inter/v12/UcCO3FwrK3iLTeHuS_fvQtMwCp50KnMw2boKoduKmMEVuLyfAZ9hiJ-Ek-_EeA.ttf",
-      fontWeight: "bold",
-      fontStyle: "normal",
-    },
-  ],
-})
 
 
 interface ContractData {
