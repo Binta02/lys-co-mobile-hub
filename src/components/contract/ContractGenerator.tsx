@@ -1,18 +1,19 @@
-import * as React from "react";
+// src/components/contract/ContractGenerator.tsx
+import React from "react"
 import {
   Document,
   Page,
   Text,
   View,
   StyleSheet,
-  PDFDownloadLink,
   Font,
-} from "@react-pdf/renderer";
-import { saveAs } from "file-saver";
-import { FileText } from "lucide-react";
-import { Button } from "@/components/ui/button";
+  pdf,
+} from "@react-pdf/renderer"
+import { saveAs } from "file-saver"
+import { FileText } from "lucide-react"
+import { Button } from "@/components/ui/button"
 
-// Define contract styles
+// --- Styles identiques ---
 const styles = StyleSheet.create({
   page: {
     padding: 30,
@@ -93,29 +94,27 @@ const styles = StyleSheet.create({
   },
 });
 
-// Register font
 Font.register({
   family: "Inter",
   src: "https://fonts.gstatic.com/s/inter/v12/UcCO3FwrK3iLTeHuS_fvQtMwCp50KnMw2boKoduKmMEVuLyfAZ9hiJ-Ek-_EeA.ttf",
-});
+})
 
 interface ContractData {
-  companyName: string;
-  fullName: string;
-  address: string;
-  addressDetails?: string;
-  city: string;
-  postalCode: string;
-  siretNumber: string;
-  businessActivity: string;
-  planPrice: number;
-  planName: string;
-  date: string;
+  companyName: string
+  fullName: string
+  address: string
+  addressDetails?: string
+  city: string
+  postalCode: string
+  siretNumber: string
+  businessActivity: string
+  planPrice: number
+  planName: string
+  date: string
 }
 
-// Contract Document Component
-const ContractDocument = ({ data }: { data: ContractData }) => {
-  const today = new Date().toLocaleDateString("fr-FR");
+export const ContractDocument: React.FC<{ data: ContractData }> = ({ data }) => {
+    const today = new Date().toLocaleDateString("fr-FR");
 
   return (
     <Document>
@@ -163,7 +162,8 @@ const ContractDocument = ({ data }: { data: ContractData }) => {
           </Text>
           <Text style={styles.text}>Représenté par : {data.fullName}</Text>
         </View>
-
+        </Page>
+      <Page size="A4" style={styles.page}>
         <View style={styles.section}>
           <Text style={styles.subsectionTitle}>Préambule</Text>
           <Text style={styles.text}>
@@ -180,15 +180,14 @@ const ContractDocument = ({ data }: { data: ContractData }) => {
             Les parties conviennent de ce qui suit :
           </Text>
         </View>
-
         <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Article 1 – Objet du contrat</Text>
-          <Text style={styles.text}>
-            Le présent contrat a pour objet de permettre au Domicilié d'établir
-            son siège social à l'adresse suivante :
+          <Text style={styles.subsectionTitle}>
+            Article 1 : Objet du contrat
           </Text>
           <Text style={styles.text}>
-            28 Rue de l'Eglise – 95170 Deuil la Barre
+            Le présent contrat a pour objet de permettre au Domicilié d'établir
+            son siège social à l'adresse suivante :<br />
+            28 Rue de l'Eglise, 95170 Deuil-la-Barre
           </Text>
           <Text style={styles.text}>
             Cette adresse sera utilisée par le Domicilié pour ses démarches
@@ -196,7 +195,7 @@ const ContractDocument = ({ data }: { data: ContractData }) => {
             réglementation en vigueur.
           </Text>
           <Text style={styles.text}>
-            L'adresse de domiciliation devra donc devenir le siège social de
+           L'adresse de domiciliation devra donc devenir le siège social de
             l'entreprise. Le Domicilié est habilité par la présente convention à
             recevoir à cette même adresse le courrier qui lui est destiné. Il
             pourra également utiliser cette adresse sur son papier à en-tête
@@ -209,9 +208,8 @@ const ContractDocument = ({ data }: { data: ContractData }) => {
             commerciale.
           </Text>
         </View>
-
         <View style={styles.section}>
-          <Text style={styles.sectionTitle}>
+          <Text style={styles.subsectionTitle}>
             Article 2 – Obligations du Domiciliaire
           </Text>
           <Text style={styles.text}>Le Domiciliaire s'engage à :</Text>
@@ -238,9 +236,8 @@ const ContractDocument = ({ data }: { data: ContractData }) => {
             </Text>
           </View>
         </View>
-      </Page>
-
-      <Page size="A4" style={styles.page}>
+        </Page>
+       <Page size="A4" style={styles.page}>
         <View style={styles.section}>
           <Text style={styles.sectionTitle}>
             Article 3 – Obligations du Domicilié
@@ -542,35 +539,29 @@ const ContractDocument = ({ data }: { data: ContractData }) => {
         </View>
       </Page>
     </Document>
-  );
-};
-
-// Component to trigger contract download
-interface ContractGeneratorProps {
-  clientInfo: {
-    email: string;
-    firstName: string;
-    lastName: string;
-    companyName: string;
-    businessActivity: string;
-    siretNumber: string;
-    address: string;
-    addressDetails?: string;
-    city: string;
-    postalCode: string;
-    phone?: string;
-  };
-  planDetails: {
-    name: string;
-    price: number;
-  };
+  )
 }
 
-const ContractGenerator = ({
+interface ContractGeneratorProps {
+  clientInfo: {
+    firstName: string
+    lastName: string
+    companyName: string
+    businessActivity: string
+    siretNumber: string
+    address: string
+    addressDetails?: string
+    city: string
+    postalCode: string
+  }
+  planDetails: { name: string; price: number }
+}
+
+const ContractGenerator: React.FC<ContractGeneratorProps> = ({
   clientInfo,
   planDetails,
-}: ContractGeneratorProps) => {
-  const contractData: ContractData = {
+}) => {
+  const data: ContractData = {
     companyName: clientInfo.companyName,
     fullName: `${clientInfo.firstName} ${clientInfo.lastName}`,
     address: clientInfo.address,
@@ -582,27 +573,24 @@ const ContractGenerator = ({
     planPrice: planDetails.price,
     planName: planDetails.name,
     date: new Date().toLocaleDateString("fr-FR"),
-  };
+  }
+
+  const handleDownload = async () => {
+    // Génère le PDF en mémoire
+    const blob = await pdf(<ContractDocument data={data} />).toBlob()
+    // Déclenche le téléchargement
+    saveAs(blob, `contrat-${data.companyName.replace(/\s+/g, "-").toLowerCase()}.pdf`)
+  }
 
   return (
-    <PDFDownloadLink
-      document={<ContractDocument data={contractData} />}
-      fileName={`contrat-domiciliation-${clientInfo.companyName
-        .replace(/\s+/g, "-")
-        .toLowerCase()}.pdf`}
-      style={{ textDecoration: "none" }}
+    <Button
+      onClick={handleDownload}
+      className="w-full bg-lysco-turquoise hover:bg-lysco-turquoise/90"
     >
-      {({ loading }) => (
-        <Button
-          className="w-full bg-lysco-turquoise hover:bg-lysco-turquoise/90"
-          disabled={loading}
-        >
-          <FileText className="mr-2 h-4 w-4" />
-          {loading ? "Préparation du contrat..." : "Télécharger votre contrat"}
-        </Button>
-      )}
-    </PDFDownloadLink>
-  );
-};
+      <FileText className="mr-2 h-4 w-4" />
+      Télécharger votre contrat
+    </Button>
+  )
+}
 
-export default ContractGenerator;
+export default ContractGenerator
