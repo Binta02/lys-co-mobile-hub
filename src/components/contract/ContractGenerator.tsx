@@ -127,7 +127,7 @@ export const ContractDocument: React.FC<{ data: ContractData }> = ({ data }) => 
         {/* En-tête avec logo et adresse */}
         <View style={styles.header}>
           <Image
-            src="/assets/lys-co-logo.png"
+            src="/assets/lys-co-logo.jpg"
             style={styles.logo}
           />
           <Text style={styles.address}>
