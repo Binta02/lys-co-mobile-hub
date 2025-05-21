@@ -8,84 +8,95 @@ import { Button } from "@/components/ui/button"
 // --- Styles identiques ---
 const styles = StyleSheet.create({
   page: {
-    padding: 30,
-    // fontFamily: "Inter",
+    padding: 40,
     fontFamily: "Helvetica",
-    fontSize: 10,
+    fontSize: 12,
+    color: "#333",
+    lineHeight: 1.5,
   },
   header: {
-    marginBottom: 20,
+    marginBottom: 30,
     textAlign: "center",
   },
   logo: {
-    fontSize: 16,
+    fontSize: 20,
     fontWeight: "bold",
-    marginBottom: 5,
+    color: "#059669",
   },
   address: {
-    marginBottom: 10,
+    fontSize: 10,
+    color: "#666",
+    marginTop: 4,
   },
   title: {
-    fontSize: 14,
+    fontSize: 16,
     fontWeight: "bold",
-    marginBottom: 20,
+    marginVertical: 10,
     textAlign: "center",
     textDecoration: "underline",
+    textTransform: "uppercase",
+    color: "#0F172A",
   },
-  section: {
-    marginBottom: 15,
+  card: {
+    backgroundColor: "#F8FAFC",
+    borderLeft: "5px solid #059669",
+    borderRadius: 4,
+    padding: 12,
+    marginBottom: 16,
   },
-  sectionTitle: {
+  sectionTitleTitle: {
+    fontSize: 14,
+    fontWeight: "bold",
+    marginBottom: 6,
+    color: "#0F172A",
+  },
+  subsectionTitleTitle: {
     fontSize: 12,
     fontWeight: "bold",
-    marginBottom: 5,
-  },
-  subsectionTitle: {
-    fontSize: 11,
-    fontWeight: "bold",
     marginTop: 8,
-    marginBottom: 3,
+    marginBottom: 4,
+    color: "#0F172A",
   },
   text: {
-    marginBottom: 5,
-    lineHeight: 1.4,
+    fontSize: 11,
+    marginBottom: 4,
+    color: "#333",
   },
   listItem: {
     flexDirection: "row",
-    marginBottom: 3,
+    marginBottom: 4,
   },
   bullet: {
     width: 10,
+    fontSize: 12,
+    color: "#059669",
   },
   listItemText: {
     flex: 1,
-  },
-  signatureSection: {
-    marginTop: 30,
-    flexDirection: "row",
-    justifyContent: "space-between",
-  },
-  signatureBox: {
-    width: "45%",
+    fontSize: 11,
   },
   footer: {
     position: "absolute",
     bottom: 30,
-    left: 30,
-    right: 30,
+    left: 40,
+    right: 40,
     textAlign: "center",
-    fontSize: 8,
-    color: "gray",
-  },
-  column: {
-    width: "48%",
+    fontSize: 9,
+    color: "#999",
   },
   row: {
     flexDirection: "row",
     justifyContent: "space-between",
-    marginBottom: 10,
+    marginTop: 24,
+    marginBottom: 24,
   },
-});
+  column: {
+    flex: 1,
+    flexDirection: "column",
+    alignItems: "flex-start",
+    marginHorizontal: 8,
+  },
+})
 
 
 interface ContractData {
@@ -117,10 +128,10 @@ export const ContractDocument: React.FC<{ data: ContractData }> = ({ data }) => 
 
         <Text style={styles.title}>CONTRAT DE DOMICILIATION COMMERCIALE</Text>
 
-        <View style={styles.section}>
+        <View style={styles.sectionTitleTitle}>
           <Text style={styles.text}>Entre les soussignés :</Text>
 
-          <Text style={styles.subsectionTitle}>
+          <Text style={styles.subsectionTitleTitle}>
             La Société de Domiciliation :
           </Text>
           <Text style={styles.text}>Nom : Europe Domiciliation</Text>
@@ -133,9 +144,9 @@ export const ContractDocument: React.FC<{ data: ContractData }> = ({ data }) => 
             Représenté par : Barbara EZELIS, gérante
           </Text>
 
-          <Text style={styles.subsectionTitle}>ET</Text>
+          <Text style={styles.subsectionTitleTitle}>ET</Text>
 
-          <Text style={styles.subsectionTitle}>Le Domicilié :</Text>
+          <Text style={styles.subsectionTitleTitle}>Le Domicilié :</Text>
           <Text style={styles.text}>Société : {data.companyName}</Text>
           <Text style={styles.text}>Nom et Prénom : {data.fullName}</Text>
           <Text style={styles.text}>Adresse : {data.address}</Text>
@@ -153,8 +164,8 @@ export const ContractDocument: React.FC<{ data: ContractData }> = ({ data }) => 
         </View>
         </Page>
       <Page size="A4" style={styles.page}>
-        <View style={styles.section}>
-          <Text style={styles.subsectionTitle}>Préambule</Text>
+        <View style={styles.sectionTitleTitle}>
+          <Text style={styles.subsectionTitleTitle}>Préambule</Text>
           <Text style={styles.text}>
             Le Domiciliaire, en sa qualité d'entreprise agréée (n° préfectoral
             d'agrément : 04_95_2023) conformément aux dispositions du Code du
@@ -169,8 +180,8 @@ export const ContractDocument: React.FC<{ data: ContractData }> = ({ data }) => 
             Les parties conviennent de ce qui suit :
           </Text>
         </View>
-        <View style={styles.section}>
-          <Text style={styles.subsectionTitle}>
+        <View style={styles.sectionTitleTitle}>
+          <Text style={styles.subsectionTitleTitle}>
             Article 1 : Objet du contrat
           </Text>
           <Text style={styles.text}>
@@ -197,8 +208,8 @@ export const ContractDocument: React.FC<{ data: ContractData }> = ({ data }) => 
             commerciale.
           </Text>
         </View>
-        <View style={styles.section}>
-          <Text style={styles.subsectionTitle}>
+        <View style={styles.sectionTitleTitle}>
+          <Text style={styles.subsectionTitleTitle}>
             Article 2 – Obligations du Domiciliaire
           </Text>
           <Text style={styles.text}>Le Domiciliaire s'engage à :</Text>
@@ -227,8 +238,8 @@ export const ContractDocument: React.FC<{ data: ContractData }> = ({ data }) => 
         </View>
         </Page>
        <Page size="A4" style={styles.page}>
-        <View style={styles.section}>
-          <Text style={styles.sectionTitle}>
+        <View style={styles.sectionTitleTitle}>
+          <Text style={styles.sectionTitleTitle}>
             Article 3 – Obligations du Domicilié
           </Text>
           <Text style={styles.text}>Le Domicilié s'engage à :</Text>
@@ -307,8 +318,8 @@ export const ContractDocument: React.FC<{ data: ContractData }> = ({ data }) => 
           </Text>
         </View>
 
-        <View style={styles.section}>
-          <Text style={styles.sectionTitle}>
+        <View style={styles.sectionTitleTitle}>
+          <Text style={styles.sectionTitleTitle}>
             Article 4 – Description des prestations de services
           </Text>
           <Text style={styles.text}>
@@ -358,8 +369,8 @@ export const ContractDocument: React.FC<{ data: ContractData }> = ({ data }) => 
       </Page>
 
       <Page size="A4" style={styles.page}>
-        <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Article 5 – Durée du contrat</Text>
+        <View style={styles.sectionTitleTitle}>
+          <Text style={styles.sectionTitleTitle}>Article 5 – Durée du contrat</Text>
           <Text style={styles.text}>
             Le présent contrat est conclu pour une durée de 6 mois, à compter du{" "}
             {today}, renouvelable par tacite reconduction, sauf dénonciation par
@@ -367,8 +378,8 @@ export const ContractDocument: React.FC<{ data: ContractData }> = ({ data }) => 
           </Text>
         </View>
 
-        <View style={styles.section}>
-          <Text style={styles.sectionTitle}>
+        <View style={styles.sectionTitleTitle}>
+          <Text style={styles.sectionTitleTitle}>
             Article 6 – Tarifs et conditions de paiement
           </Text>
           <Text style={styles.text}>
@@ -385,8 +396,8 @@ export const ContractDocument: React.FC<{ data: ContractData }> = ({ data }) => 
           </Text>
         </View>
 
-        <View style={styles.section}>
-          <Text style={styles.sectionTitle}>
+        <View style={styles.sectionTitleTitle}>
+          <Text style={styles.sectionTitleTitle}>
             Article 7 – Résiliation du contrat
           </Text>
           <Text style={styles.text}>
@@ -419,8 +430,8 @@ export const ContractDocument: React.FC<{ data: ContractData }> = ({ data }) => 
           </Text>
         </View>
 
-        <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Article 8 – Responsabilité</Text>
+        <View style={styles.sectionTitleTitle}>
+          <Text style={styles.sectionTitleTitle}>Article 8 – Responsabilité</Text>
           <Text style={styles.text}>
             Le Domiciliaire ne pourra être tenu responsable des conséquences
             liées à un retard ou à une perte de courrier imputable à des tiers
@@ -446,8 +457,8 @@ export const ContractDocument: React.FC<{ data: ContractData }> = ({ data }) => 
           </Text>
         </View>
 
-        <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Article 9 – Confidentialité</Text>
+        <View style={styles.sectionTitleTitle}>
+          <Text style={styles.sectionTitleTitle}>Article 9 – Confidentialité</Text>
           <Text style={styles.text}>
             Les parties s'engagent à préserver la confidentialité des
             informations échangées dans le cadre du présent contrat.
@@ -456,8 +467,8 @@ export const ContractDocument: React.FC<{ data: ContractData }> = ({ data }) => 
       </Page>
 
       <Page size="A4" style={styles.page}>
-        <View style={styles.section}>
-          <Text style={styles.sectionTitle}>
+        <View style={styles.sectionTitleTitle}>
+          <Text style={styles.sectionTitleTitle}>
             Article 10 – Clauses résolutoires
           </Text>
           <Text style={styles.text}>
@@ -483,8 +494,8 @@ export const ContractDocument: React.FC<{ data: ContractData }> = ({ data }) => 
           </Text>
         </View>
 
-        <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Litiges</Text>
+        <View style={styles.sectionTitleTitle}>
+          <Text style={styles.sectionTitleTitle}>Litiges</Text>
           <Text style={styles.text}>
             En cas de litige relatif à l'exécution ou l'interprétation du
             présent contrat, les parties s'efforceront de le résoudre à
@@ -493,22 +504,22 @@ export const ContractDocument: React.FC<{ data: ContractData }> = ({ data }) => 
           </Text>
         </View>
 
-        <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Signature</Text>
+        <View style={styles.sectionTitleTitle}>
+          <Text style={styles.sectionTitleTitle}>Signature</Text>
           <Text style={styles.text}>
             Fait en double exemplaire, à Deuil-la-Barre le {today}
           </Text>
 
           <View style={styles.row}>
             <View style={styles.column}>
-              <Text style={styles.subsectionTitle}>Pour le Domiciliaire :</Text>
+              <Text style={styles.subsectionTitleTitle}>Pour le Domiciliaire :</Text>
               <Text style={styles.text}>Nom : EZELIS</Text>
               <Text style={styles.text}>Fonction : GÉRANTE</Text>
               <Text style={styles.text}>Signature :</Text>
             </View>
 
             <View style={styles.column}>
-              <Text style={styles.subsectionTitle}>Pour le Domicilié :</Text>
+              <Text style={styles.subsectionTitleTitle}>Pour le Domicilié :</Text>
               <Text style={styles.text}>Nom : {data.fullName}</Text>
               <Text style={styles.text}>Signature :</Text>
               <Text style={styles.text}>
