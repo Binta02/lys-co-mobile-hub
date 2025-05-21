@@ -127,7 +127,7 @@ export const ContractDocument: React.FC<{ data: ContractData }> = ({ data }) => 
         {/* En-tête avec logo et adresse */}
         <View style={styles.header}>
           <Image
-            src="https://lys-and-co.com/wp-content/uploads/2025/03/logo-lysco.jpg"
+            src="/assets/lys-co-logo.png"
             style={styles.logo}
           />
           <Text style={styles.address}>
