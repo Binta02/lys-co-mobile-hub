@@ -155,8 +155,7 @@ export const ContractDocument: React.FC<{ data: ContractData }> = ({ data }) => 
           CONTRAT DE DOMICILIATION COMMERCIALE
         </Text>
 
-        {/* Bloc "Entre les soussignés" */}
-        <View style={styles.card}>
+        {/* <View style={styles.card}>
           <View style={styles.sectionTitle}>
             <View style={styles.sectionMarker} />
             <Text style={styles.sectionTitleText}>
@@ -164,7 +163,7 @@ export const ContractDocument: React.FC<{ data: ContractData }> = ({ data }) => 
             </Text>
           </View>
 
-          {/* Société de domiciliation */}
+          {/* Société de domiciliation *
           <Text style={styles.label}><strong>La Société de Domiciliation :</strong></Text>
           <Text style={styles.text}><strong>
             <Text style={styles.label}> Nom :</Text> Europe Domiciliation</strong>
@@ -184,7 +183,7 @@ export const ContractDocument: React.FC<{ data: ContractData }> = ({ data }) => 
 
           <Text style={[styles.label, { marginTop: 12 }]}><strong>ET</strong></Text>
 
-          {/* Le Domicilié */}
+          {/* Le Domicilié *
           <Text style={styles.label}><strong>Le Domicilié :</strong></Text>
           <Text style={styles.text}><strong>
             <Text style={styles.label}>Société :</Text> {data.companyName}</strong>
@@ -210,7 +209,64 @@ export const ContractDocument: React.FC<{ data: ContractData }> = ({ data }) => 
           <Text style={styles.text}><strong>
             <Text style={styles.label}>Représenté par :</Text> {data.fullName}</strong>
           </Text>
+         </View>*/}
+        {/* Bloc "Entre les soussignés" */}
+        <View style={styles.card}>
+          <View style={styles.sectionTitle}>
+            <View style={styles.sectionMarker}/>
+            <Text style={styles.sectionTitleText}>Entre les soussignés :</Text>
+          </View>
+
+          {/* Société de domiciliation */}
+          <Text style={styles.text}>
+            <Text style={styles.label}>Nom :</Text> Europe Domiciliation
+          </Text>
+          <Text style={styles.text}>
+            <Text style={styles.label}>Adresse :</Text> 28 Rue de l’Église – 95170 Deuil-la-Barre
+          </Text>
+          <Text style={styles.text}>
+            <Text style={styles.label}>SIRET :</Text> 804 180 792
+          </Text>
+          <Text style={styles.text}>
+            <Text style={styles.label}>Agrément préfectoral :</Text> 04_95_2023
+          </Text>
+          <Text style={styles.text}>
+            <Text style={styles.label}>Représenté par :</Text> Barbara EZELIS, gérante
+          </Text>
+
+          <Text style={[styles.text, { marginTop: 12 }]}>
+            <Text style={styles.label}>ET</Text>
+          </Text>
+
+          {/* Le domicilié */}
+          <Text style={styles.text}>
+            <Text style={styles.label}>Société :</Text> {data.companyName}
+          </Text>
+          <Text style={styles.text}>
+            <Text style={styles.label}>Nom et Prénom :</Text> {data.fullName}
+          </Text>
+          <Text style={styles.text}>
+            <Text style={styles.label}>Adresse :</Text> {data.address}
+          </Text>
+          {data.addressDetails && (
+            <Text style={styles.text}>
+              <Text style={styles.label}>Complément :</Text> {data.addressDetails}
+            </Text>
+          )}
+          <Text style={styles.text}>
+            <Text style={styles.label}>Code postal / Ville :</Text> {data.postalCode} {data.city}
+          </Text>
+          <Text style={styles.text}>
+            <Text style={styles.label}>SIRET :</Text> {data.siretNumber}
+          </Text>
+          <Text style={styles.text}>
+            <Text style={styles.label}>Activité :</Text> {data.businessActivity}
+          </Text>
+          <Text style={styles.text}>
+            <Text style={styles.label}>Représenté par :</Text> {data.fullName}
+          </Text>
         </View>
+
         </Page>
 <Page size="A4" style={styles.page}>
         {/* Préambule */}
