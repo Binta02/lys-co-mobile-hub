@@ -615,7 +615,7 @@ Par le Domiciliaire, en cas de non-respect des obligations
         <Link src="https://lys-and-co.com">
           lys-and-co.com
         </Link>
-      </Text>{"\n"}
+      </Text> ––
           <Text style={styles.strong}>N° Agrément : 04_95_2023</Text>{"\n"}
           © 2025 Lys & Co – Tous droits réservés.
         </Text>
