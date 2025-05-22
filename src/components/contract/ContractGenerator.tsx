@@ -64,7 +64,7 @@ const styles = StyleSheet.create({
   },
   text: {
     marginBottom: 6,
-    fontSize: 16,
+    fontSize: 13,
     lineHeight: 1.5,
     color: "#374151",
   },
@@ -90,7 +90,7 @@ const styles = StyleSheet.create({
   },
   listText: {
     flex: 1,
-    fontSize: 16,
+    fontSize: 13,
   },
   row: {
     flexDirection: "row",
