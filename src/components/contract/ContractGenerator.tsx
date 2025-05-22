@@ -26,7 +26,7 @@ const styles = StyleSheet.create({
     height: 95,
   },
   address: {
-    fontSize: 16,
+    fontSize: 14,
     color: "#374151",
   },
   title: {
@@ -70,6 +70,7 @@ const styles = StyleSheet.create({
   },
   strong:{
     color: "#111827",
+    fontWeight: "bold",
   },
   list: {
     paddingLeft: 16,
@@ -609,13 +610,13 @@ Par le Domiciliaire, en cas de non-respect des obligations
         <Text style={styles.footer}>
           28 Rue de l’église, 95170 Deuil-la-Barre{"\n"}
           lys-and-co.com – tél : 09.53.42.11.63 / 07.56.85.37.02 – contact@lys-and-co.com{"\n"}
-          <Text style={styles.text}>
+          <Text style={styles.strong}>
         Lien du site :{' '}
-        <Link src="https://lys-and-co.com" style={styles.highlight}>
+        <Link src="https://lys-and-co.com">
           lys-and-co.com
         </Link>
       </Text>{"\n"}
-          <Text style={styles.highlight}>N° Agrément : 04_95_2023</Text>{"\n"}
+          <Text style={styles.strong}>N° Agrément : 04_95_2023</Text>{"\n"}
           © 2025 Lys & Co – Tous droits réservés.
         </Text>
       </Page>
