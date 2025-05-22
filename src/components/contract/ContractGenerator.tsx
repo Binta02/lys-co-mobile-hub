@@ -22,8 +22,8 @@ const styles = StyleSheet.create({
     marginBottom: 30,
   },
   logo: {
-    width: 80,
-    height: 80,
+    width: 100,
+    height: 100,
   },
   address: {
     fontSize: 10,
@@ -60,9 +60,16 @@ const styles = StyleSheet.create({
   },
   label: {
     fontWeight: "bold",
+    marginBottom: 7,
   },
   text: {
     marginBottom: 6,
+    fontSize: 16,
+    lineHeight: 1.5,
+    color: "#374151",
+  },
+  strong:{
+    color: "#111827",
   },
   list: {
     paddingLeft: 16,
@@ -71,6 +78,11 @@ const styles = StyleSheet.create({
   listItem: {
     flexDirection: "row",
     marginBottom: 4,
+    marginLeft: 10,
+    marginRight: 10,
+    marginTop: 4,
+    listStyleType: "disc",
+    paddingLeft: 10,
   },
   bullet: {
     width: 6,
@@ -132,7 +144,7 @@ export const ContractDocument: React.FC<{ data: ContractData }> = ({ data }) => 
             style={styles.logo}
           />
           <Text style={styles.address}>
-            Lys&amp;Co{"\n"}
+            <Text style={styles.label}> Lys&amp;Co{"\n"}</Text>
             28 Rue de l’église, 95170 Deuil-la-Barre
           </Text>
         </View>
@@ -152,54 +164,54 @@ export const ContractDocument: React.FC<{ data: ContractData }> = ({ data }) => 
           </View>
 
           {/* Société de domiciliation */}
-          <Text style={styles.label}>La Société de Domiciliation :</Text>
-          <Text style={styles.text}>
-            <Text style={styles.label}>Nom :</Text> Europe Domiciliation
+          <Text style={styles.label}><strong>La Société de Domiciliation :</strong></Text>
+          <Text style={styles.text}><strong>
+            <Text style={styles.label}> Nom :</Text> Europe Domiciliation</strong>
           </Text>
-          <Text style={styles.text}>
-            <Text style={styles.label}>Adresse :</Text> 28 Rue de l’Église – 95170 Deuil-la Barre
+          <Text style={styles.text}><strong>
+            <Text style={styles.label}>Adresse :</Text> 28 Rue de l’Église – 95170 Deuil-la Barre</strong>
           </Text>
-          <Text style={styles.text}>
-            <Text style={styles.label}>SIRET :</Text> 804 180 792
+          <Text style={styles.text}><strong>
+            <Text style={styles.label}>SIRET :</Text> 804 180 792 </strong>
           </Text>
-          <Text style={styles.text}>
-            <Text style={styles.label}>Agrément préfectoral :</Text> 04_95_2023
+          <Text style={styles.text}><strong>
+            <Text style={styles.label}>Agrément préfectoral :</Text> 04_95_2023</strong>
           </Text>
-          <Text style={styles.text}>
-            <Text style={styles.label}>Représenté par :</Text> Barbara EZELIS, gérante
+          <Text style={styles.text}><strong>
+            <Text style={styles.label}>Représenté par :</Text> Barbara EZELIS, gérante</strong>
           </Text>
 
-          <Text style={[styles.label, { marginTop: 12 }]}>ET</Text>
+          <Text style={[styles.label, { marginTop: 12 }]}><strong>ET</strong></Text>
 
           {/* Le Domicilié */}
-          <Text style={styles.label}>Le Domicilié :</Text>
-          <Text style={styles.text}>
-            <Text style={styles.label}>Société :</Text> {data.companyName}
+          <Text style={styles.label}><strong>Le Domicilié :</strong></Text>
+          <Text style={styles.text}><strong>
+            <Text style={styles.label}>Société :</Text> {data.companyName}</strong>
           </Text>
-          <Text style={styles.text}>
-            <Text style={styles.label}>Nom et Prénom :</Text> {data.fullName}
+          <Text style={styles.text}><strong>
+            <Text style={styles.label}>Nom et Prénom :</Text> {data.fullName}</strong>
           </Text>
-          <Text style={styles.text}>
-            <Text style={styles.label}>Adresse :</Text> {data.address}
+          <Text style={styles.text}><strong>
+            <Text style={styles.label}>Adresse :</Text> {data.address}</strong>
           </Text>
           {data.addressDetails && (
-            <Text style={styles.text}>{data.addressDetails}</Text>
+            <Text style={styles.text}><strong>{data.addressDetails}</strong></Text>
           )}
-          <Text style={styles.text}>
-            {data.postalCode} {data.city}
+          <Text style={styles.text}><strong>
+            {data.postalCode} {data.city}</strong>
           </Text>
-          <Text style={styles.text}>
-            <Text style={styles.label}>SIRET :</Text> {data.siretNumber}
+          <Text style={styles.text}><strong>
+            <Text style={styles.label}>SIRET :</Text> {data.siretNumber}</strong>
           </Text>
-          <Text style={styles.text}>
-            <Text style={styles.label}>Activité :</Text> {data.businessActivity}
+          <Text style={styles.text}><strong>
+            <Text style={styles.label}>Activité :</Text> {data.businessActivity}</strong>
           </Text>
-          <Text style={styles.text}>
-            <Text style={styles.label}>Représenté par :</Text> {data.fullName}
+          <Text style={styles.text}><strong>
+            <Text style={styles.label}>Représenté par :</Text> {data.fullName}</strong>
           </Text>
         </View>
         </Page>
-      <Page size="A4" style={styles.page}>
+<Page size="A4" style={styles.page}>
         {/* Préambule */}
         <View style={styles.card}>
           <View style={styles.sectionTitle}>
@@ -207,11 +219,13 @@ export const ContractDocument: React.FC<{ data: ContractData }> = ({ data }) => 
             <Text style={styles.sectionTitleText}>Préambule</Text>
           </View>
           <Text style={styles.text}>
-            Le Domiciliaire, en sa qualité d’entreprise agréée (n° préfectoral d’agrément : 04_95_2023) …
-          </Text>
+            Le Domiciliaire, en sa qualité d'entreprise agréée (n° préfectoral
+            d'agrément : 04_95_2023) conformément aux dispositions du Code du
+            commerce et aux articles R.123-167 à R.123-168, propose des services
+            de domiciliation d'entreprise.          </Text>
           <Text style={styles.text}>
-            Le Domicilié souhaite bénéficier de ces services pour y établir son siège social.
-          </Text>
+Le Domicilié souhaite bénéficier de ces services pour y établir son
+            siège social.          </Text>
           <Text style={styles.text}>
             Les parties conviennent de ce qui suit :
           </Text>
@@ -251,7 +265,7 @@ export const ContractDocument: React.FC<{ data: ContractData }> = ({ data }) => 
           </Text>
         </View>
          </Page>
-      <Page size="A4" style={styles.page}>
+<Page size="A4" style={styles.page}>
 {/* Article 2 – Obligations du Domiciliaire */}
 <View style={styles.card}>
   <View style={styles.sectionTitle}>
@@ -271,13 +285,16 @@ export const ContractDocument: React.FC<{ data: ContractData }> = ({ data }) => 
     <View style={styles.listItem}>
       <Text style={styles.bullet}>•</Text>
       <Text style={styles.listText}>
-        Assurer la réception, la conservation et, le cas échéant, la mise à disposition ou l’envoi des courriers du Domicilié selon les modalités définies à l’Article 4.
+        Assurer la réception, la conservation et, le cas échéant, la mise
+        à disposition ou l'envoi des courriers du Domicilié selon les
+        modalités définies à l'Article 4.
       </Text>
     </View>
     <View style={styles.listItem}>
       <Text style={styles.bullet}>•</Text>
       <Text style={styles.listText}>
-        Tenir à disposition les documents nécessaires en cas de contrôle par les autorités compétentes.
+        Tenir à disposition les documents nécessaires en cas de contrôle
+        par les autorités compétentes.
       </Text>
     </View>
   </View>
@@ -302,8 +319,12 @@ export const ContractDocument: React.FC<{ data: ContractData }> = ({ data }) => 
     <View style={styles.listItem}>
       <Text style={styles.bullet}>•</Text>
       <Text style={styles.listText}>
-        Communiquer au Domiciliaire toute modification concernant sa situation administrative ou légale (changement de statut, de gérant, cessation d’activité, etc.) et fournir tout document justificatif dès que ce changement aura été pris en compte.
-      </Text>
+        Communiquer au Domiciliaire toute modification concernant sa
+              situation administrative ou légale (changement de statut, de
+              gérant, cessation d'activité, etc.) et devra le notifier par écrit
+              au Domiciliaire et fournir tout nouveau document justificatif dès
+              que ce changement aura été pris en compte par l'organisme
+              d'immatriculation concerné.      </Text>
     </View>
     <View style={styles.listItem}>
       <Text style={styles.bullet}>•</Text>
@@ -315,9 +336,9 @@ export const ContractDocument: React.FC<{ data: ContractData }> = ({ data }) => 
       "Un justificatif d’identité du gérant",
       "Un justificatif de domicile personnel du gérant (de moins de 6 mois)",
       "Adresse du comptable (si comptable)",
-      "Un extrait Kbis ou avis de situation Sirene",
-      "Une copie des statuts",
-      "La procuration postale autorisant la signature des recommandés",
+      "Un extrait Kbis pour les sociétés immatriculées (ou preuve de dépôt de dossier pour une immatriculation en cours) ou un avis de situation Sirene pour ceux qui n'ont pas de Kbis",
+      "Une copie des statuts pour les entreprises",
+      "La procuration postale (à faire à La Poste) qui autorise le Domiciliaire à signer les recommandés.",
     ].map((item, i) => (
       <View key={i} style={styles.listItem}>
         <Text style={styles.bullet}>–</Text>
@@ -326,11 +347,15 @@ export const ContractDocument: React.FC<{ data: ContractData }> = ({ data }) => 
     ))}
   </View>
   <Text style={styles.text}>
-    Le Domicilié certifie sur l’honneur l’exactitude des renseignements fournis et reconnaît que le contrat est ferme et définitif à la signature.
+    Le Domicilié certifie sur l'honneur l'exactitude des renseignements
+    fournis au Domiciliaire et nécessaires à la conclusion du contrat.
+    Le contrat est ferme et définitif à la signature et aucun
+    remboursement partiel ou total ne pourra être revendiqué par le
+    Domicilié pour quelque motif que ce soit.
   </Text>
 </View>
 </Page>
-      <Page size="A4" style={styles.page}>
+<Page size="A4" style={styles.page}>
 
 {/* Article 4 – Description des prestations de services */}
 <View style={styles.card}>
@@ -353,19 +378,37 @@ export const ContractDocument: React.FC<{ data: ContractData }> = ({ data }) => 
     <View style={styles.listItem}>
       <Text style={styles.bullet}>•</Text>
       <Text style={styles.listText}>
-        Réception, tri et mise à disposition du courrier chaque jour ouvré selon les horaires du Domiciliaire (garde ≤ 21 jours, réexpédition hebdomadaire, timbres en sus &gt;14 €).
+        {/* Réception, tri et mise à disposition du courrier chaque jour ouvré selon les horaires du Domiciliaire (garde ≤ 21 jours, réexpédition hebdomadaire, timbres en sus &gt;14 €). */}
+        Réception, tri et mise à disposition du courrier destiné au
+        Domicilié chaque jour ouvré pendant les horaires définis par le
+        Domiciliaire. La garde du courrier ne peut excéder 21 (vingt et
+         un) jours. Concernant l'option « Réexpédition », elle sera faite
+              une fois par semaine. Un surcoût sera demandé en cas de
+              dépassement de 14€ de timbres.
       </Text>
     </View>
   </View>
   <Text style={styles.text}>
-    Le Domiciliaire met à disposition un bureau pour les réunions de direction et l’accès aux registres légaux (Décret n°85‐1280 mod. n°2007‐750).
-  </Text>
-  <Text style={styles.text}>
-    En aucun cas, la location de bureau ne peut servir au recrutement de personnel.
-  </Text>
-  <Text style={styles.text}>
-    Le Domicilié doit donner procuration pour le retrait du courrier recommandé ; le Domiciliaire décline toute responsabilité en cas de perte ou retard.
-  </Text>
+            Le Domiciliataire met à la disposition du Domicilié un bureau
+            permettant une réunion régulière des organes chargés de la
+            direction, de l'administration ou de la surveillance de l'entreprise
+            et l'installation des services nécessaires à la tenue, conservation
+            et la consultation de leurs registres et documents prescrits par les
+            lois et règlements (Décret N.85.1280du 5 décembre 1985, modifié par
+            le décret N°2007.750 du 9 Mai)
+          </Text>
+          <Text style={styles.text}>
+            En aucun cas, la location de bureau ne peut être utilisée par le
+            Domicilié pour le recrutement de personnel. « France Travail » devra
+            diriger les postulants à l'adresse d'activité du Domicilié et non à
+            l'adresse de son siège social.
+          </Text>
+          <Text style={styles.text}>
+            Le Domicilié doit donner procuration au Domiciliaire pour le retrait
+            de lettres recommandées. Celles-ci seront acheminées par courrier
+            ordinaire. Le Domiciliaire se dégage de toute responsabilité en cas
+            de perte ou de transmission tardive de tous courriers.
+          </Text>
 </View>
 
 {/* Article 5 – Durée du contrat */}
@@ -377,8 +420,10 @@ export const ContractDocument: React.FC<{ data: ContractData }> = ({ data }) => 
     </Text>
   </View>
   <Text style={styles.text}>
-    Le présent contrat est conclu pour 6 mois à compter du {today}, renouvelable par tacite reconduction, sauf dénonciation par l’une des parties avec un préavis de 15 jours.
-  </Text>
+            Le présent contrat est conclu pour une durée de 6 mois, à compter du{" "}
+            {today}, renouvelable par tacite reconduction, sauf dénonciation par
+            l'une des parties avec un préavis de 15 (quinze) jours.
+          </Text>
 </View>
 
 {/* Article 6 – Tarifs et conditions de paiement */}
@@ -393,11 +438,13 @@ export const ContractDocument: React.FC<{ data: ContractData }> = ({ data }) => 
     Le montant de la domiciliation est fixé à <Text style={styles.highlight}>{data.planPrice} €</Text> par mois pour la formule « {data.planName} ».
   </Text>
   <Text style={styles.text}>
-    Paiements par virement, espèce ou carte bancaire.
-  </Text>
-  <Text style={styles.text}>
-    Retard de paiement : pénalités de 10 % du montant dû.
-  </Text>
+            Les paiements devront être effectués par virement bancaire, espèce
+            ou carte bleu.
+          </Text>
+          <Text style={styles.text}>
+            En cas de retard de paiement, des pénalités équivalentes à 10%
+            pourront être appliquées.
+          </Text>
 </View>
 </Page>
 
@@ -424,16 +471,22 @@ export const ContractDocument: React.FC<{ data: ContractData }> = ({ data }) => 
     <View style={styles.listItem}>
       <Text style={styles.bullet}>•</Text>
       <Text style={styles.listText}>
-        Par le Domiciliaire, en cas de non-respect des obligations contractuelles ou de non-paiement.
-      </Text>
+Par le Domiciliaire, en cas de non-respect des obligations
+              contractuelles du Domicilié ou de non-paiement des sommes dues.      </Text>
     </View>
   </View>
   <Text style={styles.text}>
-    À l’expiration ou la résiliation, le Domicilié s’engage à changer immédiatement son siège social.
-  </Text>
-  <Text style={styles.text}>
-    Le Domiciliaire informera le greffier du Tribunal de Commerce de la cessation de domiciliation et n’acceptera plus les réexpéditions postales (instr. 26/01/2001).
-  </Text>
+            À l'expiration ou la résiliation du contrat, le Domicilié s'engage à
+            procéder immédiatement au changement de son adresse de siège social.
+          </Text>
+          <Text style={styles.text}>
+            Conformément au décret n°5.12.85, le Domiciliaire s'oblige à
+            informer le greffier du Tribunal de Commerce, à l'expiration du
+            contrat ou en cas de résiliation de celui-ci, de la cessation de la
+            domiciliation de l'entreprise dans ses locaux. De plus, les ordres
+            de réexpédition des sociétés domiciliées donnés à la poste, ne
+            seront pas acceptés conformément à l'instruction du 26/01/2001.
+          </Text>
 </View>
 
 {/* Article 8 – Responsabilité */}
@@ -445,17 +498,28 @@ export const ContractDocument: React.FC<{ data: ContractData }> = ({ data }) => 
     </Text>
   </View>
   <Text style={styles.text}>
-    Le Domiciliaire ne saurait être tenu responsable des retards ou pertes de courrier imputables à des tiers ou à un cas de force majeure.
-  </Text>
-  <Text style={styles.text}>
-    Le Domicilié décharge le Domiciliaire de toute responsabilité pour tout envoi mal libellé.
-  </Text>
-  <Text style={styles.text}>
-    Cette autorisation n’engage en rien la responsabilité du Domiciliaire, présentement ou à venir.
-  </Text>
-  <Text style={styles.text}>
-    En cas de rejet par un organisme, le Domiciliaire n’effectuera aucun remboursement.
-  </Text>
+            Le Domiciliaire ne pourra être tenu responsable des conséquences
+            liées à un retard ou à une perte de courrier imputable à des tiers
+            (ex : service postal) ou à un cas de force majeure.
+          </Text>
+          <Text style={styles.text}>
+            Le Domicilié dégage le Domiciliataire de toute responsabilité quant
+            à la transmission du courrier effectuée par la Poste ou par des
+            entreprises assimilées ainsi que pour tout envoi mal libellé
+            (adresse incomplète ou illisible, absence de cédex, ou tout autre
+            nom, etc.) reçu à l'intention du Domicilié.
+          </Text>
+          <Text style={styles.text}>
+            Étant précisé que l'autorisation que le Domiciliaire lui accorde ne
+            saurait en aucun cas engager sa responsabilité, sous quelque forme
+            que ce soit, présente et à venir.
+          </Text>
+          <Text style={styles.text}>
+            Le Domiciliaire ne saurait être tenu en aucune façon responsable du
+            rejet du Domicilié par les différents organismes administratifs
+            nécessaires à son inscription ou pour tout autre motif et ne
+            procédera donc à aucun remboursement.
+          </Text>
 </View>
 
 {/* Article 9 – Confidentialité */}
@@ -467,8 +531,9 @@ export const ContractDocument: React.FC<{ data: ContractData }> = ({ data }) => 
     </Text>
   </View>
   <Text style={styles.text}>
-    Les parties s’engagent à conserver la confidentialité des informations échangées dans le cadre du présent contrat.
-  </Text>
+            Les parties s'engagent à préserver la confidentialité des
+            informations échangées dans le cadre du présent contrat.
+          </Text>
 </View>
 
 {/* Article 10 – Clauses résolutoires */}
@@ -480,14 +545,26 @@ export const ContractDocument: React.FC<{ data: ContractData }> = ({ data }) => 
     </Text>
   </View>
   <Text style={styles.text}>
-    En cas de non-paiement ou d’inexécution, la fourniture des services sera suspendue après mise en demeure. Passé 21 jours de garde, le courrier sera retourné à l’expéditeur.
-  </Text>
-  <Text style={styles.text}>
-    Le contrat pourra être dénoncé de plein droit par le Domiciliaire sans préavis de 30 jours et la carence sera signalée au greffe pour radiation.
-  </Text>
-  <Text style={styles.text}>
-    Tout litige sera soumis au Tribunal de Commerce compétent.
-  </Text>
+            A défaut de paiement d'une seule facture à son échéance ou en cas
+            d'inexécution d'une des clauses du présent engagement, la prestation
+            de tous les services sera suspendue après mise en demeure. A défaut
+            de règlement d'une ou plusieurs factures, rappelé par les soins du
+            Domiciliaire, le courrier ne pourra être réexpédié au domicilié. Il
+            sera tenu à sa disposition dans nos locaux comme stipulé à l'article
+            4 du contrat, dans la limite de 21 (vingt et un) jours. Au-delà, il
+            sera renvoyé à l'expéditeur.
+          </Text>
+<Text style={styles.text}>
+            Le contrat pourra être dénoncé de plein droit par le Domiciliaire
+            sans notification en respectant un préavis de 30 jours et la carence
+            du Domicilié sera signalée au greffe du Tribunal de Commerce ou au
+            Registre des Métiers afin de procéder à la radiation d'office de
+            l'entreprise.
+          </Text>
+<Text style={styles.text}>
+            En cas de contestation liée aux présentes, seul le Tribunal de
+            Commerce concerné sera compétent.
+          </Text>
 </View>
 
 {/* Litiges */}
@@ -499,8 +576,11 @@ export const ContractDocument: React.FC<{ data: ContractData }> = ({ data }) => 
     </Text>
   </View>
   <Text style={styles.text}>
-    En cas de litige relatif à l’exécution ou à l’interprétation du contrat, les parties tenteront d’abord une résolution à l’amiable, sinon les juridictions compétentes du siège du Domiciliaire seront saisies.
-  </Text>
+            En cas de litige relatif à l'exécution ou l'interprétation du
+            présent contrat, les parties s'efforceront de le résoudre à
+            l'amiable. À défaut, le litige sera soumis aux juridictions
+            compétentes du ressort du siège du Domiciliaire.
+          </Text>
 </View>
 
 {/* Signature */}
