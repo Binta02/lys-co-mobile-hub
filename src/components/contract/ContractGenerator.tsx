@@ -1,6 +1,6 @@
 // src/components/contract/ContractGenerator.tsx
 import React from "react"
-import { Document, Page, Text, View, StyleSheet, pdf, Image } from "@react-pdf/renderer"
+import { Document, Page, Text, View, StyleSheet, pdf, Image, Link } from "@react-pdf/renderer"
 import { saveAs } from "file-saver"
 import { FileText } from "lucide-react"
 import { Button } from "@/components/ui/button"
@@ -22,11 +22,11 @@ const styles = StyleSheet.create({
     marginBottom: 30,
   },
   logo: {
-    width: 100,
-    height: 100,
+    width: 95,
+    height: 95,
   },
   address: {
-    fontSize: 10,
+    fontSize: 16,
     color: "#374151",
   },
   title: {
@@ -154,63 +154,6 @@ export const ContractDocument: React.FC<{ data: ContractData }> = ({ data }) => 
         <Text style={styles.title}>
           CONTRAT DE DOMICILIATION COMMERCIALE
         </Text>
-
-        {/* <View style={styles.card}>
-          <View style={styles.sectionTitle}>
-            <View style={styles.sectionMarker} />
-            <Text style={styles.sectionTitleText}>
-              Entre les soussignés :
-            </Text>
-          </View>
-
-          {/* Société de domiciliation *
-          <Text style={styles.label}><strong>La Société de Domiciliation :</strong></Text>
-          <Text style={styles.text}><strong>
-            <Text style={styles.label}> Nom :</Text> Europe Domiciliation</strong>
-          </Text>
-          <Text style={styles.text}><strong>
-            <Text style={styles.label}>Adresse :</Text> 28 Rue de l’Église – 95170 Deuil-la Barre</strong>
-          </Text>
-          <Text style={styles.text}><strong>
-            <Text style={styles.label}>SIRET :</Text> 804 180 792 </strong>
-          </Text>
-          <Text style={styles.text}><strong>
-            <Text style={styles.label}>Agrément préfectoral :</Text> 04_95_2023</strong>
-          </Text>
-          <Text style={styles.text}><strong>
-            <Text style={styles.label}>Représenté par :</Text> Barbara EZELIS, gérante</strong>
-          </Text>
-
-          <Text style={[styles.label, { marginTop: 12 }]}><strong>ET</strong></Text>
-
-          {/* Le Domicilié *
-          <Text style={styles.label}><strong>Le Domicilié :</strong></Text>
-          <Text style={styles.text}><strong>
-            <Text style={styles.label}>Société :</Text> {data.companyName}</strong>
-          </Text>
-          <Text style={styles.text}><strong>
-            <Text style={styles.label}>Nom et Prénom :</Text> {data.fullName}</strong>
-          </Text>
-          <Text style={styles.text}><strong>
-            <Text style={styles.label}>Adresse :</Text> {data.address}</strong>
-          </Text>
-          {data.addressDetails && (
-            <Text style={styles.text}><strong>{data.addressDetails}</strong></Text>
-          )}
-          <Text style={styles.text}><strong>
-            {data.postalCode} {data.city}</strong>
-          </Text>
-          <Text style={styles.text}><strong>
-            <Text style={styles.label}>SIRET :</Text> {data.siretNumber}</strong>
-          </Text>
-          <Text style={styles.text}><strong>
-            <Text style={styles.label}>Activité :</Text> {data.businessActivity}</strong>
-          </Text>
-          <Text style={styles.text}><strong>
-            <Text style={styles.label}>Représenté par :</Text> {data.fullName}</strong>
-          </Text>
-         </View>*/}
-        {/* Bloc "Entre les soussignés" */}
         <View style={styles.card}>
           <View style={styles.sectionTitle}>
             <View style={styles.sectionMarker}/>
@@ -409,7 +352,8 @@ Le Domicilié souhaite bénéficier de ces services pour y établir son
     Domicilié pour quelque motif que ce soit.
   </Text>
 </View>
-
+</Page>
+<Page size="A4" style={styles.page}>
 {/* Article 4 – Description des prestations de services */}
 <View style={styles.card}>
   <View style={styles.sectionTitle}>
@@ -617,7 +561,8 @@ Par le Domiciliaire, en cas de non-respect des obligations
             Commerce concerné sera compétent.
           </Text>
 </View>
-
+</Page>
+<Page size="A4" style={styles.page}>
 {/* Litiges */}
 <View style={styles.card}>
   <View style={styles.sectionTitle}>
@@ -633,8 +578,6 @@ Par le Domiciliaire, en cas de non-respect des obligations
             compétentes du ressort du siège du Domiciliaire.
           </Text>
 </View>
-</Page>
-<Page size="A4" style={styles.page}>
 {/* Signature */}
         <View style={styles.card}>
           <View style={styles.sectionTitle}>
@@ -664,7 +607,15 @@ Par le Domiciliaire, en cas de non-respect des obligations
 
         {/* Pied de page */}
         <Text style={styles.footer}>
+          28 Rue de l’église, 95170 Deuil-la-Barre{"\n"}
           lys-and-co.com – tél : 09.53.42.11.63 / 07.56.85.37.02 – contact@lys-and-co.com{"\n"}
+          <Text style={styles.text}>
+        Lien du site :{' '}
+        <Link src="https://lys-and-co.com" style={styles.highlight}>
+          lys-and-co.com
+        </Link>
+      </Text>{"\n"}
+          <Text style={styles.highlight}>N° Agrément : 04_95_2023</Text>{"\n"}
           © 2025 Lys & Co – Tous droits réservés.
         </Text>
       </Page>
