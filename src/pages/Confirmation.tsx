@@ -21,7 +21,13 @@ const Confirmation = () => {
 
   // Check if the order contains domiciliation items
   const domiciliationItems = items.filter(item => 
-    item.title.toLowerCase().includes('domiciliation') || 
+    // item.title.toLowerCase().includes('domiciliation') || 
+    item.title
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .includes('domicili')
+    ||
     item.title.toLowerCase().includes('entreprise') ||
     item.title.toLowerCase().includes('auto-entrepreneur') ||
     item.title.toLowerCase().includes('association')
