@@ -265,8 +265,6 @@ Le Domicilié souhaite bénéficier de ces services pour y établir son
             commerciale.
           </Text>
         </View>
-         </Page>
-<Page size="A4" style={styles.page}>
 {/* Article 2 – Obligations du Domiciliaire */}
 <View style={styles.card}>
   <View style={styles.sectionTitle}>
@@ -355,8 +353,6 @@ Le Domicilié souhaite bénéficier de ces services pour y établir son
     Domicilié pour quelque motif que ce soit.
   </Text>
 </View>
-</Page>
-<Page size="A4" style={styles.page}>
 
 {/* Article 4 – Description des prestations de services */}
 <View style={styles.card}>
@@ -447,9 +443,7 @@ Le Domicilié souhaite bénéficier de ces services pour y établir son
             pourront être appliquées.
           </Text>
 </View>
-</Page>
 
-<Page size="A4" style={styles.page}>
 
 {/* Article 7 – Résiliation du contrat */}
 <View style={styles.card}>
