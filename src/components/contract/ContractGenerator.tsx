@@ -90,6 +90,7 @@ const styles = StyleSheet.create({
   },
   listText: {
     flex: 1,
+    fontSize: 16,
   },
   row: {
     flexDirection: "row",
