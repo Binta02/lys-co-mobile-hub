@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
@@ -18,8 +18,6 @@ import {
   useStripe,
   useElements,
 } from '@stripe/react-stripe-js'
-
-const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
 const formSchema = z.object({
   email: z.string().email({ message: "Email invalide" }),
@@ -87,49 +85,44 @@ const Checkout = () => {
     //   } 
     // });
 
-  const handleSubmit = async (data: FormValues) => {
-    setIsProcessing(true);
+    const handleSubmit = async (data: FormValues) => {
+    setIsProcessing(true)
 
     // 1) Créer le PaymentIntent côté backend
     const resp = await fetch('http://localhost:4000/create-payment-intent', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ amount: Math.round(total * 100) }),
-    });
-    const { clientSecret } = await resp.json();
+    })
+    const { clientSecret } = await resp.json()
 
     // 2) Confirmer le paiement avec Stripe.js
-    if (!stripe || !elements) return;
-    const card = elements.getElement(CardElement);
-    if (!card) return;
+    if (!stripe || !elements) return
+    const card = elements.getElement(CardElement)
+    if (!card) return
 
     const { error, paymentIntent } = await stripe.confirmCardPayment(clientSecret, {
       payment_method: { card },
       receipt_email: data.email,
-    });
+    })
 
     if (error) {
-      setErrorMessage(error.message || "Une erreur est survenue lors du paiement.");
-      setIsProcessing(false);
+      console.error(error)
+      // afficher message d’erreur à l’utilisateur
+      setIsProcessing(false)
     } else if (paymentIntent?.status === 'succeeded') {
-      setErrorMessage(null);
-      clearCart();
+      clearCart()
       navigate('/confirmation', {
         state: {
           order: { items, subtotal, tax, total, clientInfo: data, orderId: paymentIntent.id },
         },
-      });
+      })
     }
   };
 
 return (
   <div className="min-h-screen flex flex-col">
     <Navbar />
-    {errorMessage && (
-  <div className="max-w-xl mx-auto mt-6 mb-4 p-4 bg-red-100 text-red-700 rounded text-center">
-    {errorMessage}
-  </div>
-)}
     <div className="flex-1 py-16">
       <div className="container mx-auto px-4">
         <h1 className="text-3xl font-bold mb-8 text-center">Finaliser votre commande</h1>
