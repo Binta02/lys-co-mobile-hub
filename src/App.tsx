@@ -33,6 +33,10 @@ import Domiciliation3MoisEntreprise from './pages/domiciliation/Domiciliation3Mo
 import Domiciliation6MoisMicroEntreprise from './pages/domiciliation/Domiciliation6MoisMicroEntreprise';
 import Domiciliation3MoisMicroEntreprise from './pages/domiciliation/Domiciliation3MoisMicroEntreprise';
 import PackDomicilie from './pages/domiciliation/PackDomicilie';
+import { Elements } from '@stripe/react-stripe-js'
+import { loadStripe } from '@stripe/stripe-js';
+
+const stripePromise = loadStripe('your-publishable-key-here');
 
 function App() {
   const [isAuth, setIsAuth] = useState(false);
@@ -76,7 +80,15 @@ function App() {
         <Route path="/checkout" element={<PrivateRoute><Checkout /></PrivateRoute>} />
         <Route path="/confirmation" element={<Confirmation />} />
         <Route path="/demandedevis" element={<DemandeDevis />} />
+        <Route
+        path="/checkout"
+        element={
+          <Elements stripe={stripePromise}>
+            <Checkout />
+          </Elements>
+        }/>
         <Route path="*" element={<NotFound />} />
+
       </Routes>
     
   );
