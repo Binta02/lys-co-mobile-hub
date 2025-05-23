@@ -77,7 +77,6 @@ function App() {
         <Route path="/communication/media-training" element={<CommunicationMediaTraining />} />
         <Route path="/communication/packs" element={<CommunicationPacks />} />
         <Route path="/services/:id" element={<ServiceDetail />} />
-        {/* <Route path="/checkout" element={<PrivateRoute><Checkout /></PrivateRoute>} /> */}
         <Route path="/confirmation" element={<Confirmation />} />
         <Route path="/demandedevis" element={<DemandeDevis />} />
         <Route

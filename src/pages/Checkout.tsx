@@ -86,7 +86,8 @@ const Checkout = () => {
     setIsProcessing(true)
 
     // 1) Créer le PaymentIntent côté backend
-    const resp = await fetch('http://localhost:4000/create-payment-intent', {
+    // const resp = await fetch('http://localhost:4000/create-payment-intent', {
+    const resp = await fetch('/api/create-payment-intent', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ amount: Math.round(total * 100) }),
