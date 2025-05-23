@@ -18,6 +18,8 @@ import {
   useStripe,
   useElements,
 } from '@stripe/react-stripe-js'
+const API_URL = import.meta.env.VITE_API_URL;
+
 
 const formSchema = z.object({
   email: z.string().email({ message: "Email invalide" }),
@@ -87,11 +89,11 @@ const Checkout = () => {
 
     // 1) Créer le PaymentIntent côté backend
     // const resp = await fetch('http://localhost:4000/create-payment-intent', {
-    const resp = await fetch('/api/create-payment-intent', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ amount: Math.round(total * 100) }),
-    })
+    const resp = await fetch(`${API_URL}/create-payment-intent`, {
+  method: 'POST',
+  headers: { 'Content-Type': 'application/json' },
+  body: JSON.stringify({ amount: Math.round(total * 100) }),
+});
     const { clientSecret } = await resp.json()
 
     // 2) Confirmer le paiement avec Stripe.js
