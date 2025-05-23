@@ -32,9 +32,6 @@ const formSchema = z.object({
   postalCode: z.string().regex(/^\d{5}$/, { message: "Code postal à 5 chiffres requis" }),
   phone: z.string().optional(),
   country: z.string().default("France"),
-  cardNumber: z.string().regex(/^\d{16}$/, { message: "Numéro de carte à 16 chiffres requis" }),
-  expiryDate: z.string().regex(/^\d{2}\/\d{2}$/, { message: "Format MM/AA requis" }),
-  cvv: z.string().regex(/^\d{3,4}$/, { message: "CVV à 3 ou 4 chiffres requis" }),
 });
 
 type FormValues = z.infer<typeof formSchema>;
