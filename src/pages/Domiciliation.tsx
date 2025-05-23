@@ -289,7 +289,7 @@ const Domiciliation = () => {
                       </span>
                     </p>
                   </div>
-                  <Link to="/service/coworking-space">
+                  <Link to="/services/coworking-space">
                     <Button variant="outline" className="w-full mt-2">
                       Plus d'infos
                     </Button>
@@ -326,7 +326,7 @@ const Domiciliation = () => {
                       </li>
                     </ul>
                   </div>
-                  <Link to="/service/formation-room">
+                  <Link to="/services/formation-room">
                     <Button variant="outline" className="w-full mt-2">
                       Plus d'infos
                     </Button>
@@ -361,7 +361,7 @@ const Domiciliation = () => {
                       </li>
                     </ul>
                   </div>
-                  <Link to="/service/location-bureau">
+                  <Link to="/services/location-bureau">
                     <Button variant="outline" className="w-full mt-2">
                       Plus d'infos
                     </Button>

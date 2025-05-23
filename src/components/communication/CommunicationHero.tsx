@@ -23,7 +23,7 @@ const CommunicationHero = () => {
                 Prenez RDV !
               </Button>
             </Link>
-            <Link to="/communication-packs">
+            <Link to="/communication/packs">
               <Button variant="outline" className="border-lysco-turquoise text-lysco-turquoise hover:bg-lysco-turquoise/10">
                 Nos packs de communication
               </Button>

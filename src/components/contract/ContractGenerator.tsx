@@ -117,6 +117,10 @@ const styles = StyleSheet.create({
     color: "#16A34A",
     fontWeight: "bold",
   },
+  nondeco: {
+    textDecoration: "none",
+    color: "#16A34A",
+  },
 })
 
 interface ContractData {
@@ -612,10 +616,10 @@ Par le Domiciliaire, en cas de non-respect des obligations
           lys-and-co.com – tél : 09.53.42.11.63 / 07.56.85.37.02 – contact@lys-and-co.com{"\n"}
           <Text style={styles.strong}>
         Lien du site :{' '}
-        <Link src="https://lys-and-co.com">
+        <Link style={styles.nondeco} src="https://lys-and-co.com">
           lys-and-co.com
         </Link>
-      </Text> ––
+      </Text> –– 
           <Text style={styles.strong}>N° Agrément : 04_95_2023</Text>{"\n"}
           © 2025 Lys & Co – Tous droits réservés.
         </Text>

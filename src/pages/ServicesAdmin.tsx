@@ -47,6 +47,25 @@ const ServicesAdmin = () => {
         {/* Admin Service Offers */}
         <AdminServiceOffers />
 
+        <p className="max-w-3xl mx-auto mt-8 mb-12 text-lg text-gray-700 text-center leading-relaxed">
+          <strong>FORMALITÉS ENTREPRISES – ADMINISTRATIF</strong>
+          <br /><br />
+          Si vous êtes en pleine <strong>création d’entreprise</strong>, 
+          envisagez de <strong>changer votre siège social</strong> 
+          ou devez gérer d’autres <strong>modifications importantes
+            </strong>, mais que le <strong>temps</strong> ou les 
+            <strong>connaissances</strong> vous manquent pour 
+            aborder les <strong>démarches administratives</strong>, 
+            sachez que vous n’êtes pas seul. Notre partenaire, un 
+            <strong>expert-comptable qualifié</strong>, est prêt à 
+            vous épauler à chaque étape du processus. Il vous 
+            offrira une <strong>assistance personnalisée</strong> 
+            et des <strong>conseils avisés</strong> pour naviguer 
+            aisément à travers ces formalités, assurant ainsi une 
+            <strong>transition en douceur</strong> et conforme aux 
+            <strong>exigences légales</strong>. N’attendez plus pour 
+            <strong>demander de l’aide</strong> !
+        </p>
         {/* Tarifs Section */}
         <section className="py-16 bg-gray-50">
           <div className="container mx-auto px-4">
@@ -97,7 +116,20 @@ const ServicesAdmin = () => {
             </div>
           </div>
         </section>
-
+        <p className="max-w-3xl mx-auto mt-8 mb-12 text-lg text-gray-700 text-center leading-relaxed">
+          <strong>ASSISTANAT</strong><br /><br />
+          Imaginez <strong>déléguer</strong> toute la <strong>gestion administrative</strong>, 
+          <strong>comptable</strong> et <strong>commerciale</strong> à des <strong>assistants experts</strong>, 
+          vous permettant ainsi de vous recentrer sur l’<strong>essentiel</strong> 
+          de votre activité. Nos partenaires <strong>secrétaires</strong> prennent 
+          en charge toutes vos <strong>obligations</strong>, de la <strong>paperasserie 
+          quotidienne</strong> à la <strong>comptabilité</strong>, en passant par le <strong>suivi 
+          commercial</strong>. Ce service vous offre la <strong>liberté</strong> de vous 
+          consacrer pleinement à ce que vous faites de mieux, 
+          tout en ayant la <strong>tranquillité d’esprit</strong> que les aspects 
+          les plus <strong>fastidieux</strong> de votre entreprise sont <strong>gérés 
+          efficacement</strong> et <strong>professionnellement</strong>.
+        </p>
         {/* Assistanat Section */}
         <section className="py-16 bg-white">
           <div className="container mx-auto px-4">

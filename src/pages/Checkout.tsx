@@ -13,6 +13,11 @@ import { z } from 'zod';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Textarea } from '@/components/ui/textarea';
+import {
+  CardElement,
+  useStripe,
+  useElements,
+} from '@stripe/react-stripe-js'
 
 const formSchema = z.object({
   email: z.string().email({ message: "Email invalide" }),
@@ -35,6 +40,8 @@ const formSchema = z.object({
 type FormValues = z.infer<typeof formSchema>;
 
 const Checkout = () => {
+  const stripe = useStripe()
+  const elements = useElements()
   const { items, total, subtotal, tax, clearCart } = useCart();
   const navigate = useNavigate();
   
@@ -55,335 +62,366 @@ const Checkout = () => {
       postalCode: "",
       phone: "",
       country: "France",
-      cardNumber: "",
-      expiryDate: "",
-      cvv: "",
     }
   });
 
-  const handleSubmit = async (data: FormValues) => {
-    setIsProcessing(true);
+  // const handleSubmit = async (data: FormValues) => {
+  //   setIsProcessing(true);
     
     // Simuler un traitement de commande
-    await new Promise(resolve => setTimeout(resolve, 2000));
+    // await new Promise(resolve => setTimeout(resolve, 2000));
     
-    clearCart();
-    navigate('/confirmation', { 
-      state: { 
-        order: {
-          items,
-          subtotal,
-          tax,
-          total,
-          clientInfo: data,
-          orderId: `ORD-${Math.floor(Math.random() * 1000000)}`
-        } 
-      } 
-    });
+    // clearCart();
+    // navigate('/confirmation', { 
+    //   state: { 
+    //     order: {
+    //       items,
+    //       subtotal,
+    //       tax,
+    //       total,
+    //       clientInfo: data,
+    //       orderId: `ORD-${Math.floor(Math.random() * 1000000)}`
+    //     } 
+    //   } 
+    // });
+
+    const handleSubmit = async (data: FormValues) => {
+    setIsProcessing(true)
+
+    // 1) Créer le PaymentIntent côté backend
+    const resp = await fetch('http://localhost:4000/create-payment-intent', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ amount: Math.round(total * 100) }),
+    })
+    const { clientSecret } = await resp.json()
+
+    // 2) Confirmer le paiement avec Stripe.js
+    if (!stripe || !elements) return
+    const card = elements.getElement(CardElement)
+    if (!card) return
+
+    const { error, paymentIntent } = await stripe.confirmCardPayment(clientSecret, {
+      payment_method: { card },
+      receipt_email: data.email,
+    })
+
+    if (error) {
+      console.error(error)
+      // afficher message d’erreur à l’utilisateur
+      setIsProcessing(false)
+    } else if (paymentIntent?.status === 'succeeded') {
+      clearCart()
+      navigate('/confirmation', {
+        state: {
+          order: { items, subtotal, tax, total, clientInfo: data, orderId: paymentIntent.id },
+        },
+      })
+    }
   };
 
-  return (
-    <div className="min-h-screen flex flex-col">
-      <Navbar />
-      <div className="flex-1 py-16">
-        <div className="container mx-auto px-4">
-          <h1 className="text-3xl font-bold mb-8 text-center">Finaliser votre commande</h1>
-          
-          <div className="grid md:grid-cols-2 gap-8">
-            {/* Informations de facturation et paiement */}
-            <div>
-              <Card>
-                <CardHeader>
-                  <CardTitle>Informations de facturation</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <Form {...form}>
-                    <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-4">
+return (
+  <div className="min-h-screen flex flex-col">
+    <Navbar />
+    <div className="flex-1 py-16">
+      <div className="container mx-auto px-4">
+        <h1 className="text-3xl font-bold mb-8 text-center">Finaliser votre commande</h1>
+
+        <div className="grid md:grid-cols-2 gap-8">
+          {/* Informations de facturation et paiement */}
+          <div>
+            <Card>
+              <CardHeader>
+                <CardTitle>Informations de facturation</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <Form {...form}>
+                  <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-4">
+                    <FormField
+                      control={form.control}
+                      name="email"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>E-mail</FormLabel>
+                          <FormControl>
+                            <Input type="email" placeholder="votre@email.com" {...field} />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+
+                    <div className="pt-4 border-t mt-2">
+                      <h3 className="font-medium mb-4">Adresse de facturation</h3>
+                      <p className="text-sm text-gray-600 mb-4">
+                        Entrez l'adresse de facturation qui correspond à votre moyen de paiement.
+                      </p>
+
                       <FormField
                         control={form.control}
-                        name="email"
+                        name="country"
                         render={({ field }) => (
                           <FormItem>
-                            <FormLabel>E-mail</FormLabel>
+                            <FormLabel>Pays / Région</FormLabel>
                             <FormControl>
-                              <Input type="email" placeholder="votre@email.com" {...field} />
+                              <Input value="France" disabled {...field} />
                             </FormControl>
                             <FormMessage />
                           </FormItem>
                         )}
                       />
-                      
-                      <div className="pt-4 border-t mt-2">
-                        <h3 className="font-medium mb-4">Adresse de facturation</h3>
-                        <p className="text-sm text-gray-600 mb-4">
-                          Entrez l'adresse de facturation qui correspond à votre moyen de paiement.
-                        </p>
-                      
+
+                      <div className="grid grid-cols-2 gap-4 mt-4">
                         <FormField
                           control={form.control}
-                          name="country"
+                          name="firstName"
                           render={({ field }) => (
                             <FormItem>
-                              <FormLabel>Pays / Région</FormLabel>
+                              <FormLabel>Prénom</FormLabel>
                               <FormControl>
-                                <Input value="France" disabled {...field} />
+                                <Input placeholder="Jean" {...field} />
                               </FormControl>
                               <FormMessage />
                             </FormItem>
                           )}
                         />
-
-                        <div className="grid grid-cols-2 gap-4 mt-4">
-                          <FormField
-                            control={form.control}
-                            name="firstName"
-                            render={({ field }) => (
-                              <FormItem>
-                                <FormLabel>Prénom</FormLabel>
-                                <FormControl>
-                                  <Input placeholder="Jean" {...field} />
-                                </FormControl>
-                                <FormMessage />
-                              </FormItem>
-                            )}
-                          />
-
-                          <FormField
-                            control={form.control}
-                            name="lastName"
-                            render={({ field }) => (
-                              <FormItem>
-                                <FormLabel>Nom</FormLabel>
-                                <FormControl>
-                                  <Input placeholder="Dupont" {...field} />
-                                </FormControl>
-                                <FormMessage />
-                              </FormItem>
-                            )}
-                          />
-                        </div>
-
                         <FormField
                           control={form.control}
-                          name="companyName"
-                          render={({ field }) => (
-                            <FormItem className="mt-4">
-                              <FormLabel>Nom de l'entreprise</FormLabel>
-                              <FormControl>
-                                <Input placeholder="Entreprise SAS" {...field} />
-                              </FormControl>
-                              <FormMessage />
-                            </FormItem>
-                          )}
-                        />
-
-                        <FormField
-                          control={form.control}
-                          name="businessActivity"
-                          render={({ field }) => (
-                            <FormItem className="mt-4">
-                              <FormLabel>Activité de l'entreprise</FormLabel>
-                              <FormControl>
-                                <Input placeholder="Conseil informatique" {...field} />
-                              </FormControl>
-                              <FormMessage />
-                            </FormItem>
-                          )}
-                        />
-
-                        <FormField
-                          control={form.control}
-                          name="siretNumber"
-                          render={({ field }) => (
-                            <FormItem className="mt-4">
-                              <FormLabel>Numéro SIRET</FormLabel>
-                              <FormControl>
-                                <Input placeholder="12345678901234" {...field} />
-                              </FormControl>
-                              <FormMessage />
-                            </FormItem>
-                          )}
-                        />
-
-                        <FormField
-                          control={form.control}
-                          name="address"
-                          render={({ field }) => (
-                            <FormItem className="mt-4">
-                              <FormLabel>Adresse postale</FormLabel>
-                              <FormControl>
-                                <Input placeholder="123 Rue de Paris" {...field} />
-                              </FormControl>
-                              <FormMessage />
-                            </FormItem>
-                          )}
-                        />
-
-                        <FormField
-                          control={form.control}
-                          name="addressDetails"
-                          render={({ field }) => (
-                            <FormItem className="mt-4">
-                              <FormLabel>Complément d'adresse (optionnel)</FormLabel>
-                              <FormControl>
-                                <Input placeholder="Appartement, étage, etc." {...field} />
-                              </FormControl>
-                              <FormMessage />
-                            </FormItem>
-                          )}
-                        />
-
-                        <div className="grid grid-cols-2 gap-4 mt-4">
-                          <FormField
-                            control={form.control}
-                            name="city"
-                            render={({ field }) => (
-                              <FormItem>
-                                <FormLabel>Ville</FormLabel>
-                                <FormControl>
-                                  <Input placeholder="Paris" {...field} />
-                                </FormControl>
-                                <FormMessage />
-                              </FormItem>
-                            )}
-                          />
-
-                          <FormField
-                            control={form.control}
-                            name="postalCode"
-                            render={({ field }) => (
-                              <FormItem>
-                                <FormLabel>Code postal</FormLabel>
-                                <FormControl>
-                                  <Input placeholder="75001" {...field} />
-                                </FormControl>
-                                <FormMessage />
-                              </FormItem>
-                            )}
-                          />
-                        </div>
-
-                        <FormField
-                          control={form.control}
-                          name="phone"
-                          render={({ field }) => (
-                            <FormItem className="mt-4">
-                              <FormLabel>Téléphone (optionnel)</FormLabel>
-                              <FormControl>
-                                <Input type="tel" placeholder="0612345678" {...field} />
-                              </FormControl>
-                              <FormMessage />
-                            </FormItem>
-                          )}
-                        />
-                      </div>
-
-                      <div className="pt-4 border-t mt-6">
-                        <h3 className="font-medium mb-4">Informations de paiement</h3>
-                        
-                        <FormField
-                          control={form.control}
-                          name="cardNumber"
+                          name="lastName"
                           render={({ field }) => (
                             <FormItem>
-                              <FormLabel>Numéro de carte</FormLabel>
+                              <FormLabel>Nom</FormLabel>
                               <FormControl>
-                                <div className="relative">
-                                  <Input placeholder="1234 5678 9012 3456" {...field} />
-                                  <CreditCard className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400" size={16} />
-                                </div>
+                                <Input placeholder="Dupont" {...field} />
                               </FormControl>
                               <FormMessage />
                             </FormItem>
                           )}
                         />
-
-                        <div className="grid grid-cols-2 gap-4 mt-4">
-                          <FormField
-                            control={form.control}
-                            name="expiryDate"
-                            render={({ field }) => (
-                              <FormItem>
-                                <FormLabel>Date d'expiration</FormLabel>
-                                <FormControl>
-                                  <Input placeholder="MM/AA" {...field} />
-                                </FormControl>
-                                <FormMessage />
-                              </FormItem>
-                            )}
-                          />
-
-                          <FormField
-                            control={form.control}
-                            name="cvv"
-                            render={({ field }) => (
-                              <FormItem>
-                                <FormLabel>CVV</FormLabel>
-                                <FormControl>
-                                  <Input placeholder="123" {...field} />
-                                </FormControl>
-                                <FormMessage />
-                              </FormItem>
-                            )}
-                          />
-                        </div>
                       </div>
 
-                      <Button 
-                        type="submit" 
-                        className="w-full bg-lysco-turquoise hover:bg-lysco-turquoise/90 mt-6"
-                        disabled={isProcessing}
-                      >
-                        {isProcessing ? "Traitement en cours..." : `Payer ${total.toFixed(2)} €`}
-                      </Button>
-                    </form>
-                  </Form>
-                </CardContent>
-              </Card>
-            </div>
+                      <FormField
+                        control={form.control}
+                        name="companyName"
+                        render={({ field }) => (
+                          <FormItem className="mt-4">
+                            <FormLabel>Nom de l'entreprise</FormLabel>
+                            <FormControl>
+                              <Input placeholder="Entreprise SAS" {...field} />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
 
-            {/* Résumé de la commande */}
-            <div>
-              <Card>
-                <CardHeader>
-                  <CardTitle>Votre commande</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="space-y-4">
-                    {items.map((item) => (
-                      <div key={item.id} className="flex justify-between pb-2 border-b">
-                        <div>
-                          <p className="font-medium">{item.title}</p>
-                          <p className="text-sm text-gray-600">Quantité: {item.quantity}</p>
-                        </div>
-                        <p className="font-medium">{(item.price * item.quantity).toFixed(2)} €</p>
+                      <FormField
+                        control={form.control}
+                        name="businessActivity"
+                        render={({ field }) => (
+                          <FormItem className="mt-4">
+                            <FormLabel>Activité de l'entreprise</FormLabel>
+                            <FormControl>
+                              <Input placeholder="Conseil informatique" {...field} />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+
+                      <FormField
+                        control={form.control}
+                        name="siretNumber"
+                        render={({ field }) => (
+                          <FormItem className="mt-4">
+                            <FormLabel>Numéro SIRET</FormLabel>
+                            <FormControl>
+                              <Input placeholder="12345678901234" {...field} />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+
+                      <FormField
+                        control={form.control}
+                        name="address"
+                        render={({ field }) => (
+                          <FormItem className="mt-4">
+                            <FormLabel>Adresse postale</FormLabel>
+                            <FormControl>
+                              <Input placeholder="123 Rue de Paris" {...field} />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+
+                      <FormField
+                        control={form.control}
+                        name="addressDetails"
+                        render={({ field }) => (
+                          <FormItem className="mt-4">
+                            <FormLabel>Complément d'adresse (optionnel)</FormLabel>
+                            <FormControl>
+                              <Input placeholder="Appartement, étage, etc." {...field} />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+
+                      <div className="grid grid-cols-2 gap-4 mt-4">
+                        <FormField
+                          control={form.control}
+                          name="city"
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel>Ville</FormLabel>
+                              <FormControl>
+                                <Input placeholder="Paris" {...field} />
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                        <FormField
+                          control={form.control}
+                          name="postalCode"
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel>Code postal</FormLabel>
+                              <FormControl>
+                                <Input placeholder="75001" {...field} />
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
                       </div>
-                    ))}
-                    
-                    <div className="pt-4">
-                      <div className="flex justify-between">
-                        <span>Sous-total</span>
-                        <span>{subtotal.toFixed(2)} €</span>
+
+                      <FormField
+                        control={form.control}
+                        name="phone"
+                        render={({ field }) => (
+                          <FormItem className="mt-4">
+                            <FormLabel>Téléphone (optionnel)</FormLabel>
+                            <FormControl>
+                              <Input type="tel" placeholder="0612345678" {...field} />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                    </div>
+
+                    {/* <div className="pt-4 border-t mt-6">
+                      <h3 className="font-medium mb-4">Informations de paiement</h3>
+                      <FormField
+                        control={form.control}
+                        name="cardNumber"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Numéro de carte</FormLabel>
+                            <FormControl>
+                              <div className="relative">
+                                <Input placeholder="1234 5678 9012 3456" {...field} />
+                                <CreditCard className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400" size={16} />
+                              </div>
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                      <div className="grid grid-cols-2 gap-4 mt-4">
+                        <FormField
+                          control={form.control}
+                          name="expiryDate"
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel>Date d'expiration</FormLabel>
+                              <FormControl>
+                                <Input placeholder="MM/AA" {...field} />
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                        <FormField
+                          control={form.control}
+                          name="cvv"
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel>CVV</FormLabel>
+                              <FormControl>
+                                <Input placeholder="123" {...field} />
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
                       </div>
-                      <div className="flex justify-between mt-2">
-                        <span>TVA (20%)</span>
-                        <span>{tax.toFixed(2)} €</span>
-                      </div>
-                      <div className="flex justify-between pt-4 mt-2 border-t font-bold">
-                        <span>Total</span>
-                        <span>{total.toFixed(2)} €</span>
+                    </div> */}
+                    <div className="pt-4 border-t mt-6">
+                      <h3 className="font-medium mb-4">Informations de paiement</h3>
+                      <div className="border p-3 rounded">
+                        <CardElement options={{ style: { base: { fontSize: '16px' } } }} />
                       </div>
                     </div>
+                    <Button
+                      type="submit"
+                      className="w-full bg-lysco-turquoise hover:bg-lysco-turquoise/90 mt-6"
+                      disabled={isProcessing}
+                    >
+                      {isProcessing ? "Traitement en cours..." : `Payer ${total.toFixed(2)} €`}
+                    </Button>
+                  </form>
+                </Form>
+              </CardContent>
+            </Card>
+          </div>
+
+          {/* Résumé de la commande */}
+          <div>
+            <Card>
+              <CardHeader>
+                <CardTitle>Votre commande</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-4">
+                  {items.map(item => (
+                    <div key={item.id} className="flex justify-between pb-2 border-b">
+                      <div>
+                        <p className="font-medium">{item.title}</p>
+                        <p className="text-sm text-gray-600">Quantité: {item.quantity}</p>
+                      </div>
+                      <p className="font-medium">{(item.price * item.quantity).toFixed(2)} €</p>
+                    </div>
+                  ))}
+                  <div className="pt-4">
+                    <div className="flex justify-between">
+                      <span>Sous-total</span>
+                      <span>{subtotal.toFixed(2)} €</span>
+                    </div>
+                    <div className="flex justify-between mt-2">
+                      <span>TVA (20%)</span>
+                      <span>{tax.toFixed(2)} €</span>
+                    </div>
+                    <div className="flex justify-between pt-4 mt-2 border-t font-bold">
+                      <span>Total</span>
+                      <span>{total.toFixed(2)} €</span>
+                    </div>
                   </div>
-                </CardContent>
-              </Card>
-            </div>
+                </div>
+              </CardContent>
+            </Card>
           </div>
         </div>
       </div>
-      <Footer />
     </div>
-  );
+    <Footer />
+  </div>
+);
+
 };
 
 export default Checkout;
