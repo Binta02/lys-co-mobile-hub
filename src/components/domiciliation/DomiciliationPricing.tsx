@@ -45,14 +45,17 @@ const DomiciliationPricing = () => {
             {engagementSociete && (
               <p className="font-medium text-green-600">Soit 18€ vos 3 premiers mois !</p>
             )}
-            <Checkbox
-              checked={engagementSociete}
-              onCheckedChange={checked => setEngagementSociete(checked === true)}
-            >
-              <label htmlFor="engagementSociete" className="text-sm">
+            <div className="flex items-center gap-2">
+              <Checkbox
+                id="engagementSociete"
+                checked={engagementSociete}
+                onCheckedChange={checked => setEngagementSociete(checked === true)}
+              />
+              <label htmlFor="engagementSociete" className="text-sm cursor-pointer">
                 Je m'engage pour plus de 6 mois
               </label>
-            </Checkbox>
+            </div>
+
             <Button
               className="w-full flex items-center justify-center bg-lysco-turquoise hover:bg-opacity-90"
               onClick={() =>
@@ -88,14 +91,17 @@ const DomiciliationPricing = () => {
             {engagementAuto && (
               <p className="font-medium text-green-600">Soit 12€ vos 3 premiers mois !</p>
             )}
-            <Checkbox
-              checked={engagementAuto}
-              onCheckedChange={checked => setEngagementAuto(checked === true)}
-            >
-              <label htmlFor="engagementAuto" className="text-sm">
+            <div className="flex items-center gap-2">
+              <Checkbox
+                id="engagementAuto"
+                checked={engagementAuto}
+                onCheckedChange={checked => setEngagementAuto(checked === true)}
+              />
+              <label htmlFor="engagementAuto" className="text-sm cursor-pointer">
                 Je m'engage pour plus de 6 mois
               </label>
-            </Checkbox>
+            </div>
+
             <Button
               className="w-full flex items-center justify-center bg-lysco-turquoise hover:bg-opacity-90"
               onClick={() =>
