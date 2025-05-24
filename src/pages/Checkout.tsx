@@ -62,52 +62,11 @@ const Checkout = () => {
     }
   });
 
-  //   const handleSubmit = async (data: FormValues) => {
-  //   setIsProcessing(true)
-
-  // const response = await fetch('https://mon-backend-node.vercel.app/api/create-payment-intent', {
-  //   method: 'POST',
-  //   headers: { 'Content-Type': 'application/json' },
-  //   body: JSON.stringify({ amount: Math.round(total * 100), email: data.email }),
-  // })
-
-  // const { clientSecret } = await response.json()
-  // if (!response.ok) {
-  //   const errorText = await response.text();
-  //   console.error('Erreur lors de la création du PaymentIntent :', errorText);
-  //   setIsProcessing(false);
-  //   return;
-  // }
-  // if (!clientSecret) {
-  //   console.error('clientSecret manquant dans la réponse du backend');
-  //   setIsProcessing(false);
-  //   return;
-  // }
-
-
-  //   // 2) Confirmer le paiement avec Stripe.js
-  //   if (!stripe || !elements) return
-  //   const card = elements.getElement(CardElement)
-  //   if (!card) return
-
-  //   const { error, paymentIntent } = await stripe.confirmCardPayment(clientSecret, {
-  //     payment_method: { card },
-  //     receipt_email: data.email,
-  //   })
-
-  //   if (error) {
-  //     console.error(error)
-  //     // afficher message d’erreur à l’utilisateur
-  //     setIsProcessing(false)
-  //   } else if (paymentIntent?.status === 'succeeded') {
-  //     clearCart()
-  //     navigate('/confirmation', {
-  //       state: {
-  //         order: { items, subtotal, tax, total, clientInfo: data, orderId: paymentIntent.id },
-  //       },
-  //     })
-  //   }
-  // };
+const lineItems = [
+  { price: 'price_id_abonnement', quantity: 1 },  // abonnement
+  { price: 'price_id_unique', quantity: 1 },      // achat unique
+  
+];
 
 const subscriptionProductIds = [
   'domiciliation-mensuel-societe',
@@ -121,133 +80,69 @@ const subscriptionProductIds = [
 const getPriceIdFromProductId = (productId: string): string | undefined => {
   const map: Record<string, string> = {
     'domiciliation-mensuel-societe': 'price_1RSKGYQ5vrwB5bWyC5m7YKIm',
-    'domiciliation-mensuel-auto-entrepreneur': 'price_1RRqxxxxxxAuto',
-    'domiciliation-mensuel-association': 'price_1RRqxxxxxxAsso',
-    'service-reexpedition': 'price_1RRqxxxxxxReexp',
-    'service-scan': 'price_1RRqxxxxxxScan',
-    'service-colis': 'price_1RRqxxxxxxColis',
-  };
+    'domiciliation-mensuel-auto-entrepreneur': 'price_1RSKGYQ5vrwB5bWyC5m7YKIm',
+    'domiciliation-mensuel-association': 'price_1RSKGYQ5vrwB5bWyC5m7YKIm',
+    'service-reexpedition': 'price_1RSKGYQ5vrwB5bWyC5m7YKIm',
+    'service-scan': 'price_1RSKGYQ5vrwB5bWyC5m7YKIm',
+    'service-colis': 'price_1RSKGYQ5vrwB5bWyC5m7YKIm',
 
+    // Nouveaux produits Stripe
+    'coworking-space': 'price_1RSLlyQ5vrwB5bWyTf2ay5tf',
+    'location-bureau': 'price_1RSMLjQ5vrwB5bWyUerVSlHF',
+  };
   return map[productId];
+};
+
+const sendToStripeCheckout = async (email: string, lineItems: { price: string, quantity: number }[], mode: 'payment' | 'subscription') => {
+  const response = await fetch('https://mon-backend-node.vercel.app/api/create-checkout-session', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ email, lineItems, mode }),
+  });
+
+  const data = await response.json();
+  if (!response.ok || !data.url) {
+    throw new Error('Erreur lors de la création de la session Stripe');
+  }
+
+  window.location.href = data.url;
 };
 
 const handleSubmit = async (data: FormValues) => {
   setIsProcessing(true);
-  if (!stripe || !elements) return;
-  const card = elements.getElement(CardElement);
-  if (!card) return;
 
-  const { error: paymentError, paymentMethod } = await stripe.createPaymentMethod({
-    type: 'card',
-    card,
-    billing_details: { email: data.email },
-  });
-
-  if (paymentError || !paymentMethod) {
-    console.error(paymentError);
-    setIsProcessing(false);
-    return;
-  }
-
-  const subscriptionItems = items.filter(item => subscriptionProductIds.includes(item.id));
-  const oneTimeItems = items.filter(item => !subscriptionProductIds.includes(item.id));
-
-  // Gestion des abonnements multiples
-  if (subscriptionItems.length > 0) {
-    const priceItems = subscriptionItems.map(item => {
-      const priceId = getPriceIdFromProductId(item.id);
-      if (!priceId) {
-        console.error("Price ID introuvable pour l'abonnement :", item.id);
-        return null;
-      }
-      return { price: priceId, quantity: item.quantity };
-    }).filter(Boolean);
-
-    if (priceItems.length === 0) {
-      console.error("Aucun abonnement valide trouvé dans le panier");
-      setIsProcessing(false);
-      return;
-    }
-
-    const response = await fetch('https://mon-backend-node.vercel.app/api/create-subscription', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        email: data.email,
-        paymentMethodId: paymentMethod.id,
-        items: priceItems,
-      }),
-    });
-
-    const { clientSecret, subscriptionId } = await response.json();
-    if (!response.ok || !clientSecret) {
-      console.error("Erreur lors de la création de l'abonnement");
-      setIsProcessing(false);
-      return;
-    }
-
-    const { error: confirmError, paymentIntent } = await stripe.confirmCardPayment(clientSecret);
-    if (confirmError) {
-      console.error(confirmError);
-      setIsProcessing(false);
-      return;
-    }
-
-    if (paymentIntent?.status === 'succeeded' && oneTimeItems.length === 0) {
-      clearCart();
-      navigate('/confirmation', {
-        state: {
-          order: { items, subtotal, tax, total, clientInfo: data, subscriptionId },
-        },
+  try {
+    const subscriptionItems = items
+      .filter(item => subscriptionProductIds.includes(item.id))
+      .map(item => {
+        const priceId = getPriceIdFromProductId(item.id);
+        if (!priceId) throw new Error(`Price ID manquant pour ${item.id}`);
+        return { price: priceId, quantity: item.quantity };
       });
-      return;
-    }
-  }
 
-  // Paiement simple (ou si des produits one-time restent à payer)
-  if (oneTimeItems.length > 0) {
-    const oneTimeTotal = oneTimeItems.reduce((acc, item) => acc + item.price * item.quantity, 0);
-
-    const response = await fetch('https://mon-backend-node.vercel.app/api/create-payment-intent', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ amount: Math.round(oneTimeTotal * 100), email: data.email }),
-    });
-
-    const { clientSecret } = await response.json();
-    if (!response.ok || !clientSecret) {
-      console.error("Erreur lors de la création du paiement");
-      setIsProcessing(false);
-      return;
-    }
-
-    const { error, paymentIntent } = await stripe.confirmCardPayment(clientSecret, {
-      payment_method: paymentMethod.id,
-      receipt_email: data.email,
-    });
-
-    if (error) {
-      console.error(error);
-      setIsProcessing(false);
-      return;
-    }
-
-    if (paymentIntent?.status === 'succeeded') {
-      clearCart();
-      navigate('/confirmation', {
-        state: {
-          order: { items, subtotal, tax, total, clientInfo: data, orderId: paymentIntent.id },
-        },
+    const oneTimeItems = items
+      .filter(item => !subscriptionProductIds.includes(item.id))
+      .map(item => {
+        const priceId = getPriceIdFromProductId(item.id);
+        if (!priceId) throw new Error(`Price ID manquant pour ${item.id}`);
+        return { price: priceId, quantity: item.quantity };
       });
+
+    // On ouvre d'abord une session pour les paiements ponctuels
+    if (oneTimeItems.length > 0) {
+      await sendToStripeCheckout(data.email, oneTimeItems, 'payment');
     }
-  } else {
-    // Si tout était des abonnements déjà traités
+
+    // Puis une session pour les abonnements
+    if (subscriptionItems.length > 0) {
+      await sendToStripeCheckout(data.email, subscriptionItems, 'subscription');
+    }
+
     clearCart();
-    navigate('/confirmation', {
-      state: {
-        order: { items, subtotal, tax, total, clientInfo: data },
-      },
-    });
+  } catch (err) {
+    console.error(err);
+  } finally {
+    setIsProcessing(false);
   }
 };
 
