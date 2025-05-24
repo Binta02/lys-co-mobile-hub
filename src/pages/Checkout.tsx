@@ -111,28 +111,28 @@ const getPriceIdFromProductId = (productId: string): string | undefined => {
   return map[productId];
 };
 const handleSubmit = async (data: FormValues) => {
-  const oneTimeItems = items
-      .filter(item => !subscriptionProductIds.includes(item.id))
-      .map(item => {
-        const priceId = getPriceIdFromProductId(item.id);
-        if (!priceId) throw new Error(`Price ID manquant pour ${item.id}`);
-        return { price: priceId, quantity: item.quantity };
-      });
-      const subscriptionItems = items
-      .filter(item => subscriptionProductIds.includes(item.id))
-      .map(item => {
-        const priceId = getPriceIdFromProductId(item.id);
-        if (!priceId) throw new Error(`Price ID manquant pour ${item.id}`);
-        return { price: priceId, quantity: item.quantity };
-      });
   setIsProcessing(true);
   if (!stripe || !elements) return;
 
   const card = elements.getElement(CardElement);
   if (!card) return;
 
+  const oneTimeItems = items
+    .filter(item => !subscriptionProductIds.includes(item.id))
+    .map(item => ({
+      amount: Math.round(item.price * 100), // montant en centimes
+      quantity: item.quantity,
+    }));
+
+  const subscriptionItems = items
+    .filter(item => subscriptionProductIds.includes(item.id))
+    .map(item => {
+      const priceId = getPriceIdFromProductId(item.id);
+      if (!priceId) throw new Error(`Price ID manquant pour ${item.id}`);
+      return { price: priceId, quantity: item.quantity };
+    });
+
   try {
-    // Créer un PaymentMethod
     const { error: paymentError, paymentMethod } = await stripe.createPaymentMethod({
       type: 'card',
       card,
@@ -148,42 +148,37 @@ const handleSubmit = async (data: FormValues) => {
       return;
     }
 
+    const response = await fetch('https://mon-backend-node.vercel.app/api/create-payment-intent', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        email: data.email,
+        paymentMethodId: paymentMethod.id,
+        oneTimeItems,
+        subscriptionItems,
+      }),
+    });
+
+    const {
+      oneTimePaymentIntentClientSecret,
+      subscriptionClientSecret,
+    } = await response.json();
+
+    if (!response.ok) throw new Error('Erreur du backend');
+
     // Paiement unique
-    if (oneTimeItems.length > 0) {
-      const response = await fetch('https://mon-backend-node.vercel.app/api/create-payment-intent', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ items: oneTimeItems, email: data.email }),
-      });
-
-      const { clientSecret } = await response.json();
-      if (!response.ok || !clientSecret) throw new Error('Erreur création paiement');
-
-      const { error: confirmError } = await stripe.confirmCardPayment(clientSecret, {
+    if (oneTimePaymentIntentClientSecret) {
+      const { error: confirmError } = await stripe.confirmCardPayment(oneTimePaymentIntentClientSecret, {
         payment_method: paymentMethod.id,
         receipt_email: data.email,
       });
-
       if (confirmError) throw new Error('Échec du paiement unique');
     }
 
     // Abonnement
-    if (subscriptionItems.length > 0) {
-      const response = await fetch('https://mon-backend-node.vercel.app/api/create-subscription', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          email: data.email,
-          paymentMethodId: paymentMethod.id,
-          items: subscriptionItems,
-        }),
-      });
-
-      const { clientSecret, subscriptionId } = await response.json();
-      if (!response.ok || !clientSecret) throw new Error('Erreur création abonnement');
-
-      const { error: confirmError } = await stripe.confirmCardPayment(clientSecret);
-      if (confirmError) throw new Error('Échec de paiement de l\'abonnement');
+    if (subscriptionClientSecret) {
+      const { error: confirmError } = await stripe.confirmCardPayment(subscriptionClientSecret);
+      if (confirmError) throw new Error("Échec de paiement de l'abonnement");
     }
 
     clearCart();
@@ -199,6 +194,7 @@ const handleSubmit = async (data: FormValues) => {
     setIsProcessing(false);
   }
 };
+
 
 
 
