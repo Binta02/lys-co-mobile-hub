@@ -149,15 +149,27 @@ const handleSubmit = async (data: FormValues) => {
     // Paiement unique
     if (oneTimeItems.length > 0) {
       // Utilisez le montant total du panier pour le paiement unique
-      // const oneTimeTotal = subtotal;
-      const oneTimeTotal = oneTimeItems.reduce((acc, item) => {
-        const price = typeof item.price === 'string' ? parseFloat(item.price.replace(',', '.')) : item.price;
-        return acc + price * item.quantity;
-}, 0);      const response = await fetch('https://mon-backend-node.vercel.app/api/create-payment-intent', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ amount: Math.round(oneTimeTotal * 100), email: data.email }),
-      });
+      // Préparer les articles pour le paiement unique
+      const oneTimeItems = items
+        .filter(item => !subscriptionProductIds.includes(item.id))
+        .map(item => {
+          const priceId = getPriceIdFromProductId(item.id);
+          if (!priceId) throw new Error(`Price ID manquant pour ${item.id}`);
+          return { price: priceId, quantity: item.quantity };
+        });
+
+// Envoyer les articles au backend
+    const response = await fetch('https://mon-backend-node.vercel.app/api/create-payment-intent', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ items: oneTimeItems, email: data.email }),
+    });
+
+      // const response = await fetch('https://mon-backend-node.vercel.app/api/create-payment-intent', {
+      //   method: 'POST',
+      //   headers: { 'Content-Type': 'application/json' },
+      //   body: JSON.stringify({ amount: Math.round(oneTimeTotal * 100), email: data.email }),
+      // });
 
       const { clientSecret } = await response.json();
       if (!response.ok || !clientSecret) throw new Error('Erreur création paiement');
