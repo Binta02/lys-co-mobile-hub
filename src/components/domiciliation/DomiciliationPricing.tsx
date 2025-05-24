@@ -49,7 +49,9 @@ const DomiciliationPricing = () => {
               checked={engagementSociete}
               onCheckedChange={checked => setEngagementSociete(checked === true)}
             >
-              Je m'engage pour plus de 6 mois
+              <label htmlFor="engagementSociete" className="text-sm">
+                Je m'engage pour plus de 6 mois
+              </label>
             </Checkbox>
             <Button
               className="w-full flex items-center justify-center bg-lysco-turquoise hover:bg-opacity-90"
@@ -90,7 +92,9 @@ const DomiciliationPricing = () => {
               checked={engagementAuto}
               onCheckedChange={checked => setEngagementAuto(checked === true)}
             >
-              Je m'engage pour plus de 6 mois
+              <label htmlFor="engagementAuto" className="text-sm">
+                Je m'engage pour plus de 6 mois
+              </label>
             </Checkbox>
             <Button
               className="w-full flex items-center justify-center bg-lysco-turquoise hover:bg-opacity-90"
