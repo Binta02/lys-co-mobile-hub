@@ -36,15 +36,15 @@ import PackDomicilie from './pages/domiciliation/PackDomicilie';
 import { Elements } from '@stripe/react-stripe-js'
 import { loadStripe } from '@stripe/stripe-js';
 
-// const stripePromise = loadStripe('your-publishable-key-here');
 const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY);
-
+console.log("Stripe public key loaded:", import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY);
 
 function App() {
   const [isAuth, setIsAuth] = useState(false);
 
   useEffect(() => {
     const token = localStorage.getItem('sb-utwuypfqugnhtucjfdhy-auth-token');
+    console.log("Auth token found:", token);
     setIsAuth(!!token);
   }, []);
 
