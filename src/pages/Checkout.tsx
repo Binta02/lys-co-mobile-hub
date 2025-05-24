@@ -79,16 +79,34 @@ const subscriptionProductIds = [
 
 const getPriceIdFromProductId = (productId: string): string | undefined => {
   const map: Record<string, string> = {
-    'domiciliation-mensuel-societe': 'price_1RSKGYQ5vrwB5bWyC5m7YKIm',
-    'domiciliation-mensuel-auto-entrepreneur': 'price_1RSKGYQ5vrwB5bWyC5m7YKIm',
-    'domiciliation-mensuel-association': 'price_1RSKGYQ5vrwB5bWyC5m7YKIm',
-    'service-reexpedition': 'price_1RSKGYQ5vrwB5bWyC5m7YKIm',
-    'service-scan': 'price_1RSKGYQ5vrwB5bWyC5m7YKIm',
-    'service-colis': 'price_1RSKGYQ5vrwB5bWyC5m7YKIm',
+    'domiciliation-mensuel-societe-normal': 'price_1RSKGYQ5vrwB5bWyC5m7YKIm', //fait
+    'domiciliation-mensuel-societe-reduit': 'price_1RSMFmQ5vrwB5bWyBk9nXFcb', //fait
+    'domiciliation-mensuel-auto-entrepreneur-normal': 'price_1RSMGfQ5vrwB5bWyWe4cF5pp',//fait
+    'domiciliation-mensuel-auto-entreprise-reduit': 'price_1RSMGIQ5vrwB5bWy4e4ogBUY', //fait
+    'domiciliation-mensuel-association': 'price_1RSLsMQ5vrwB5bWydudKGQ7b', //fait
+    'service-reexpedition': 'price_1RSLlyQ5vrwB5bWyTf2ay5tf', //fait
+    'service-scan': 'price_1RSLmKQ5vrwB5bWyRouPTXPR', //fait
+    'service-colis': 'price_1RSLmcQ5vrwB5bWyeWckoEPg', //fait
+    'coworking-space': 'price_1RSMKlQ5vrwB5bWyTH1NrRlA', //fait
+    'location-bureau': 'price_1RSMLjQ5vrwB5bWyUerVSlHF', //fait
+    'formation-room': 'price_1RSMLIQ5vrwB5bWysp4JTZZQ', //fait
+    'domiciliation-1an-entreprise': 'price_1RSLi2Q5vrwB5bWyeizWaoWy', //fait
+    'domiciliation-3mois-entreprise': 'price_1RSLinQ5vrwB5bWyYpgyzSyL', //fait
+    'domiciliation-3mois-micro': 'price_1RSLjPQ5vrwB5bWyoNy1OKMb', //fait
+    'domiciliation-6mois-entreprise': 'price_1RSLkAQ5vrwB5bWyk4rjnkyb',//fait
+    'domiciliation-6mois-micro': 'price_1RSLkfQ5vrwB5bWymj0lkM4Z',//fait
+    'pack-domine': 'price_1RSLlCQ5vrwB5bWyqOByLGS5', //fait
+    'vtc-creation': 'price_1RSLnfQ5vrwB5bWy7D4g1s1M', //fait
+    'bank-account': 'price_1RSLo4Q5vrwB5bWyqaPfyWN0', //fait
+    'company-creation': 'price_1RSLoRQ5vrwB5bWyLbVvOhhe', //fait
+    'micro-company': 'price_1RSLozQ5vrwB5bWyhXZaREUE', //fait
+    'company-transfer': 'price_1RSLpLQ5vrwB5bWyFdN0Wljp', //fait
+    'share-transfer': 'price_1RSLpjQ5vrwB5bWynvYt7DzQ', //fait
+    'commercial-ad': 'price_1RSLqCQ5vrwB5bWyabANz81P', //fait
+    'quote-creation': 'price_1RSLqdQ5vrwB5bWyuMOQBt2h', //fait
+    'annual-accounts': 'price_1RSLqzQ5vrwB5bWyp2PPrbP2', //fait
+    'company-modification': 'price_1RSLrMQ5vrwB5bWyqYeVbL0c', //fait
 
-    // Nouveaux produits Stripe
-    'coworking-space': 'price_1RSLlyQ5vrwB5bWyTf2ay5tf',
-    'location-bureau': 'price_1RSMLjQ5vrwB5bWyUerVSlHF',
   };
   return map[productId];
 };
