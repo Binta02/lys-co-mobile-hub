@@ -110,24 +110,12 @@ const getPriceIdFromProductId = (productId: string): string | undefined => {
   };
   return map[productId];
 };
-
-const sendToStripeCheckout = async (email: string, lineItems: { price: string, quantity: number }[], mode: 'payment' | 'subscription') => {
-  const response = await fetch('https://mon-backend-node.vercel.app/api/create-checkout-session', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ email, lineItems, mode }),
-  });
-
-  const data = await response.json();
-  if (!response.ok || !data.url) {
-    throw new Error('Erreur lors de la création de la session Stripe');
-  }
-
-  window.location.href = data.url;
-};
-
 const handleSubmit = async (data: FormValues) => {
   setIsProcessing(true);
+  if (!stripe || !elements) return;
+
+  const card = elements.getElement(CardElement);
+  if (!card) return;
 
   try {
     const subscriptionItems = items
@@ -146,23 +134,75 @@ const handleSubmit = async (data: FormValues) => {
         return { price: priceId, quantity: item.quantity };
       });
 
-    // On ouvre d'abord une session pour les paiements ponctuels
-    if (oneTimeItems.length > 0) {
-      await sendToStripeCheckout(data.email, oneTimeItems, 'payment');
+    const { error: paymentError, paymentMethod } = await stripe.createPaymentMethod({
+      type: 'card',
+      card,
+      billing_details: { email: data.email },
+    });
+
+    if (paymentError || !paymentMethod) {
+      console.error(paymentError);
+      setIsProcessing(false);
+      return;
     }
 
-    // Puis une session pour les abonnements
+    // Paiement unique
+    if (oneTimeItems.length > 0) {
+      // Utilisez le montant total du panier pour le paiement unique
+      // const oneTimeTotal = subtotal;
+      const oneTimeTotal = oneTimeItems.reduce((acc, item) => {
+        const price = typeof item.price === 'string' ? parseFloat(item.price.replace(',', '.')) : item.price;
+        return acc + price * item.quantity;
+}, 0);      const response = await fetch('https://mon-backend-node.vercel.app/api/create-payment-intent', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ amount: Math.round(oneTimeTotal * 100), email: data.email }),
+      });
+
+      const { clientSecret } = await response.json();
+      if (!response.ok || !clientSecret) throw new Error('Erreur création paiement');
+
+      const { error: confirmError1 } = await stripe.confirmCardPayment(clientSecret, {
+        payment_method: paymentMethod.id,
+        receipt_email: data.email,
+      });
+
+      if (confirmError1) throw new Error('Échec du paiement unique');
+    }
+
+    // Abonnement
     if (subscriptionItems.length > 0) {
-      await sendToStripeCheckout(data.email, subscriptionItems, 'subscription');
+      const response = await fetch('https://mon-backend-node.vercel.app/api/create-subscription', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          email: data.email,
+          paymentMethodId: paymentMethod.id,
+          items: subscriptionItems,
+        }),
+      });
+
+      const { clientSecret, subscriptionId } = await response.json();
+      if (!response.ok || !clientSecret) throw new Error('Erreur création abonnement');
+
+      const { error: confirmError2 } = await stripe.confirmCardPayment(clientSecret);
+      if (confirmError2) throw new Error('Échec de paiement de l\'abonnement');
     }
 
     clearCart();
+    navigate('/confirmation', {
+      state: {
+        order: { items, subtotal, tax, total, clientInfo: data },
+      },
+    });
+
   } catch (err) {
     console.error(err);
   } finally {
     setIsProcessing(false);
   }
 };
+
 
 
   return (
