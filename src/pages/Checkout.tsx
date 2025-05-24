@@ -85,14 +85,25 @@ const Checkout = () => {
     const handleSubmit = async (data: FormValues) => {
     setIsProcessing(true)
 
-const response = await fetch('https://mon-backend-node.vercel.app/api/create-payment-intent', {
-  method: 'POST',
-  headers: { 'Content-Type': 'application/json' },
-  body: JSON.stringify({ amount: Math.round(total * 100), email: data.email }),
-})
+  const response = await fetch('https://mon-backend-node.vercel.app/api/create-payment-intent', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ amount: Math.round(total * 100), email: data.email }),
+  })
 
+  const { clientSecret } = await response.json()
+  if (!response.ok) {
+    const errorText = await response.text();
+    console.error('Erreur lors de la création du PaymentIntent :', errorText);
+    setIsProcessing(false);
+    return;
+  }
+  if (!clientSecret) {
+    console.error('clientSecret manquant dans la réponse du backend');
+    setIsProcessing(false);
+    return;
+  }
 
-const { clientSecret } = await response.json()
 
     // 2) Confirmer le paiement avec Stripe.js
     if (!stripe || !elements) return
