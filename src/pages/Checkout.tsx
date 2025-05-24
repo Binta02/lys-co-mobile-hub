@@ -165,12 +165,6 @@ const handleSubmit = async (data: FormValues) => {
       body: JSON.stringify({ items: oneTimeItems, email: data.email }),
     });
 
-      // const response = await fetch('https://mon-backend-node.vercel.app/api/create-payment-intent', {
-      //   method: 'POST',
-      //   headers: { 'Content-Type': 'application/json' },
-      //   body: JSON.stringify({ amount: Math.round(oneTimeTotal * 100), email: data.email }),
-      // });
-
       const { clientSecret } = await response.json();
       if (!response.ok || !clientSecret) throw new Error('Erreur création paiement');
 
@@ -181,6 +175,11 @@ const handleSubmit = async (data: FormValues) => {
 
       if (confirmError1) throw new Error('Échec du paiement unique');
     }
+    console.log("Données envoyées au backend:", {
+      items: oneTimeItems,
+      email: data.email
+    });
+
 
     // Abonnement
     if (subscriptionItems.length > 0) {
