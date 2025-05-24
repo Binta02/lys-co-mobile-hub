@@ -42,7 +42,10 @@ const DomiciliationPricing = () => {
             <p className="text-sm text-gray-600">
               Pour un engagement de plus de 6 mois, bénéficiez de 50% de réduction sur votre premier trimestre.
             </p>
-            <Checkbox 
+            {engagementSociete && (
+              <p className="font-medium text-green-600">Soit 18€ vos 3 premiers mois !</p>
+            )}
+            <Checkbox
               checked={engagementSociete}
               onCheckedChange={checked => setEngagementSociete(checked === true)}
             >
@@ -80,6 +83,9 @@ const DomiciliationPricing = () => {
             <p className="text-sm text-gray-600">
               Pour un engagement de plus de 6 mois, bénéficiez de 50% de réduction sur votre premier trimestre.
             </p>
+            {engagementAuto && (
+              <p className="font-medium text-green-600">Soit 12€ vos 3 premiers mois !</p>
+            )}
             <Checkbox
               checked={engagementAuto}
               onCheckedChange={checked => setEngagementAuto(checked === true)}
