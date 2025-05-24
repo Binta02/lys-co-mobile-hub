@@ -120,7 +120,7 @@ const subscriptionProductIds = [
 
 const getPriceIdFromProductId = (productId: string): string | undefined => {
   const map: Record<string, string> = {
-    'domiciliation-mensuel-societe': 'price_1RRqxxxxxxSociete',
+    'domiciliation-mensuel-societe': 'price_1RSKGYQ5vrwB5bWyC5m7YKIm',
     'domiciliation-mensuel-auto-entrepreneur': 'price_1RRqxxxxxxAuto',
     'domiciliation-mensuel-association': 'price_1RRqxxxxxxAsso',
     'service-reexpedition': 'price_1RRqxxxxxxReexp',
