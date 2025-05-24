@@ -38,6 +38,8 @@ import { loadStripe } from '@stripe/stripe-js';
 
 const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY);
 console.log("Stripe public key loaded:", import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY);
+console.log("ENV variables:", import.meta.env);
+
 
 function App() {
   const [isAuth, setIsAuth] = useState(false);
