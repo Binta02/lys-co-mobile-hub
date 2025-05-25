@@ -206,12 +206,12 @@ console.log("📋 Services utilisateur :", userServices);
     }
   };
 
-  const formatDate = (dateString: string): string => {
+  const formatDate = (dateInput: string | number): string => {
     try {
-      const date = new Date(dateString);
+      const date = new Date(dateInput);
       return format(date, "dd/MM/yyyy", { locale: fr });
     } catch (e) {
-      return dateString;
+      return String(dateInput);
     }
   };
 
@@ -454,41 +454,40 @@ console.log("📋 Services utilisateur :", userServices);
             </Card>
           )} */}
           {/* Abonnements Stripe */}
-          {stripeSubscriptions.length > 0 && (
-            <Card>
-              <CardHeader>
-                <CardTitle className="text-2xl font-semibold flex items-center gap-2">
-                  <List className="w-5 h-5 text-lysco-turquoise" />
-                  Mes abonnements
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="grid md:grid-cols-2 gap-4">
-                  {stripeSubscriptions.map((sub) => (
-                    <div key={sub.id} className="border rounded-xl p-4 shadow-sm bg-white">
-                      <p className="text-sm text-gray-500 mb-1">
-                        ID : <span className="font-mono break-all">{sub.id}</span>
-                      </p>
-                      <p className="mb-1">Statut : {getStatusBadge(sub.status)}</p>
-                      <p className="mb-1">Début : {formatDate(String(sub.start_date * 1000))}</p>
-                      {sub.cancel_at && (
-                        <p className="mb-1">Fin prévue : {formatDate(String(sub.cancel_at * 1000))}</p>
-                      )}
-                      {sub.product_names?.length > 0 && (
-                        <p className="mb-1">
-                          📦 Produit(s) : <span className="font-medium">{sub.product_names.join(', ')}</span>
-                        </p>
-                      )}
-                    </div>
-                  ))}
-                </div>
-                <Button className="mt-4" onClick={handleOpenStripePortal}>
-                  Gérer mes abonnements
-                </Button>
-              </CardContent>
-            </Card>
-          )}
-
+         {stripeSubscriptions.length > 0 && (
+  <Card>
+    <CardHeader>
+      <CardTitle className="text-2xl font-semibold flex items-center gap-2">
+        <List className="w-5 h-5 text-lysco-turquoise" />
+        Mes abonnements
+      </CardTitle>
+    </CardHeader>
+    <CardContent>
+      <div className="grid md:grid-cols-2 gap-4">
+        {stripeSubscriptions.map((sub) => (
+          <div key={sub.id} className="border rounded-xl p-4 shadow-sm bg-white">
+            <p className="text-sm text-gray-500 mb-1">
+              ID : <span className="font-mono break-all">{sub.id}</span>
+            </p>
+            <p className="mb-1">Statut : {getStatusBadge(sub.status)}</p>
+            <p className="mb-1">Début : {formatDate(sub.start_date * 1000)}</p>
+            {sub.cancel_at && (
+              <p className="mb-1">Fin prévue : {formatDate(sub.cancel_at * 1000)}</p>
+            )}
+            {sub.items?.data?.length > 0 && sub.items.data.map((item) => (
+              <p key={item.id} className="mb-1">
+                📦 Produit : <span className="font-medium">{item.product_name || 'Nom inconnu'}</span>
+              </p>
+            ))}
+          </div>
+        ))}
+      </div>
+      <Button className="mt-4" onClick={handleOpenStripePortal}>
+        Gérer mes abonnements
+      </Button>
+    </CardContent>
+  </Card>
+)}
           {/* Factures Stripe */}
           {stripeInvoices.length > 0 && (
             <Card>
@@ -505,12 +504,12 @@ console.log("📋 Services utilisateur :", userServices);
                       <p className="mb-1">
                         💳 Montant payé : <strong>{(invoice.amount_paid / 100).toFixed(2)} €</strong>
                       </p>
-                      <p className="mb-1">🗓 Date : {formatDate(String(invoice.created * 1000))}</p>
-                      {invoice.product_names?.length > 0 && (
-                        <p className="mb-1">
-                          🏷 Produit(s) : <span className="font-medium">{invoice.product_names.join(', ')}</span>
+                      <p className="mb-1">🗓 Date : {formatDate(invoice.created * 1000)}</p>
+                      {invoice.lines?.data?.length > 0 && invoice.lines.data.map((line) => (
+                        <p key={line.id} className="mb-1">
+                          🏷 Produit : <span className="font-medium">{line.product_name || 'Nom inconnu'}</span>
                         </p>
-                      )}
+                      ))}
                       <a
                         href={invoice.invoice_pdf}
                         target="_blank"
@@ -525,6 +524,7 @@ console.log("📋 Services utilisateur :", userServices);
               </CardContent>
             </Card>
           )}
+
 
 
         </div>
