@@ -176,45 +176,92 @@ console.log("📋 Services utilisateur :", userServices);
   fetchStripeData();
 }, [profile]);
 
-  const handleOpenStripePortal = async () => {
-    if (!profile?.id) return;
+//   const handleOpenStripePortal = async () => {
+//     if (!profile?.id) return;
 
-    const { data: profileData, error: profileError } = await supabase
-      .from("profiles")
-      .select("stripe_customer_id")
-      .eq("id", profile.id)
-      .maybeSingle();
+//     const { data: profileData, error: profileError } = await supabase
+//       .from("profiles")
+//       .select("stripe_customer_id")
+//       .eq("id", profile.id)
+//       .maybeSingle();
 
-    if (profileError) {
-      console.error("Erreur lors de la récupération du profil :", profileError);
+//     if (profileError) {
+//       console.error("Erreur lors de la récupération du profil :", profileError);
+//       return;
+//     }
+
+//     if (!profileData?.stripe_customer_id) return;
+
+//     try {
+//       const res = await fetch("https://mon-backend-node.vercel.app/api/create-stripe-portal-session", {
+//         method: "POST",
+//         headers: { "Content-Type": "application/json" },
+//         body: JSON.stringify({ stripeCustomerId: profileData.stripe_customer_id }),
+//       });
+
+//       const { url } = await res.json();
+//       const data = await res.json();
+//       console.log("🎯 Réponse de l'API portail Stripe :", data);
+//       if (!data.url) {
+//   toast({
+//     title: "Erreur",
+//     description: "Impossible d'obtenir l'URL du portail Stripe.",
+//     variant: "destructive",
+//   });
+//   return;
+// }
+//       window.location.href = url;
+//     } catch (error) {
+//       console.error("Erreur lors de l'ouverture du portail client Stripe :", error);
+//     }
+//   };
+
+const handleOpenStripePortal = async () => {
+  if (!profile?.id) return;
+
+  const { data: profileData, error: profileError } = await supabase
+    .from("profiles")
+    .select("stripe_customer_id")
+    .eq("id", profile.id)
+    .maybeSingle();
+
+  if (profileError) {
+    console.error("Erreur lors de la récupération du profil :", profileError);
+    return;
+  }
+
+  if (!profileData?.stripe_customer_id) return;
+
+  try {
+    const res = await fetch("https://mon-backend-node.vercel.app/api/create-stripe-portal-session", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ stripeCustomerId: profileData.stripe_customer_id }),
+    });
+
+    const data = await res.json(); // ✅ lire UNE SEULE FOIS
+
+    console.log("🎯 Réponse de l'API portail Stripe :", data);
+
+    if (!data.url) {
+      toast({
+        title: "Erreur",
+        description: "Impossible d'obtenir l'URL du portail Stripe.",
+        variant: "destructive",
+      });
       return;
     }
 
-    if (!profileData?.stripe_customer_id) return;
-
-    try {
-      const res = await fetch("https://mon-backend-node.vercel.app/api/create-stripe-portal-session", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ stripeCustomerId: profileData.stripe_customer_id }),
-      });
-
-      const { url } = await res.json();
-      const data = await res.json();
-      console.log("🎯 Réponse de l'API portail Stripe :", data);
-      if (!data.url) {
-  toast({
-    title: "Erreur",
-    description: "Impossible d'obtenir l'URL du portail Stripe.",
-    variant: "destructive",
-  });
-  return;
-}
-      window.location.href = url;
-    } catch (error) {
-      console.error("Erreur lors de l'ouverture du portail client Stripe :", error);
-    }
-  };
+    window.location.href = data.url;
+  } catch (error) {
+    console.error("Erreur lors de l'ouverture du portail client Stripe :", error);
+    toast({
+      title: "Erreur",
+      description: "Une erreur est survenue avec le portail client.",
+      variant: "destructive",
+    });
+  }
+};
 
   const formatDate = (dateInput: string | number): string => {
     try {
