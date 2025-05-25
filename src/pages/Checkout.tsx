@@ -165,7 +165,9 @@ const handleSubmit = async (data: FormValues) => {
       const { error: confirmError } = await stripe.confirmCardPayment(oneTimePaymentIntentClientSecret, {
         payment_method: paymentMethod.id,
         receipt_email: data.email,
+        
       });
+      console.log("Paiement ponctuel envoyé :", oneTimeItems);
       if (confirmError) throw new Error('Échec du paiement unique');
     }
 
