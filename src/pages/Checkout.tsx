@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
@@ -13,6 +13,7 @@ import { z } from 'zod';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Textarea } from '@/components/ui/textarea';
+import { supabase } from "@/integrations/supabase/client";
 import {
   CardElement,
   useStripe,
@@ -106,6 +107,19 @@ const getPriceIdFromProductId = (productId: string): string | undefined => {
   };
   return map[productId];
 };
+const [userId, setUserId] = useState<string | null>(null);
+
+useEffect(() => {
+  const getSession = async () => {
+    const { data } = await supabase.auth.getSession();
+    const id = data?.session?.user.id;
+    setUserId(id || null);
+    console.log("👤 ID utilisateur récupéré depuis Supabase :", id);
+  };
+
+  getSession();
+}, []);
+
 const handleSubmit = async (data: FormValues) => {
   setIsProcessing(true);
   if (!stripe || !elements) return;
@@ -152,6 +166,7 @@ const handleSubmit = async (data: FormValues) => {
         paymentMethodId: paymentMethod.id,
         oneTimeItems,
         subscriptionItems,
+        userId, // Ajout de l'ID utilisateur
       }),
     });
 
