@@ -158,7 +158,7 @@ console.log("📋 Services utilisateur :", userServices);
 
     try {
       console.log("📡 Envoi de requête à l'API /api/get-stripe-data avec ID :", profileData.stripe_customer_id);
-      const res = await fetch("/api/get-stripe-data", {
+      const res = await fetch("https://mon-backend-node.vercel.app/api/get-stripe-data", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ stripeCustomerId: profileData.stripe_customer_id }),

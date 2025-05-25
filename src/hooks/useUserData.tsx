@@ -126,7 +126,7 @@ export function useUserData() {
         .from('user_domiciliations')
         .select('*')
         .eq('user_id', session.user.id)
-        .single();
+        .maybeSingle();
 
       if (domiciliationError && domiciliationError.code !== 'PGRST116') {
         // Si c'est une erreur autre que "No rows found"
