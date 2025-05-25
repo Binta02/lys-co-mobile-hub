@@ -62,12 +62,6 @@ const Checkout = () => {
     }
   });
 
-const lineItems = [
-  { price: 'price_id_abonnement', quantity: 1 },  // abonnement
-  { price: 'price_id_unique', quantity: 1 },      // achat unique
-  
-];
-
 const subscriptionProductIds = [
   'domiciliation-mensuel-societe',
   'domiciliation-mensuel-auto-entrepreneur',
@@ -125,7 +119,7 @@ const handleSubmit = async (data: FormValues) => {
     }));
 
   const subscriptionItems = items
-    .filter(item => subscriptionProductIds.includes(item.id))
+    .filter(item => subscriptionProductIds.some(subId => item.id.startsWith(subId)))
     .map(item => {
       const priceId = getPriceIdFromProductId(item.id);
       if (!priceId) throw new Error(`Price ID manquant pour ${item.id}`);
