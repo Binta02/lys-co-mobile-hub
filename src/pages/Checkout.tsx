@@ -63,8 +63,10 @@ const Checkout = () => {
   });
 
 const subscriptionProductIds = [
-  'domiciliation-mensuel-societe',
-  'domiciliation-mensuel-auto-entrepreneur',
+  'domiciliation-mensuel-societe-normal',
+  'domiciliation-mensuel-societe-reduit',
+  'domiciliation-mensuel-auto-entrepreneur-normal',
+  'domiciliation-mensuel-auto-entreprise-reduit',
   'domiciliation-mensuel-association',
   'service-reexpedition',
   'service-scan',
