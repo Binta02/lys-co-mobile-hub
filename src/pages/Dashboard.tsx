@@ -1,8 +1,13 @@
+// Dashboard.tsx
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import {
   Table,
@@ -26,6 +31,8 @@ const Dashboard: React.FC = () => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
   const [isEditingProfile, setIsEditingProfile] = useState(false);
+  const [stripeSubscriptions, setStripeSubscriptions] = useState<any[]>([]);
+  const [stripeInvoices, setStripeInvoices] = useState<any[]>([]);
 
   const {
     profile,
@@ -54,7 +61,7 @@ const Dashboard: React.FC = () => {
           return;
         }
       } catch (error) {
-        console.error("Error checking auth status:", error);
+        console.error("Erreur lors de la vérification de l'authentification :", error);
         navigate("/login");
       } finally {
         setLoading(false);
@@ -76,6 +83,93 @@ const Dashboard: React.FC = () => {
     };
   }, [navigate]);
 
+  useEffect(() => {
+    const fetchStripeData = async () => {
+      if (!profile?.id) return;
+
+      const { data: profileData, error: profileError } = await supabase
+        .from("profiles")
+        .select("stripe_customer_id")
+        .eq("id", profile.id)
+        .single();
+
+      if (profileError) {
+        console.error("Erreur lors de la récupération du profil :", profileError);
+        return;
+      }
+
+      if (!profileData?.stripe_customer_id) return;
+
+      try {
+        const res = await fetch("/api/get-stripe-data", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ stripeCustomerId: profileData.stripe_customer_id }),
+        });
+
+        const stripeData = await res.json();
+        setStripeSubscriptions(stripeData.subscriptions || []);
+        setStripeInvoices(stripeData.invoices || []);
+      } catch (error) {
+        console.error("Erreur lors de la récupération des données Stripe :", error);
+      }
+    };
+
+    fetchStripeData();
+  }, [profile]);
+
+  const handleOpenStripePortal = async () => {
+    if (!profile?.id) return;
+
+    const { data: profileData, error: profileError } = await supabase
+      .from("profiles")
+      .select("stripe_customer_id")
+      .eq("id", profile.id)
+      .single();
+
+    if (profileError) {
+      console.error("Erreur lors de la récupération du profil :", profileError);
+      return;
+    }
+
+    if (!profileData?.stripe_customer_id) return;
+
+    try {
+      const res = await fetch("/api/create-stripe-portal-session", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ stripeCustomerId: profileData.stripe_customer_id }),
+      });
+
+      const { url } = await res.json();
+      window.location.href = url;
+    } catch (error) {
+      console.error("Erreur lors de l'ouverture du portail client Stripe :", error);
+    }
+  };
+
+  const formatDate = (dateString: string): string => {
+    try {
+      const date = new Date(dateString);
+      return format(date, "dd/MM/yyyy", { locale: fr });
+    } catch (e) {
+      return dateString;
+    }
+  };
+
+  const getStatusBadge = (status: string) => {
+    switch (status) {
+      case "active":
+        return <Badge className="bg-green-500">Actif</Badge>;
+      case "option":
+        return <Badge className="bg-amber-500">En option</Badge>;
+      case "pending":
+        return <Badge className="bg-blue-500">En attente</Badge>;
+      default:
+        return <Badge className="bg-gray-500">{status}</Badge>;
+    }
+  };
+
   if (loading || userDataLoading) {
     return (
       <div className="flex items-center justify-center h-screen">
@@ -96,27 +190,6 @@ const Dashboard: React.FC = () => {
       </div>
     );
   }
-
-  const formatDate = (dateString: string): string => {
-    try {
-      const date = new Date(dateString);
-      return format(date, "dd/MM/yyyy", { locale: fr });
-    } catch (e) {
-      return dateString;
-    }
-  };
-
-  const getStatusBadge = (status: string) => {
-    if (status === "active") {
-      return <Badge className="bg-green-500">Actif</Badge>;
-    } else if (status === "option") {
-      return <Badge className="bg-amber-500">En option</Badge>;
-    } else if (status === "pending") {
-      return <Badge className="bg-blue-500">En attente</Badge>;
-    } else {
-      return <Badge className="bg-gray-500">{status}</Badge>;
-    }
-  };
 
   if (isEditingProfile) {
     return (
@@ -220,22 +293,20 @@ const Dashboard: React.FC = () => {
               </CardHeader>
               <CardContent>
                 <div className="mb-4">
-                  <p className="text-sm text-gray-600">Adresse</p>
+                                    <p className="text-sm text-gray-600">Adresse</p>
                   <p className="font-medium">{domiciliation.address}</p>
                 </div>
                 <div className="flex flex-col md:flex-row gap-6">
                   <div className="flex-1 space-y-3">
                     <div>
                       <p className="text-sm text-gray-600">Statut</p>
-                      <p
-                        className={`font-medium ${
-                          domiciliation.status === "active"
-                            ? "text-green-600"
-                            : domiciliation.status === "pending"
-                            ? "text-amber-600"
-                            : "text-gray-600"
-                        }`}
-                      >
+                      <p className={`font-medium ${
+                        domiciliation.status === "active"
+                          ? "text-green-600"
+                          : domiciliation.status === "pending"
+                          ? "text-amber-600"
+                          : "text-gray-600"
+                      }`}>
                         {domiciliation.status === "active"
                           ? "Actif"
                           : domiciliation.status === "pending"
@@ -246,9 +317,7 @@ const Dashboard: React.FC = () => {
                     {domiciliation.renewal_date && (
                       <div>
                         <p className="text-sm text-gray-600">Renouvellement</p>
-                        <p className="font-medium">
-                          {formatDate(domiciliation.renewal_date)}
-                        </p>
+                        <p className="font-medium">{formatDate(domiciliation.renewal_date)}</p>
                       </div>
                     )}
                   </div>
@@ -272,148 +341,82 @@ const Dashboard: React.FC = () => {
           )}
 
           {/* Services achetés */}
-          <Card>
-            <CardHeader>
-              <CardTitle className="text-xl flex items-center">
-                <ShoppingCart className="mr-2 h-5 w-5 text-lysco-turquoise" />
-                Services achetés
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              {userServices.length > 0 ? (
-                <div className="space-y-6">
-                  {domiciliationServices.length > 0 && (
-                    <div>
-                      <h3 className="font-medium mb-2">
-                        Services de domiciliation
-                      </h3>
-                      <Table>
-                        <TableHeader>
-                          <TableRow>
-                            <TableHead>Service</TableHead>
-                            <TableHead>Statut</TableHead>
-                            <TableHead>Prix</TableHead>
-                          </TableRow>
-                        </TableHeader>
-                        <TableBody>
-                          {domiciliationServices.map((service) => (
-                            <TableRow key={service.id}>
-                              <TableCell>{service.name}</TableCell>
-                              <TableCell>
-                                {getStatusBadge(service.status)}
-                              </TableCell>
-                              <TableCell>
-                                {service.price ? `${service.price}€` : "-"}
-                              </TableCell>
-                            </TableRow>
-                          ))}
-                        </TableBody>
-                      </Table>
-                    </div>
-                  )}
+          {[domiciliationServices, adminServices, marketingServices, complementaryServices].map((services, index) => {
+            const titles = ["Services de domiciliation", "Services administratifs", "Services marketing", "Services complémentaires"];
+            if (services.length === 0) return null;
+            return (
+              <Card key={index}>
+                <CardHeader>
+                  <CardTitle className="text-xl">{titles[index]}</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <Table>
+                    <TableHeader>
+                      <TableRow>
+                        <TableHead>Service</TableHead>
+                        <TableHead>Statut</TableHead>
+                        <TableHead>Prix</TableHead>
+                      </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                      {services.map((service) => (
+                        <TableRow key={service.id}>
+                          <TableCell>{service.name}</TableCell>
+                          <TableCell>{getStatusBadge(service.status)}</TableCell>
+                          <TableCell>{service.price ? `${service.price} €` : "-"}</TableCell>
+                        </TableRow>
+                      ))}
+                    </TableBody>
+                  </Table>
+                </CardContent>
+              </Card>
+            );
+          })}
 
-                  {adminServices.length > 0 && (
-                    <div>
-                      <h3 className="font-medium mb-2">
-                        Services administratifs
-                      </h3>
-                      <Table>
-                        <TableHeader>
-                          <TableRow>
-                            <TableHead>Service</TableHead>
-                            <TableHead>Statut</TableHead>
-                            <TableHead>Prix</TableHead>
-                          </TableRow>
-                        </TableHeader>
-                        <TableBody>
-                          {adminServices.map((service) => (
-                            <TableRow key={service.id}>
-                              <TableCell>{service.name}</TableCell>
-                              <TableCell>
-                                {getStatusBadge(service.status)}
-                              </TableCell>
-                              <TableCell>
-                                {service.price ? `${service.price}€` : "-"}
-                              </TableCell>
-                            </TableRow>
-                          ))}
-                        </TableBody>
-                      </Table>
-                    </div>
-                  )}
+          {/* Abonnements Stripe */}
+          {stripeSubscriptions.length > 0 && (
+            <Card>
+              <CardHeader>
+                <CardTitle className="text-xl">Mes abonnements</CardTitle>
+              </CardHeader>
+              <CardContent>
+                {stripeSubscriptions.map((sub) => (
+                  <div key={sub.id} className="mb-4 border-b pb-4">
+                    <p className="font-medium">ID : {sub.id}</p>
+                    <p>Status : {getStatusBadge(sub.status)}</p>
+                    <p>Début : {formatDate(String(sub.start_date * 1000))}</p>
+                    {sub.cancel_at && <p>Fin prévue : {formatDate(String(sub.cancel_at * 1000))}</p>}
+                  </div>
+                ))}
+                <Button onClick={handleOpenStripePortal}>Gérer mes abonnements</Button>
+              </CardContent>
+            </Card>
+          )}
 
-                  {marketingServices.length > 0 && (
-                    <div>
-                      <h3 className="font-medium mb-2">Services marketing</h3>
-                      <Table>
-                        <TableHeader>
-                          <TableRow>
-                            <TableHead>Service</TableHead>
-                            <TableHead>Statut</TableHead>
-                            <TableHead>Prix</TableHead>
-                          </TableRow>
-                        </TableHeader>
-                        <TableBody>
-                          {marketingServices.map((service) => (
-                            <TableRow key={service.id}>
-                              <TableCell>{service.name}</TableCell>
-                              <TableCell>
-                                {getStatusBadge(service.status)}
-                              </TableCell>
-                              <TableCell>
-                                {service.price ? `${service.price}€` : "-"}
-                              </TableCell>
-                            </TableRow>
-                          ))}
-                        </TableBody>
-                      </Table>
-                    </div>
-                  )}
-
-                  {complementaryServices.length > 0 && (
-                    <div>
-                      <h3 className="font-medium mb-2">
-                        Services complémentaires
-                      </h3>
-                      <Table>
-                        <TableHeader>
-                          <TableRow>
-                            <TableHead>Service</TableHead>
-                            <TableHead>Statut</TableHead>
-                            <TableHead>Prix</TableHead>
-                          </TableRow>
-                        </TableHeader>
-                        <TableBody>
-                          {complementaryServices.map((service) => (
-                            <TableRow key={service.id}>
-                              <TableCell>{service.name}</TableCell>
-                              <TableCell>
-                                {getStatusBadge(service.status)}
-                              </TableCell>
-                              <TableCell>
-                                {service.price ? `${service.price}€` : "-"}
-                              </TableCell>
-                            </TableRow>
-                          ))}
-                        </TableBody>
-                      </Table>
-                    </div>
-                  )}
-                </div>
-              ) : (
-                <div className="text-center py-6">
-                  <p className="text-gray-500">
-                    Vous n'avez pas encore de services actifs.
-                  </p>
-                  <Button variant="outline" className="mt-4" asChild>
-                    <a href="/domiciliation">Voir nos offres</a>
-                  </Button>
-                </div>
-              )}
-            </CardContent>
-          </Card>
-
-          {/* TODO: Ajouter la section Réservations quand celle-ci sera implémentée */}
+          {/* Factures Stripe */}
+          {stripeInvoices.length > 0 && (
+            <Card>
+              <CardHeader>
+                <CardTitle className="text-xl">Mes factures</CardTitle>
+              </CardHeader>
+              <CardContent>
+                {stripeInvoices.map((invoice) => (
+                  <div key={invoice.id} className="mb-4 border-b pb-4">
+                    <p>Montant payé : {(invoice.amount_paid / 100).toFixed(2)} €</p>
+                    <p>Date : {formatDate(String(invoice.created * 1000))}</p>
+                    <a
+                      href={invoice.invoice_pdf}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-blue-600 underline"
+                    >
+                      Télécharger la facture
+                    </a>
+                  </div>
+                ))}
+              </CardContent>
+            </Card>
+          )}
         </div>
       </main>
 
@@ -423,3 +426,4 @@ const Dashboard: React.FC = () => {
 };
 
 export default Dashboard;
+ 
