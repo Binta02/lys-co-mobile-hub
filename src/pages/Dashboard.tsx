@@ -83,40 +83,98 @@ const Dashboard: React.FC = () => {
     };
   }, [navigate]);
 
-  useEffect(() => {
-    const fetchStripeData = async () => {
-      if (!profile?.id) return;
+  // useEffect(() => {
+  //   const fetchStripeData = async () => {
+  //     if (!profile?.id) return;
 
-      const { data: profileData, error: profileError } = await supabase
-        .from("profiles")
-        .select("stripe_customer_id")
-        .eq("id", profile.id)
-        .maybeSingle();
+  //     const { data: profileData, error: profileError } = await supabase
+  //       .from("profiles")
+  //       .select("stripe_customer_id")
+  //       .eq("id", profile.id)
+  //       .maybeSingle();
 
-      if (profileError) {
-        console.error("Erreur lors de la récupération du profil :", profileError);
-        return;
-      }
+  //     if (profileError) {
+  //       console.error("Erreur lors de la récupération du profil :", profileError);
+  //       return;
+  //     }
 
-      if (!profileData?.stripe_customer_id) return;
+  //     if (!profileData?.stripe_customer_id) return;
 
-      try {
-        const res = await fetch("/api/get-stripe-data", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ stripeCustomerId: profileData.stripe_customer_id }),
-        });
+  //     try {
+  //       const res = await fetch("/api/get-stripe-data", {
+  //         method: "POST",
+  //         headers: { "Content-Type": "application/json" },
+  //         body: JSON.stringify({ stripeCustomerId: profileData.stripe_customer_id }),
+  //       });
 
-        const stripeData = await res.json();
-        setStripeSubscriptions(stripeData.subscriptions || []);
-        setStripeInvoices(stripeData.invoices || []);
-      } catch (error) {
-        console.error("Erreur lors de la récupération des données Stripe :", error);
-      }
-    };
+  //       const stripeData = await res.json();
+  //       setStripeSubscriptions(stripeData.subscriptions || []);
+  //       setStripeInvoices(stripeData.invoices || []);
+  //     } catch (error) {
+  //       console.error("Erreur lors de la récupération des données Stripe :", error);
+  //     }
+  //   };
 
-    fetchStripeData();
-  }, [profile]);
+  //   fetchStripeData();
+  // }, [profile]);
+useEffect(() => {
+  const fetchStripeData = async () => {
+    if (!profile?.id) {
+      console.log("⛔ Aucun ID de profil trouvé, on quitte.");
+      console.log("📋 Profil :", profile);
+console.log("📋 Domiciliation :", domiciliation);
+console.log("📋 Services utilisateur :", userServices);
+
+      return;
+    }
+
+    console.log("🔍 Profil ID détecté :", profile.id);
+
+    const { data: profileData, error: profileError } = await supabase
+      .from("profiles")
+      .select("stripe_customer_id")
+      .eq("id", profile.id)
+      .maybeSingle();
+
+    if (profileError) {
+      console.error("❌ Erreur Supabase lors de la récupération du profil :", profileError);
+      console.log("📋 Profil :", profile);
+console.log("📋 Domiciliation :", domiciliation);
+console.log("📋 Services utilisateur :", userServices);
+
+      return;
+    }
+
+    console.log("📦 Donnée du profil récupérée :", profileData);
+
+    if (!profileData?.stripe_customer_id) {
+      console.warn("⚠️ Pas de stripe_customer_id pour ce profil.");
+      console.log("📋 Profil :", profile);
+console.log("📋 Domiciliation :", domiciliation);
+console.log("📋 Services utilisateur :", userServices);
+
+      return;
+    }
+
+    try {
+      console.log("📡 Envoi de requête à l'API /api/get-stripe-data avec ID :", profileData.stripe_customer_id);
+      const res = await fetch("/api/get-stripe-data", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ stripeCustomerId: profileData.stripe_customer_id }),
+      });
+
+      const stripeData = await res.json();
+      console.log("✅ Données Stripe reçues :", stripeData);
+      setStripeSubscriptions(stripeData.subscriptions || []);
+      setStripeInvoices(stripeData.invoices || []);
+    } catch (error) {
+      console.error("❌ Erreur lors de l'appel à Stripe :", error);
+    }
+  };
+
+  fetchStripeData();
+}, [profile]);
 
   const handleOpenStripePortal = async () => {
     if (!profile?.id) return;
@@ -171,6 +229,7 @@ const Dashboard: React.FC = () => {
   };
 
   if (loading || userDataLoading) {
+    console.log("⏳ Chargement en cours :", loading, " / Erreur : ", error);
     return (
       <div className="flex items-center justify-center h-screen">
         <div className="animate-spin rounded-full h-16 w-16 border-t-2 border-b-2 border-lysco-turquoise"></div>
@@ -179,6 +238,8 @@ const Dashboard: React.FC = () => {
   }
 
   if (error) {
+    console.log("⏳ Chargement en cours :", loading, " / Erreur : ", error);
+
     return (
       <div className="flex flex-col items-center justify-center h-screen">
         <p className="text-red-500 text-xl mb-4">
