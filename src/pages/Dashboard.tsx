@@ -399,152 +399,42 @@ const handleOpenStripePortal = async () => {
               </div>
             </CardContent>
           </Card>
-
-          {/* Domiciliation */}
-          {domiciliation && (
+          
+          {/* Abonnements Stripe */}
+         {stripeSubscriptions.length > 0 && (
             <Card>
               <CardHeader>
-                <CardTitle className="text-xl flex items-center">
-                  <Calendar className="mr-2 h-5 w-5 text-lysco-turquoise" />
-                  Domiciliation
+                <CardTitle className="text-2xl font-semibold flex items-center gap-2">
+                  <List className="w-5 h-5 text-lysco-turquoise" />
+                  Mes abonnements
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="mb-4">
-                                    <p className="text-sm text-gray-600">Adresse</p>
-                  <p className="font-medium">{domiciliation.address}</p>
-                </div>
-                <div className="flex flex-col md:flex-row gap-6">
-                  <div className="flex-1 space-y-3">
-                    <div>
-                      <p className="text-sm text-gray-600">Statut</p>
-                      <p className={`font-medium ${
-                        domiciliation.status === "active"
-                          ? "text-green-600"
-                          : domiciliation.status === "pending"
-                          ? "text-amber-600"
-                          : "text-gray-600"
-                      }`}>
-                        {domiciliation.status === "active"
-                          ? "Actif"
-                          : domiciliation.status === "pending"
-                          ? "En attente"
-                          : "Inactif"}
+                <div className="grid md:grid-cols-2 gap-4">
+                  {stripeSubscriptions.map((sub) => (
+                    <div key={sub.id} className="border rounded-xl p-4 shadow-sm bg-white">
+                      <p className="text-sm text-gray-500 mb-1">
+                        ID : <span className="font-mono break-all">{sub.id}</span>
                       </p>
+                      <p className="mb-1">Statut : {getStatusBadge(sub.status)}</p>
+                      <p className="mb-1">Début : {formatDate(sub.start_date * 1000)}</p>
+                      {sub.cancel_at && (
+                        <p className="mb-1">Fin prévue : {formatDate(sub.cancel_at * 1000)}</p>
+                      )}
+                      {sub.items?.data?.length > 0 && sub.items.data.map((item) => (
+                        <p key={item.id} className="mb-1">
+                        Produit : <span className="font-medium">{item.product_name || 'Nom inconnu'}</span>
+                        </p>
+                      ))}
                     </div>
-                    {domiciliation.renewal_date && (
-                      <div>
-                        <p className="text-sm text-gray-600">Renouvellement</p>
-                        <p className="font-medium">{formatDate(domiciliation.renewal_date)}</p>
-                      </div>
-                    )}
-                  </div>
-                  <div className="flex-1 space-y-3">
-                    {domiciliation.plan_type && (
-                      <div>
-                        <p className="text-sm text-gray-600">Type de plan</p>
-                        <p className="font-medium">{domiciliation.plan_type}</p>
-                      </div>
-                    )}
-                    {domiciliation.duration && (
-                      <div>
-                        <p className="text-sm text-gray-600">Durée</p>
-                        <p className="font-medium">{domiciliation.duration}</p>
-                      </div>
-                    )}
-                  </div>
+                  ))}
                 </div>
+                <Button className="mt-4" onClick={handleOpenStripePortal}>
+                  Gérer mes abonnements
+                </Button>
               </CardContent>
             </Card>
           )}
-
-          {/* Services achetés */}
-          {[domiciliationServices, adminServices, marketingServices, complementaryServices].map((services, index) => {
-            const titles = ["Services de domiciliation", "Services administratifs", "Services marketing", "Services complémentaires"];
-            if (services.length === 0) return null;
-            return (
-              <Card key={index}>
-                <CardHeader>
-                  <CardTitle className="text-xl">{titles[index]}</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <Table>
-                    <TableHeader>
-                      <TableRow>
-                        <TableHead>Service</TableHead>
-                        <TableHead>Statut</TableHead>
-                        <TableHead>Prix</TableHead>
-                      </TableRow>
-                    </TableHeader>
-                    <TableBody>
-                      {services.map((service) => (
-                        <TableRow key={service.id}>
-                          <TableCell>{service.name}</TableCell>
-                          <TableCell>{getStatusBadge(service.status)}</TableCell>
-                          <TableCell>{service.price ? `${service.price} €` : "-"}</TableCell>
-                        </TableRow>
-                      ))}
-                    </TableBody>
-                  </Table>
-                </CardContent>
-              </Card>
-            );
-          })}
-
-          {/* Abonnements Stripe */}
-          {/* {stripeSubscriptions.length > 0 && (
-            <Card>
-              <CardHeader>
-                <CardTitle className="text-xl">Mes abonnements</CardTitle>
-              </CardHeader>
-              <CardContent>
-                {stripeSubscriptions.map((sub) => (
-                  <div key={sub.id} className="mb-4 border-b pb-4">
-                    <p className="font-medium">ID : {sub.id}</p>
-                    <p>Status : {getStatusBadge(sub.status)}</p>
-                    <p>Début : {formatDate(String(sub.start_date * 1000))}</p>
-                    {sub.cancel_at && <p>Fin prévue : {formatDate(String(sub.cancel_at * 1000))}</p>}
-                  </div>
-                ))}
-                <Button onClick={handleOpenStripePortal}>Gérer mes abonnements</Button>
-              </CardContent>
-            </Card>
-          )} */}
-          {/* Abonnements Stripe */}
-         {stripeSubscriptions.length > 0 && (
-  <Card>
-    <CardHeader>
-      <CardTitle className="text-2xl font-semibold flex items-center gap-2">
-        <List className="w-5 h-5 text-lysco-turquoise" />
-        Mes abonnements
-      </CardTitle>
-    </CardHeader>
-    <CardContent>
-      <div className="grid md:grid-cols-2 gap-4">
-        {stripeSubscriptions.map((sub) => (
-          <div key={sub.id} className="border rounded-xl p-4 shadow-sm bg-white">
-            <p className="text-sm text-gray-500 mb-1">
-              ID : <span className="font-mono break-all">{sub.id}</span>
-            </p>
-            <p className="mb-1">Statut : {getStatusBadge(sub.status)}</p>
-            <p className="mb-1">Début : {formatDate(sub.start_date * 1000)}</p>
-            {sub.cancel_at && (
-              <p className="mb-1">Fin prévue : {formatDate(sub.cancel_at * 1000)}</p>
-            )}
-            {sub.items?.data?.length > 0 && sub.items.data.map((item) => (
-              <p key={item.id} className="mb-1">
-                📦 Produit : <span className="font-medium">{item.product_name || 'Nom inconnu'}</span>
-              </p>
-            ))}
-          </div>
-        ))}
-      </div>
-      <Button className="mt-4" onClick={handleOpenStripePortal}>
-        Gérer mes abonnements
-      </Button>
-    </CardContent>
-  </Card>
-)}
           {/* Factures Stripe */}
           {stripeInvoices.length > 0 && (
             <Card>
