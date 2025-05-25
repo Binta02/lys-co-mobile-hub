@@ -114,7 +114,7 @@ const handleSubmit = async (data: FormValues) => {
   const oneTimeItems = items
     .filter(item => !subscriptionProductIds.includes(item.id))
     .map(item => ({
-      amount: Math.round(item.price * 100), // montant en centimes
+      amount: Math.round((item.price / 1.2) * 100), // montant en centimes
       quantity: item.quantity,
     }));
 
