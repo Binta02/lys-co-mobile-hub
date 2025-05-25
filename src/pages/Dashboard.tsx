@@ -200,6 +200,16 @@ console.log("📋 Services utilisateur :", userServices);
       });
 
       const { url } = await res.json();
+      const data = await res.json();
+      console.log("🎯 Réponse de l'API portail Stripe :", data);
+      if (!data.url) {
+  toast({
+    title: "Erreur",
+    description: "Impossible d'obtenir l'URL du portail Stripe.",
+    variant: "destructive",
+  });
+  return;
+}
       window.location.href = url;
     } catch (error) {
       console.error("Erreur lors de l'ouverture du portail client Stripe :", error);
