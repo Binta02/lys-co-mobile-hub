@@ -121,7 +121,7 @@ const handleSubmit = async (data: FormValues) => {
     }));
 
   const subscriptionItems = items
-    .filter(item => subscriptionProductIds.some(subId => item.id.startsWith(subId)))
+    .filter(item => subscriptionProductIds.includes(item.id))
     .map(item => {
       const priceId = getPriceIdFromProductId(item.id);
       if (!priceId) throw new Error(`Price ID manquant pour ${item.id}`);
