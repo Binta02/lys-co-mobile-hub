@@ -135,7 +135,7 @@ const Dashboard: React.FC = () => {
     if (!profileData?.stripe_customer_id) return;
 
     try {
-      const res = await fetch("/api/create-stripe-portal-session", {
+      const res = await fetch("https://mon-backend-node.vercel.app/api/create-stripe-portal-session", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ stripeCustomerId: profileData.stripe_customer_id }),
