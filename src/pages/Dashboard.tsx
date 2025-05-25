@@ -91,7 +91,7 @@ const Dashboard: React.FC = () => {
         .from("profiles")
         .select("stripe_customer_id")
         .eq("id", profile.id)
-        .single();
+        .maybeSingle();
 
       if (profileError) {
         console.error("Erreur lors de la récupération du profil :", profileError);
@@ -125,7 +125,7 @@ const Dashboard: React.FC = () => {
       .from("profiles")
       .select("stripe_customer_id")
       .eq("id", profile.id)
-      .single();
+      .maybeSingle();
 
     if (profileError) {
       console.error("Erreur lors de la récupération du profil :", profileError);
