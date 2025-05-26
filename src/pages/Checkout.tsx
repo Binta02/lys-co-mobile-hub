@@ -372,14 +372,14 @@ const handleSubmit = async (data: FormValues) => {
         if (date) {
           const startISO = `${date}T${start}:00+00:00`;
           const endISO = `${date}T${end}:00+00:00`;
-          const period = `[${startISO},${endISO})`;
+          const period = `"[\"${startISO}\",\"${endISO}\")"`;
 
-          const { error } = await supabase.rpc('insert_reservation' as any, {
-            user_id_input: userId!,
-            reservation_type_input: item.id.split('-')[0],
-            reservation_date_input: date,
-            price_input: item.price,
-            period_input: period
+          const { error } = await supabase.from('reservations').insert({
+            user_id: userId!,
+            reservation_type: item.id.split('-')[0],
+            reservation_date: date,
+            price: item.price,
+            period
           });
 
           if (error) console.error('Erreur ajout réservation:', error);
@@ -408,6 +408,7 @@ const handleSubmit = async (data: FormValues) => {
     setIsProcessing(false);
   }
 };
+
 
   return (
   <div className="min-h-screen flex flex-col">
