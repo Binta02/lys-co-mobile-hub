@@ -229,22 +229,53 @@ const handleSubmit = async (data: FormValues) => {
 
       console.log('Traitement item:', item);
 
-      if (item.id.includes('domiciliation')) {
-        const insertData = {
-          ...baseInsert,
-          address: data.address,
-          duration: item.title.includes('1 an') ? '12mois' :
-                    item.title.includes('6 mois') ? '6mois' :
-                    item.title.includes('3 mois') ? '3mois' : null,
-          plan_type: item.title.includes('micro') ? 'micro' :
-                     item.title.includes('entreprise') ? 'entreprise' :
-                     item.title.includes('association') ? 'association' : null,
-        };
-        console.log('Insertion domiciliation:', insertData);
-        const { error } = await supabase.from('user_domiciliations').insert(insertData);
-        if (error) console.error('Erreur ajout domiciliation:', error);
-// ...existing code...
-        } else if (item.id.includes('location-bureau') || item.id.includes('formation-room') || item.id.includes('coworking-space')) {
+//       if (item.id.includes('domiciliation')) {
+//         const insertData = {
+//           ...baseInsert,
+//           address: data.address,
+//           duration: item.title.includes('1 an') ? '12mois' :
+//                     item.title.includes('6 mois') ? '6mois' :
+//                     item.title.includes('3 mois') ? '3mois' : null,
+//           plan_type: item.title.includes('micro') ? 'micro' :
+//                      item.title.includes('entreprise') ? 'entreprise' :
+//                      item.title.includes('association') ? 'association' : null,
+//         };
+//         console.log('Insertion domiciliation:', insertData);
+//         const { error } = await supabase.from('user_domiciliations').insert(insertData);
+//         if (error) console.error('Erreur ajout domiciliation:', error);
+// // ...existing code...
+//         } 
+        if (item.id.includes('domiciliation')) {
+          const duration =
+            item.title.includes('1 an')   ? '12mois' :
+            item.title.includes('6 mois') ? '6mois'  :
+            item.title.includes('3 mois') ? '3mois'  :
+            null;
+
+          const plan_type =
+            item.title.includes('micro')       ? 'micro' :
+            item.title.includes('entreprise')  ? 'entreprise' :
+            item.title.includes('association') ? 'association' :
+            null;
+
+          const insertData = {
+            user_id:   userId!,
+            address:   data.address,
+            duration,          // string | null
+            plan_type,         // string | null
+            status:    'active', // si tu veux stocker un statut
+            // renewal_date: … si tu veux gérer la date de renouvellement
+          };
+
+          console.log('Insertion domiciliation:', insertData);
+          const { error } = await supabase
+            .from('user_domiciliations')
+            .insert(insertData);
+
+          if (error) console.error('Erreur ajout domiciliation:', error);
+        }
+
+        else if (item.id.includes('location-bureau') || item.id.includes('formation-room') || item.id.includes('coworking-space')) {
           const dateMatch = item.id.match(/\d{4}-\d{2}-\d{2}/);
           const date = dateMatch ? dateMatch[0] : null;
 
