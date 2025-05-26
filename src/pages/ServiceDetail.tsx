@@ -250,7 +250,20 @@ console.log('[isMorningReserved]', isMorningReserved);
 const isAfternoonReserved = isRangeReserved(getHalfDayRange('afternoon'));
 console.log('[isAfternoonReserved]', isAfternoonReserved);
 // Full day est réservé uniquement si matin et après-midi le sont tous les deux
-const isFullDayReserved = isMorningReserved || isAfternoonReserved;
+// ✅ jour complet bloqué seulement si matin ET aprèm sont pris
+const isFullDayReserved = isMorningReserved && isAfternoonReserved;
+
+// ✅ on bloque l'option "journée complète" dès qu'une moitié est prise
+const isFullDayOptionDisabled = isMorningReserved || isAfternoonReserved;
+
+// ✅ on bloque juste la moitié correspondante
+const isHalfDayOptionDisabled = (period: 'morning' | 'afternoon') =>
+  period === 'morning'
+    ? isMorningReserved   // si matin déjà réservé → bloqué
+    : isAfternoonReserved;
+
+
+
 // ===== AJOUTER ICI =====
 let reservationNotice = '';
 if (isMorningReserved && isAfternoonReserved) {
@@ -317,12 +330,12 @@ const isHourDisabled = (hour: string): boolean => {
 
 
 // Logique pour désactiver les options selon les règles
-const isFullDayOptionDisabled = isFullDayReserved;
-const isHalfDayOptionDisabled = (period: 'morning'|'afternoon') => {
-  const disabled = isFullDayReserved || (period === 'morning' ? isMorningReserved : isAfternoonReserved);
-  console.log('[isHalfDayOptionDisabled]', period, ':', disabled);
-  return disabled;
-};
+// const isFullDayOptionDisabled = isFullDayReserved;
+// const isHalfDayOptionDisabled = (period: 'morning'|'afternoon') => {
+//   const disabled = isFullDayReserved || (period === 'morning' ? isMorningReserved : isAfternoonReserved);
+//   console.log('[isHalfDayOptionDisabled]', period, ':', disabled);
+//   return disabled;
+// };
 
 // Pour la désactivation de la journée complète
 console.log('[isFullDayOptionDisabled]', isFullDayReserved);
