@@ -382,7 +382,9 @@ const handleSubmit = async (data: FormValues) => {
         if (date) {
           const startISO = `${date}T${start}:00+00:00`;
           const endISO = `${date}T${end}:00+00:00`;
-          const period = `"[\"${startISO}\",\"${endISO}\")"`;
+          // const period = `"[\"${startISO}\",\"${endISO}\")"`;
+          const period = `[${startISO},${endISO})`;
+
 
           const reservationType = item.id.includes('coworking') ? 'coworking' : item.id.split('-')[0];
 
