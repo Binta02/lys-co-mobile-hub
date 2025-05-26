@@ -660,19 +660,12 @@ const getReservationType = (id: string) => {
   return id
 }
 
-const getHalfDayRange = (period: 'morning' | 'afternoon') => {
-  if (!dateReservation) return ''
-  if (period === 'morning') {
-    return `[${dateReservation}T09:00:00+00:00,${dateReservation}T12:00:00+00:00)`
-  }
-  return `[${dateReservation}T13:00:00+00:00,${dateReservation}T16:00:00+00:00)`
-}
+// Ajout de vérifications de plage réservée pour demi-journée et journée complète
 
-const getFullDayRange = () => {
-  if (!dateReservation) return ''
-  return `[${dateReservation}T09:00:00+00:00,${dateReservation}T16:00:00+00:00)`
-}
-const isRangeReserved = (range: string) => reservedPeriods.includes(range)
+const isMorningReserved = reservedPeriods.includes(`[${dateReservation} 09:00:00+00,${dateReservation} 12:00:00+00)`);
+const isAfternoonReserved = reservedPeriods.includes(`[${dateReservation} 13:00:00+00,${dateReservation} 16:00:00+00)`);
+const isFullDayReserved = reservedPeriods.includes(`[${dateReservation} 09:00:00+00,${dateReservation} 16:00:00+00)`);
+
 
 useEffect(() => {
   const fetchReservedPeriods = async () => {
@@ -806,10 +799,7 @@ const isHourDisabled = (hour: string): boolean => {
                     <select value={modeReservation} onChange={e => setModeReservation(e.target.value as any)} className="w-full p-2 border rounded">
                       <option value="hour">À l'heure</option>
                       <option value="halfDay">Demi-journée</option>
-                      {/* <option value="fullDay">Journée complète</option> */}
-                      <option value="fullDay" disabled={isRangeReserved(getFullDayRange())}>
-                        Journée complète {isRangeReserved(getFullDayRange()) && ' (réservée)'}
-                      </option>
+                      <option value="fullDay">Journée complète</option>
                     </select>
                   </div>
 
@@ -821,17 +811,19 @@ const isHourDisabled = (hour: string): boolean => {
                         onChange={e => setHalfDayPeriod(e.target.value as any)}
                         className="w-full p-2 border rounded"
                       >
-                        <option value="morning" disabled={isRangeReserved(getHalfDayRange('morning'))}>
-                          Matin (9h-12h) {isRangeReserved(getHalfDayRange('morning')) && ' (réservé)'}
-                        </option>
-                        <option value="afternoon" disabled={isRangeReserved(getHalfDayRange('afternoon'))}>
-                          Après-midi (13h-16h) {isRangeReserved(getHalfDayRange('afternoon')) && ' (réservé)'}
-                        </option>
+                        <option value="morning" disabled={isMorningReserved}>Matin (9h-12h) {isMorningReserved ? ' (indisponible)' : ''}</option>
+                        <option value="afternoon" disabled={isAfternoonReserved}>Après-midi (13h-16h) {isAfternoonReserved ? ' (indisponible)' : ''}</option>
                       </select>
                     </div>
                   )}
+                  {/* // Affichage visuel si toute la journée est réservée */}
+                  {isFullDayReserved && dateReservation && (
+                    <div className="mt-4 text-red-600 font-medium text-center">
+                      La journée entière est déjà réservée à cette date.
+                    </div>
+                  )}
 
-                  {/* <div className="space-y-2">
+                  <div className="space-y-2">
                     <label className="font-medium">Date</label>
                     <input
                       type="date"
@@ -843,29 +835,6 @@ const isHourDisabled = (hour: string): boolean => {
                       min={new Date().toISOString().split('T')[0]}
                       className="w-full p-2 border rounded"
                     />
-                  </div> */}
-                  // 3. Affichage d'une icône si la journée est réservée (juste après le champ date)
-                  <div className="space-y-2">
-                    <label className="font-medium">Date</label>
-                    <input
-                      type="date"
-                      value={dateReservation}
-                      onChange={e => {
-                        setDateReservation(e.target.value)
-                        setSelectedHours([])
-                      }}
-                      min={new Date().toISOString().split('T')[0]}
-                      className="w-full p-2 border rounded"
-                    />
-                    {isRangeReserved(getFullDayRange()) && (
-                      <div className="flex items-center text-red-600 mt-1">
-                        <svg className="w-4 h-4 mr-1" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
-                          <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="2" fill="none"/>
-                          <path stroke="currentColor" strokeWidth="2" d="M9 12l2 2l4 -4" />
-                        </svg>
-                        Journée déjà réservée
-                      </div>
-                    )}
                   </div>
 
                   {modeReservation === 'hour' && dateReservation && (
@@ -889,11 +858,20 @@ const isHourDisabled = (hour: string): boolean => {
                     </div>
                   )}
 
-                  <Button className="w-full bg-lysco-turquoise" disabled={!dateReservation || (modeReservation === 'hour' && selectedHours.length === 0) || isReserved} onClick={() => {
-                    const label = `${service.title} — ${modeReservation}${modeReservation === 'halfDay' ? ` (${halfDayPeriod})` : ''} — ${dateReservation} ${selectedHours.join(', ')}`
-                    addItem({ id: `${id}-${dateReservation}`, title: label, price: calculPrix(), quantity: 1 })
-                    toast({ title: 'Ajouté au panier', description: label })
-                  }}>
+                  <Button
+                    className="w-full bg-lysco-turquoise"
+                    disabled={
+                      !dateReservation ||
+                      (modeReservation === 'hour' && selectedHours.length === 0) ||
+                      (modeReservation === 'halfDay' && ((halfDayPeriod === 'morning' && isMorningReserved) || (halfDayPeriod === 'afternoon' && isAfternoonReserved))) ||
+                      (modeReservation === 'fullDay' && isFullDayReserved)
+                    }
+                    onClick={() => {
+                      const label = `${service.title} — ${modeReservation}${modeReservation === 'halfDay' ? ` (${halfDayPeriod})` : ''} — ${dateReservation} ${selectedHours.join(', ')}`
+                      addItem({ id: `${id}-${dateReservation}`, title: label, price: calculPrix(), quantity: 1 })
+                      toast({ title: 'Ajouté au panier', description: label })
+                    }}
+                  >
                     <ShoppingCart className="h-4 w-4 mr-2" /> Ajouter au panier
                   </Button>
 
