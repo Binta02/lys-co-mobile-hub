@@ -7,6 +7,15 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { useCart } from '@/components/cart/CartContext';
+
+// Ajout du type CartItem avec la propriété optionnelle 'period'
+type CartItem = {
+  id: string;
+  title: string;
+  price: number;
+  quantity: number;
+  period?: string; // Ajout de la propriété optionnelle period
+};
 import { Check, CreditCard } from 'lucide-react';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { z } from 'zod';
@@ -226,45 +235,64 @@ const handleSubmit = async (data: FormValues) => {
         console.log('Insertion domiciliation:', insertData);
         const { error } = await supabase.from('user_domiciliations').insert(insertData);
         if (error) console.error('Erreur ajout domiciliation:', error);
+// ...existing code...
+        } else if (item.id.includes('location-bureau') || item.id.includes('formation-room') || item.id.includes('coworking-space')) {
+          const dateMatch = item.id.match(/\d{4}-\d{2}-\d{2}/);
+          const date = dateMatch ? dateMatch[0] : null;
 
-      } else if (item.id.includes('location-bureau') || item.id.includes('formation-room') || item.id.includes('coworking-space')) {
-        const dateMatch = item.id.match(/\d{4}-\d{2}-\d{2}/);
-        const date = dateMatch ? dateMatch[0] : null;
-        const timeMatches = item.title.match(/\d{2}:\d{2}/g);
-        let start = '09:00', end = '16:00';
+          // Utilise la période exacte du panier si elle existe
+            // On tente d'utiliser la propriété period si elle existe, sinon on la calcule à partir du titre
+            let period = (item as any).period;
+            if (!period) {
+            // Extraction des horaires depuis le titre (ex: "Salle de formation — halfDay (morning) — 2025-05-28 ")
+            const timeMatches = item.title.match(/\d{2}:\d{2}/g);
+            let start = '09:00', end = '16:00';
 
-        if (timeMatches?.length === 1) {
-          start = timeMatches[0];
-          end = String(Number(start.split(':')[0]) + 1).padStart(2, '0') + ':00';
-        } else if (timeMatches?.length > 1) {
-          start = timeMatches[0];
-          end = timeMatches[timeMatches.length - 1];
-          end = String(Number(end.split(':')[0]) + 1).padStart(2, '0') + ':00';
+            if (timeMatches?.length === 1) {
+              start = timeMatches[0];
+              end = String(Number(start.split(':')[0]) + 1).padStart(2, '0') + ':00';
+            } else if (timeMatches?.length > 1) {
+              start = timeMatches[0];
+              end = timeMatches[timeMatches.length - 1];
+              end = String(Number(end.split(':')[0]) + 1).padStart(2, '0') + ':00';
+            } else if (item.title.includes('morning')) {
+              start = '09:00';
+              end = '12:00';
+            } else if (item.title.includes('afternoon')) {
+              start = '13:00';
+              end = '16:00';
+            }
+
+            if (date) {
+              const startISO = `${date}T${start}:00+00:00`;
+              const endISO = `${date}T${end}:00+00:00`;
+              period = `[${startISO},${endISO})`;
+            }
+            }
+
+          if (date && period) {
+            const reservationType = getReservationType(item.id);
+
+            const insertData = {
+              user_id: userId!,
+              reservation_type: reservationType,
+              reservation_date: date,
+              price: item.price,
+              period
+            };
+            console.log('Insertion réservation:', insertData);
+
+            const { error } = await supabase.from('reservations').insert(insertData);
+            if (error) console.error('Erreur ajout réservation:', error);
+          } else {
+            console.error('Date ou période non extraite depuis item:', item);
+          }
+        // ...existing code...
+        // ...existing code...
+
+              
         }
-
-        if (date) {
-          const startISO = `${date}T${start}:00+00:00`;
-          const endISO = `${date}T${end}:00+00:00`;
-          const period = `[${startISO},${endISO})`;
-
-          const reservationType = getReservationType(item.id);
-
-          const insertData = {
-            user_id: userId!,
-            reservation_type: reservationType,
-            reservation_date: date,
-            price: item.price,
-            period
-          };
-          console.log('Insertion réservation:', insertData);
-
-          const { error } = await supabase.from('reservations').insert(insertData);
-          if (error) console.error('Erreur ajout réservation:', error);
-        } else {
-          console.error('Date non extraite depuis item.id:', item.id);
-        }
-
-      } else {
+       else {
         const insertData = {
           ...baseInsert,
           category: 'commande',
@@ -274,7 +302,6 @@ const handleSubmit = async (data: FormValues) => {
         if (error) console.error('Erreur ajout service:', error);
       }
     }
-
     clearCart();
     navigate('/confirmation', {
       state: {
