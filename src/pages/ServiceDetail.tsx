@@ -190,7 +190,6 @@ const ServiceDetail: React.FC = () => {
   }
   return '';
 };
-// ...existing code...
 const getReservationType = (id) => {
   if (id === 'coworking-space') return 'coworking';
   if (id === 'formation-room') return 'formation';
@@ -201,7 +200,7 @@ const getReservationType = (id) => {
 // Fonction pour vérifier si une plage est réservée
 const isRangeReserved = (range: string): boolean => {
   const result = reservedPeriods.some(reservedRange => {
-    console.log('[isRangeReserved] Test:', { reservedRange, range });
+    // console.log('[isRangeReserved] Test:', { reservedRange, range });
     // Convertir les plages en dates pour comparaison
     const extractDates = (rangeStr: string) => {
   // Pour [2025-05-28 09:00:00+00,2025-05-28 16:00:00+00)
@@ -221,7 +220,7 @@ const isRangeReserved = (range: string): boolean => {
       (checkStart <= reservedStart && checkEnd >= reservedEnd)
     );
   });
-    console.log('[isRangeReserved] Résultat pour', range, ':', result);
+    // console.log('[isRangeReserved] Résultat pour', range, ':', result);
   return result;
 };
 
@@ -231,7 +230,7 @@ const getHalfDayRange = (period: 'morning' | 'afternoon'): string => {
   const range = period === 'morning'
     ? `[${dateReservation} 09:00:00+00,${dateReservation} 12:00:00+00)`
     : `[${dateReservation} 13:00:00+00,${dateReservation} 16:00:00+00)`;
-  console.log('[getHalfDayRange]', period, ':', range);
+  // console.log('[getHalfDayRange]', period, ':', range);
   return range;
 
 };
@@ -239,16 +238,16 @@ const getHalfDayRange = (period: 'morning' | 'afternoon'): string => {
 const getFullDayRange = (): string => {
   if (!dateReservation) return '';
   const range = `[${dateReservation} 09:00:00+00,${dateReservation} 16:00:00+00)`;
-  console.log('[getFullDayRange] :', range);
+  // console.log('[getFullDayRange] :', range);
   return range;
 
 };
 
 // Vérifications des réservations existantes
 const isMorningReserved = isRangeReserved(getHalfDayRange('morning'));
-console.log('[isMorningReserved]', isMorningReserved);
+// console.log('[isMorningReserved]', isMorningReserved);
 const isAfternoonReserved = isRangeReserved(getHalfDayRange('afternoon'));
-console.log('[isAfternoonReserved]', isAfternoonReserved);
+// console.log('[isAfternoonReserved]', isAfternoonReserved);
 // Full day est réservé uniquement si matin et après-midi le sont tous les deux
 // ✅ jour complet bloqué seulement si matin ET aprèm sont pris
 const isFullDayReserved = isMorningReserved && isAfternoonReserved;
@@ -273,19 +272,19 @@ if (isMorningReserved && isAfternoonReserved) {
 } else if (isAfternoonReserved) {
   reservationNotice = "L’après-midi est déjà réservé pour cette date.";
 }
-console.log('[isFullDayReserved]', isFullDayReserved);
+// console.log('[isFullDayReserved]', isFullDayReserved);
 
 useEffect(() => {
   const fetchReservedPeriods = async () => {
-    console.log('Début récupération des plages réservées');
+    // console.log('Début récupération des plages réservées');
     if (!dateReservation || !id) {
-      console.log('Aucune date ou ID fourni, annulation de la requête');
+      // console.log('Aucune date ou ID fourni, annulation de la requête');
       return;
     }
 
     const reservationType = getReservationType(id);
 
-    console.log('Requête Supabase avec:', { reservation_type: reservationType, reservation_date: dateReservation });
+    // console.log('Requête Supabase avec:', { reservation_type: reservationType, reservation_date: dateReservation });
 
     const { data, error } = await supabase
       .from('reservations')
@@ -303,14 +302,14 @@ useEffect(() => {
           const match = r.period.match(/\["(.+?)","(.+?)"\)/);
           if (match) {
             const formatted = `[${match[1]},${match[2]})`;
-            console.log('[fetchReservedPeriods] Formaté:', formatted);
+            // console.log('[fetchReservedPeriods] Formaté:', formatted);
             return formatted;
           }
         }
-        console.log('[fetchReservedPeriods] Déjà formaté:', r.period);
+        // console.log('[fetchReservedPeriods] Déjà formaté:', r.period);
         return r.period;
       });
-      console.log('Plages extraites :', periods);
+      // console.log('Plages extraites :', periods);
       setReservedPeriods(periods);
     }
   };
@@ -324,7 +323,7 @@ const isHourDisabled = (hour: string): boolean => {
   const end = `${dateReservation} ${endHour}:00:00+00`;
   const rangeToCheck = `[${start},${end})`;
   const disabled = isRangeReserved(rangeToCheck);
-  console.log('[isHourDisabled]', hour, rangeToCheck, '=>', disabled);
+  // console.log('[isHourDisabled]', hour, rangeToCheck, '=>', disabled);
   return disabled;
 };
 
@@ -338,7 +337,7 @@ const isHourDisabled = (hour: string): boolean => {
 // };
 
 // Pour la désactivation de la journée complète
-console.log('[isFullDayOptionDisabled]', isFullDayReserved);
+// console.log('[isFullDayOptionDisabled]', isFullDayReserved);
 
   const calculPrix = () => {
     const base = parseFloat(service.price.replace(',', '.'))
