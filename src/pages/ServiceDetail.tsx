@@ -670,9 +670,15 @@ const ServiceDetail: React.FC = () => {
   //   fetchReservedPeriods()
   // }, [dateReservation, id])
 
-  useEffect(() => {
+useEffect(() => {
   const fetchReservedPeriods = async () => {
-    if (!dateReservation || !id) return
+    console.log('Début récupération des plages réservées')
+    if (!dateReservation || !id) {
+      console.log('Aucune date ou ID fourni, annulation de la requête')
+      return
+    }
+
+    console.log('Requête Supabase avec:', { reservation_type: id, reservation_date: dateReservation })
 
     const { data, error } = await supabase
       .from('reservations')
@@ -686,6 +692,7 @@ const ServiceDetail: React.FC = () => {
     } else {
       console.log('Plages réservées reçues de Supabase:', data)
       const periods = data.map((r: any) => r.period)
+      console.log('Plages extraites :', periods)
       setReservedPeriods(periods)
     }
   }
@@ -699,10 +706,13 @@ const isHourDisabled = (hour: string): boolean => {
   const end = `${dateReservation}T${endHour}:00:00+00:00`
   const rangeToCheck = `[${start},${end})`
 
+  console.log('Vérification de la plage :', rangeToCheck)
   const match = reservedPeriods.includes(rangeToCheck)
-  console.log(`Vérification pour ${rangeToCheck} => ${match}`)
+  console.log(`Résultat pour ${rangeToCheck} :`, match)
+
   return match
 }
+
 
   const calculPrix = () => {
     const base = parseFloat(service.price.replace(',', '.'))
