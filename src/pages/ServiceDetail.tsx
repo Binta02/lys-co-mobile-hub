@@ -249,10 +249,17 @@ const isMorningReserved = isRangeReserved(getHalfDayRange('morning'));
 console.log('[isMorningReserved]', isMorningReserved);
 const isAfternoonReserved = isRangeReserved(getHalfDayRange('afternoon'));
 console.log('[isAfternoonReserved]', isAfternoonReserved);
-// const isFullDayReserved = isRangeReserved(getFullDayRange());
 // Full day est réservé uniquement si matin et après-midi le sont tous les deux
-const isFullDayReserved = isMorningReserved && isAfternoonReserved;
-
+const isFullDayReserved = isMorningReserved || isAfternoonReserved;
+// ===== AJOUTER ICI =====
+let reservationNotice = '';
+if (isMorningReserved && isAfternoonReserved) {
+  reservationNotice = 'La journée entière est déjà réservée pour cette date.';
+} else if (isMorningReserved) {
+  reservationNotice = 'Le matin est déjà réservé pour cette date.';
+} else if (isAfternoonReserved) {
+  reservationNotice = "L’après-midi est déjà réservé pour cette date.";
+}
 console.log('[isFullDayReserved]', isFullDayReserved);
 
 useEffect(() => {
@@ -297,63 +304,6 @@ useEffect(() => {
 
   fetchReservedPeriods();
 }, [dateReservation, id]);
-// useEffect(() => {
-//   const fetchReservedPeriods = async () => {
-//     console.log('Début récupération des plages réservées')
-//     if (!dateReservation || !id) {
-//       console.log('Aucune date ou ID fourni, annulation de la requête')
-//       return
-//     }
-
-//     const reservationType = getReservationType(id)
-
-//     console.log('Requête Supabase avec:', { reservation_type: reservationType, reservation_date: dateReservation })
-
-//     const { data, error } = await supabase
-//       .from('reservations')
-//       .select('period')
-//       .like('reservation_type', `${reservationType}%`)
-//       .eq('reservation_date', dateReservation)
-
-//     if (error) {
-//       console.error('Erreur récupération des réservations :', error)
-//       setReservedPeriods([])
-//     } else {
-//       // Uniformisation du format des périodes récupérées
-//       const periods = data.map((r: any) => {
-//         // Si period est au format JSON PostgreSQL : '["2025-05-28 09:00:00+00","2025-05-28 10:00:00+00")'
-//         if (typeof r.period === 'string' && r.period.startsWith('["')) {
-//           const match = r.period.match(/\["(.+?)","(.+?)"\)/)
-//           if (match) {
-//             // On remet au format utilisé dans le code : [start,end)
-//             return `[${match[1]},${match[2]})`
-//           }
-//         }
-//         // Sinon, on suppose que c'est déjà au bon format
-//         return r.period
-//       })
-//       console.log('Plages extraites :', periods)
-//       setReservedPeriods(periods)
-//     }
-//   }
- 
-//   fetchReservedPeriods()
-// }, [dateReservation, id])
-
-// const isHourDisabled = (hour: string): boolean => {
-//   // Génère la période au format de la base : [YYYY-MM-DD HH:MM:SS+00,YYYY-MM-DD HH:MM:SS+00)
-//   const start = `${dateReservation} ${hour}:00+00`
-//   const endHour = String(Number(hour.split(':')[0]) + 1).padStart(2, '0')
-//   const end = `${dateReservation} ${endHour}:00:00+00`
-//   const rangeToCheck = `[${start},${end})`
-
-//   // Vérification stricte de l'inclusion
-//   const match = reservedPeriods.includes(rangeToCheck)
-//   // console.log('Vérification de la plage :', rangeToCheck, '=>', match)
-//   return match
-// }
-// Fonction pour vérifier si une heure est réservée
-// Pour la désactivation des heures
 const isHourDisabled = (hour: string): boolean => {
   if (!dateReservation) return false;
   const start = `${dateReservation} ${hour}:00+00`;
@@ -472,9 +422,9 @@ console.log('[isFullDayOptionDisabled]', isFullDayReserved);
                     </select>
                   </div>
 
-                  {isRangeReserved(getFullDayRange()) && dateReservation && (
+                  {reservationNotice && dateReservation && (
                     <div className="mt-4 text-red-600 font-medium text-center">
-                      La journée entière est déjà réservée à cette date.
+                      {reservationNotice}
                     </div>
                   )}
                   {/* Pour la sélection de demi-journée */}
