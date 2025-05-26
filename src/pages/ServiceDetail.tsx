@@ -204,13 +204,13 @@ const isRangeReserved = (range: string): boolean => {
 const getHalfDayRange = (period: 'morning' | 'afternoon'): string => {
   if (!dateReservation) return '';
   return period === 'morning'
-    ? `["${dateReservation} 09:00:00+00","${dateReservation} 12:00:00+00")`
-    : `["${dateReservation} 13:00:00+00","${dateReservation} 16:00:00+00")`;
+    ? `[${dateReservation} 09:00:00+00,${dateReservation} 12:00:00+00)`
+    : `[${dateReservation} 13:00:00+00,${dateReservation} 16:00:00+00)`;
 };
 
 const getFullDayRange = (): string => {
   if (!dateReservation) return '';
-  return `["${dateReservation} 09:00:00+00","${dateReservation} 16:00:00+00")`;
+  return `[${dateReservation} 09:00:00+00,${dateReservation} 16:00:00+00)`;
 };
 
 // Vérifications des réservations existantes
@@ -276,12 +276,10 @@ useEffect(() => {
 // Fonction pour vérifier si une heure est réservée
 const isHourDisabled = (hour: string): boolean => {
   if (!dateReservation) return false;
-  
   const start = `${dateReservation} ${hour}:00+00`;
   const endHour = String(Number(hour.split(':')[0]) + 1).padStart(2, '0');
   const end = `${dateReservation} ${endHour}:00:00+00`;
-  const rangeToCheck = `["${start}","${end}")`;
-  
+  const rangeToCheck = `[${start},${end})`;
   return isRangeReserved(rangeToCheck);
 };
 
