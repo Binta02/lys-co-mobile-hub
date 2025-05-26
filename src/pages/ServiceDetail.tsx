@@ -853,9 +853,16 @@ const isHourDisabled = (hour: string): boolean => {
                       <p className="font-medium mb-2">Heures disponibles :</p>
                       <div className="grid grid-cols-4 gap-2">
                         {HOURS.map(hour => {
-                          const isDisabled = isRangeOverlapping(getRange(`${dateReservation}T${hour}:00+00:00`, `${dateReservation}T${String(Number(hour.split(':')[0])+1).padStart(2, '0')}:00+00:00`))
+                          const isDisabled = isHourDisabled(hour)
                           return (
-                            <button key={hour} disabled={isDisabled} onClick={() => toggleHour(hour)} className={`p-2 border rounded text-sm ${selectedHours.includes(hour) ? 'bg-green-100 text-green-800' : 'hover:bg-gray-100'}`}>{hour}</button>
+                            <button
+                              key={hour}
+                              disabled={isDisabled}
+                              onClick={() => toggleHour(hour)}
+                              className={`p-2 border rounded text-sm ${selectedHours.includes(hour) ? 'bg-green-100 text-green-800' : 'hover:bg-gray-100'}`}
+                            >
+                              {hour}
+                            </button>
                           )
                         })}
                       </div>
