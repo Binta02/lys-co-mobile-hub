@@ -662,9 +662,6 @@ const getReservationType = (id: string) => {
 
 // Ajout de vérifications de plage réservée pour demi-journée et journée complète
 
-const isMorningReserved = reservedPeriods.includes(`[${dateReservation} 09:00:00+00,${dateReservation} 12:00:00+00)`);
-const isAfternoonReserved = reservedPeriods.includes(`[${dateReservation} 13:00:00+00,${dateReservation} 16:00:00+00)`);
-const isFullDayReserved = reservedPeriods.includes(`[${dateReservation} 09:00:00+00,${dateReservation} 16:00:00+00)`);
 const getHalfDayRange = (period: 'morning' | 'afternoon') => {
   if (!dateReservation) return ''
   if (period === 'morning') {
@@ -679,6 +676,10 @@ const getFullDayRange = () => {
 }
 
 const isRangeReserved = (range: string) => reservedPeriods.includes(range)
+
+const isMorningReserved = isRangeReserved(getHalfDayRange('morning'));
+const isAfternoonReserved = isRangeReserved(getHalfDayRange('afternoon'));
+const isFullDayReserved = isRangeReserved(getFullDayRange());
 
 useEffect(() => {
   const fetchReservedPeriods = async () => {
