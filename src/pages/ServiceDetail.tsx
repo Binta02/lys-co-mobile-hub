@@ -501,7 +501,8 @@ console.log('[isFullDayOptionDisabled]', isFullDayReserved);
                         modeReservation === 'halfDay' ? ` (${halfDayPeriod})` : ''
                       } — ${dateReservation} ${selectedHours.join(', ')}`;
                       addItem({ 
-                        id: `${id}-${dateReservation}`, 
+                        // id: `${id}-${dateReservation}`, 
+                        id: `${id}-${dateReservation}-${halfDayPeriod || selectedHours.join('-')}`,
                         title: label, 
                         price: calculPrix(), 
                         quantity: 1,
