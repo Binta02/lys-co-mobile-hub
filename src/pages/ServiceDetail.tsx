@@ -652,6 +652,15 @@ const ServiceDetail: React.FC = () => {
   const [refreshReviews, setRefreshReviews] = useState(false)
   const [activeTab, setActiveTab] = useState<'description'|'reviews'>('description')
 
+// ...existing code...
+const getReservationType = (id: string) => {
+  if (id === 'coworking-space') return 'coworking'
+  if (id === 'formation-room') return 'formation'
+  if (id === 'location-bureau') return 'bureau'
+  return id
+}
+// ...existing code...
+
 useEffect(() => {
   const fetchReservedPeriods = async () => {
     console.log('Début récupération des plages réservées')
@@ -660,12 +669,14 @@ useEffect(() => {
       return
     }
 
-    console.log('Requête Supabase avec:', { reservation_type: id, reservation_date: dateReservation })
+    const reservationType = getReservationType(id)
+
+    console.log('Requête Supabase avec:', { reservation_type: reservationType, reservation_date: dateReservation })
 
     const { data, error } = await supabase
       .from('reservations')
       .select('period')
-      .eq('reservation_type', id)
+      .eq('reservation_type', reservationType)
       .eq('reservation_date', dateReservation)
 
     if (error) {
@@ -681,6 +692,38 @@ useEffect(() => {
  
   fetchReservedPeriods()
 }, [dateReservation, id])
+
+// ...existing code...
+// useEffect(() => {
+//   const fetchReservedPeriods = async () => {
+//     console.log('Début récupération des plages réservées')
+//     if (!dateReservation || !id) {
+//       console.log('Aucune date ou ID fourni, annulation de la requête')
+//       return
+//     }
+
+//     console.log('Requête Supabase avec:', { reservation_type: id, reservation_date: dateReservation })
+
+//     const { data, error } = await supabase
+//       .from('reservations')
+//       .select('period')
+//       .eq('reservation_type', id)
+//       .eq('reservation_date', dateReservation)
+
+//     if (error) {
+//       console.error('Erreur récupération des réservations :', error)
+//       setReservedPeriods([])
+//     } else {
+//       console.log('Plages réservées reçues de Supabase:', data)
+//       const periods = data.map((r: any) => r.period)
+//       console.log('Plages extraites :', periods)
+//       setReservedPeriods(periods)
+//     }
+//   }
+ 
+//   fetchReservedPeriods()
+// }, [dateReservation, id])
+
 
 const isHourDisabled = (hour: string): boolean => {
   const start = `${dateReservation}T${hour}:00:00+00:00`
