@@ -706,9 +706,10 @@ useEffect(() => {
 }, [dateReservation, id])
 
 const isHourDisabled = (hour: string): boolean => {
-  const start = `${dateReservation}T${hour}:00:00+00:00`
+  // Génère la période au format de la base : [YYYY-MM-DD HH:MM:SS+00,YYYY-MM-DD HH:MM:SS+00)
+  const start = `${dateReservation} ${hour}:00+00`
   const endHour = String(Number(hour.split(':')[0]) + 1).padStart(2, '0')
-  const end = `${dateReservation}T${endHour}:00:00+00:00`
+  const end = `${dateReservation} ${endHour}:00:00+00`
   const rangeToCheck = `[${start},${end})`
 
   // Vérification stricte de l'inclusion
