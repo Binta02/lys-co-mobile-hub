@@ -263,6 +263,13 @@ useEffect(() => {
 //   }
 // };
 
+const getReservationType = (id: string) => {
+  if (id === 'coworking-space') return 'coworking';
+  if (id === 'formation-room') return 'formation';
+  if (id === 'location-bureau') return 'bureau';
+  return id;
+};
+
 const handleSubmit = async (data: FormValues) => {
   setIsProcessing(true);
   if (!stripe || !elements) return;
@@ -382,11 +389,9 @@ const handleSubmit = async (data: FormValues) => {
         if (date) {
           const startISO = `${date}T${start}:00+00:00`;
           const endISO = `${date}T${end}:00+00:00`;
-          // const period = `"[\"${startISO}\",\"${endISO}\")"`;
           const period = `[${startISO},${endISO})`;
 
-
-          const reservationType = item.id.includes('coworking') ? 'coworking' : item.id.split('-')[0];
+          const reservationType = getReservationType(item.id);
 
           const insertData = {
             user_id: userId!,
@@ -426,6 +431,7 @@ const handleSubmit = async (data: FormValues) => {
     setIsProcessing(false);
   }
 };
+
 
 
   return (
