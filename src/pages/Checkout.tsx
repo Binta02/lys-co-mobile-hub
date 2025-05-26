@@ -192,6 +192,7 @@ const handleSubmit = async (data: FormValues) => {
           address: data.address,
           siretNumber: data.siretNumber,
           },
+          items,  // ← ton tableau d’objets { title, price, quantity }
           total,
       }),
     });
