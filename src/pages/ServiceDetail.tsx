@@ -169,6 +169,27 @@ const ServiceDetail: React.FC = () => {
   const [refreshReviews, setRefreshReviews] = useState(false)
   const [activeTab, setActiveTab] = useState<'description'|'reviews'>('description')
 
+  const getReservationPeriod = () => {
+  if (!dateReservation) return '';
+  if (modeReservation === 'halfDay') {
+    if (halfDayPeriod === 'morning') {
+      return `[${dateReservation} 09:00:00+00,${dateReservation} 12:00:00+00)`;
+    } else {
+      return `[${dateReservation} 13:00:00+00,${dateReservation} 16:00:00+00)`;
+    }
+  }
+  if (modeReservation === 'fullDay') {
+    return `[${dateReservation} 09:00:00+00,${dateReservation} 16:00:00+00)`;
+  }
+  if (modeReservation === 'hour' && selectedHours.length > 0) {
+    const hour = selectedHours[0];
+    const start = `${dateReservation} ${hour}:00+00`;
+    const endHour = String(Number(hour.split(':')[0]) + 1).padStart(2, '0');
+    const end = `${dateReservation} ${endHour}:00+00`;
+    return `[${start},${end})`;
+  }
+  return '';
+};
 // ...existing code...
 const getReservationType = (id) => {
   if (id === 'coworking-space') return 'coworking';
@@ -513,29 +534,32 @@ console.log('[isFullDayOptionDisabled]', isFullDayReserved);
                   )}
 
                   {/* Pour le bouton d'ajout au panier */}
-<Button
-  className="w-full bg-lysco-turquoise"
-  disabled={
-    !dateReservation ||
-    (modeReservation === 'hour' && selectedHours.length === 0) ||
-    (modeReservation === 'halfDay' && isHalfDayOptionDisabled(halfDayPeriod)) ||
-    (modeReservation === 'fullDay' && isFullDayReserved)
-  }
-  onClick={() => {
-    const label = `${service.title} — ${modeReservation}${
-      modeReservation === 'halfDay' ? ` (${halfDayPeriod})` : ''
-    } — ${dateReservation} ${selectedHours.join(', ')}`;
-    addItem({ 
-      id: `${id}-${dateReservation}`, 
-      title: label, 
-      price: calculPrix(), 
-      quantity: 1 
-    });
-    toast({ title: 'Ajouté au panier', description: label });
-  }}
->
-  <ShoppingCart className="h-4 w-4 mr-2" /> Ajouter au panier
-</Button>
+                  <Button
+                    className="w-full bg-lysco-turquoise"
+                    disabled={
+                      !dateReservation ||
+                      (modeReservation === 'hour' && selectedHours.length === 0) ||
+                      (modeReservation === 'halfDay' && isHalfDayOptionDisabled(halfDayPeriod)) ||
+                      (modeReservation === 'fullDay' && isFullDayReserved)
+                    }
+                    onClick={() => {
+                      const period = getReservationPeriod(); // <-- Génère la période exacte
+                      const label = `${service.title} — ${modeReservation}${
+                        modeReservation === 'halfDay' ? ` (${halfDayPeriod})` : ''
+                      } — ${dateReservation} ${selectedHours.join(', ')}`;
+                      addItem({ 
+                        id: `${id}-${dateReservation}`, 
+                        title: label, 
+                        price: calculPrix(), 
+                        quantity: 1,
+                        // @ts-expect-error Ajout temporaire de la propriété period pour la réservation
+                        period
+                      });
+                      toast({ title: 'Ajouté au panier', description: label });
+                    }}
+                  >
+                    <ShoppingCart className="h-4 w-4 mr-2" /> Ajouter au panier
+                  </Button>
 
                   <div className="pt-4 border-t">
                     <div className="flex items-center justify-center gap-2 text-sm text-gray-600">
