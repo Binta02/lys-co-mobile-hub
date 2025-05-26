@@ -845,7 +845,16 @@ const isHourDisabled = (hour: string): boolean => {
 
                   <div className="space-y-2">
                     <label className="font-medium">Date</label>
-                    <input type="date" value={dateReservation} onChange={e => setDateReservation(e.target.value)} min={new Date().toISOString().split('T')[0]} className="w-full p-2 border rounded" />
+                    <input
+                      type="date"
+                      value={dateReservation}
+                      onChange={e => {
+                        setDateReservation(e.target.value)
+                        setSelectedHours([]) // <-- Ajoute ceci pour vider la sélection
+                      }}
+                      min={new Date().toISOString().split('T')[0]}
+                      className="w-full p-2 border rounded"
+                    />
                   </div>
 
                   {modeReservation === 'hour' && dateReservation && (
