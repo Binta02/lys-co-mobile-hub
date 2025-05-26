@@ -652,23 +652,57 @@ const ServiceDetail: React.FC = () => {
   const [refreshReviews, setRefreshReviews] = useState(false)
   const [activeTab, setActiveTab] = useState<'description'|'reviews'>('description')
 
+  // useEffect(() => {
+  //   const fetchReservedPeriods = async () => {
+  //     if (!dateReservation || !id) return
+  //     const { data, error } = await supabase
+  //       .from('reservations')
+  //       .select('period')
+  //       .eq('reservation_type', id)
+  //       .eq('reservation_date', dateReservation)
+  //     if (!error && data) {
+  //       const periods = data.map(r => r.period as string)
+  //       setReservedPeriods(periods)
+  //     } else {
+  //       setReservedPeriods([])
+  //     }
+  //   }
+  //   fetchReservedPeriods()
+  // }, [dateReservation, id])
+
   useEffect(() => {
-    const fetchReservedPeriods = async () => {
-      if (!dateReservation || !id) return
-      const { data, error } = await supabase
-        .from('reservations')
-        .select('period')
-        .eq('reservation_type', id)
-        .eq('reservation_date', dateReservation)
-      if (!error && data) {
-        const periods = data.map(r => r.period as string)
-        setReservedPeriods(periods)
-      } else {
-        setReservedPeriods([])
-      }
+  const fetchReservedPeriods = async () => {
+    if (!dateReservation || !id) return
+
+    const { data, error } = await supabase
+      .from('reservations')
+      .select('period')
+      .eq('reservation_type', id)
+      .eq('reservation_date', dateReservation)
+
+    if (error) {
+      console.error('Erreur récupération des réservations :', error)
+      setReservedPeriods([])
+    } else {
+      console.log('Plages réservées reçues de Supabase:', data)
+      const periods = data.map((r: any) => r.period)
+      setReservedPeriods(periods)
     }
-    fetchReservedPeriods()
-  }, [dateReservation, id])
+  }
+
+  fetchReservedPeriods()
+}, [dateReservation, id])
+
+const isHourDisabled = (hour: string): boolean => {
+  const start = `${dateReservation}T${hour}:00:00+00:00`
+  const endHour = String(Number(hour.split(':')[0]) + 1).padStart(2, '0')
+  const end = `${dateReservation}T${endHour}:00:00+00:00`
+  const rangeToCheck = `[${start},${end})`
+
+  const match = reservedPeriods.includes(rangeToCheck)
+  console.log(`Vérification pour ${rangeToCheck} => ${match}`)
+  return match
+}
 
   const calculPrix = () => {
     const base = parseFloat(service.price.replace(',', '.'))
