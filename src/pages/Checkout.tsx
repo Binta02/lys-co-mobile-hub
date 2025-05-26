@@ -114,7 +114,7 @@ useEffect(() => {
     const { data } = await supabase.auth.getSession();
     const id = data?.session?.user.id;
     setUserId(id || null);
-    console.log("👤 ID utilisateur récupéré depuis Supabase :", id);
+    // console.log("👤 ID utilisateur récupéré depuis Supabase :", id);
   };
 
   getSession();
@@ -184,7 +184,7 @@ const handleSubmit = async (data: FormValues) => {
         receipt_email: data.email,
         
       });
-      console.log("Paiement ponctuel envoyé :", oneTimeItems);
+      // console.log("Paiement ponctuel envoyé :", oneTimeItems);
       if (confirmError) throw new Error('Échec du paiement unique');
     }
 

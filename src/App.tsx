@@ -37,8 +37,8 @@ import { Elements } from '@stripe/react-stripe-js'
 import { loadStripe } from '@stripe/stripe-js';
 
 const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY);
-console.log("Stripe public key loaded:", import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY);
-console.log("ENV variables:", import.meta.env);
+// console.log("Stripe public key loaded:", import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY);
+// console.log("ENV variables:", import.meta.env);
 
 
 function App() {
@@ -46,7 +46,7 @@ function App() {
 
   useEffect(() => {
     const token = localStorage.getItem('sb-utwuypfqugnhtucjfdhy-auth-token');
-    console.log("Auth token found:", token);
+    // console.log("Auth token found:", token);
     setIsAuth(!!token);
   }, []);
 

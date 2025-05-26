@@ -47,46 +47,40 @@ export type Database = {
       }
       reservations: {
         Row: {
-          created_at: string
-          end_time: string | null
+          created_at: string | null
           id: string
           period: unknown
           price: number
           reservation_date: string
           reservation_type: string
-          space_id: string
-          start_time: string | null
-          status: string
-          updated_at: string
-          user_id: string
+          space_id: string | null
+          status: string | null
+          updated_at: string | null
+          user_id: string | null
         }
         Insert: {
-          created_at?: string
-          end_time?: string | null
+          created_at?: string | null
           id?: string
           period: unknown
           price: number
           reservation_date: string
           reservation_type: string
-          space_id: string
-          start_time?: string | null
-          status?: string
-          updated_at?: string
-          user_id: string
+          space_id?: string | null
+          status?: string | null
+          updated_at?: string | null
+          user_id?: string | null
         }
         Update: {
-          created_at?: string
-          end_time?: string | null
+          created_at?: string | null
           id?: string
           period?: unknown
           price?: number
           reservation_date?: string
           reservation_type?: string
-          space_id?: string
-          start_time?: string | null
-          status?: string
-          updated_at?: string
-          user_id?: string
+          space_id?: string | null
+          status?: string | null
+          updated_at?: string | null
+          user_id?: string | null
         }
         Relationships: [
           {
