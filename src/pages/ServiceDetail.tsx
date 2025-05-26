@@ -428,9 +428,9 @@ console.log('[isFullDayOptionDisabled]', isFullDayReserved);
                       </option>
                       <option 
                         value="fullDay" 
-                        disabled={isFullDayReserved}
+                        disabled={isFullDayOptionDisabled}
                       >
-                        Journée complète {isFullDayReserved && '(réservée)'}
+                        Journée complète {isFullDayOptionDisabled && '(indisponible)'}
                       </option>
                     </select>
                   </div>
