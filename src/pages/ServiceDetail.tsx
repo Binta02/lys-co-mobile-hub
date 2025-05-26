@@ -660,7 +660,19 @@ const getReservationType = (id: string) => {
   return id
 }
 
-// ...existing imports et code...
+const getHalfDayRange = (period: 'morning' | 'afternoon') => {
+  if (!dateReservation) return ''
+  if (period === 'morning') {
+    return `[${dateReservation}T09:00:00+00:00,${dateReservation}T12:00:00+00:00)`
+  }
+  return `[${dateReservation}T13:00:00+00:00,${dateReservation}T16:00:00+00:00)`
+}
+
+const getFullDayRange = () => {
+  if (!dateReservation) return ''
+  return `[${dateReservation}T09:00:00+00:00,${dateReservation}T16:00:00+00:00)`
+}
+const isRangeReserved = (range: string) => reservedPeriods.includes(range)
 
 useEffect(() => {
   const fetchReservedPeriods = async () => {
@@ -717,41 +729,6 @@ const isHourDisabled = (hour: string): boolean => {
   console.log('Vérification de la plage :', rangeToCheck, '=>', match)
   return match
 }
-
-// ...reste du code inchangé...
-// useEffect(() => {
-//   const fetchReservedPeriods = async () => {
-//     console.log('Début récupération des plages réservées')
-//     if (!dateReservation || !id) {
-//       console.log('Aucune date ou ID fourni, annulation de la requête')
-//       return
-//     }
-
-//     const reservationType = getReservationType(id)
-
-//     console.log('Requête Supabase avec:', { reservation_type: reservationType, reservation_date: dateReservation })
-
-//     const { data, error } = await supabase
-//       .from('reservations')
-//       .select('period')
-//       .eq('reservation_type', reservationType)
-//       .eq('reservation_date', dateReservation)
-
-//     if (error) {
-//       console.error('Erreur récupération des réservations :', error)
-//       setReservedPeriods([])
-//     } else {
-//       console.log('Plages réservées reçues de Supabase:', data)
-//       const periods = data.map((r: any) => r.period)
-//       console.log('Plages extraites :', periods)
-//       setReservedPeriods(periods)
-//     }
-//   }
- 
-//   fetchReservedPeriods()
-// }, [dateReservation, id])
-
-
   const calculPrix = () => {
     const base = parseFloat(service.price.replace(',', '.'))
     if (id === 'coworking-space') {
@@ -829,21 +806,32 @@ const isHourDisabled = (hour: string): boolean => {
                     <select value={modeReservation} onChange={e => setModeReservation(e.target.value as any)} className="w-full p-2 border rounded">
                       <option value="hour">À l'heure</option>
                       <option value="halfDay">Demi-journée</option>
-                      <option value="fullDay">Journée complète</option>
+                      {/* <option value="fullDay">Journée complète</option> */}
+                      <option value="fullDay" disabled={isRangeReserved(getFullDayRange())}>
+                        Journée complète {isRangeReserved(getFullDayRange()) && ' (réservée)'}
+                      </option>
                     </select>
                   </div>
 
                   {modeReservation === 'halfDay' && (
                     <div className="space-y-2">
                       <label className="font-medium">Matin ou Après-midi</label>
-                      <select value={halfDayPeriod} onChange={e => setHalfDayPeriod(e.target.value as any)} className="w-full p-2 border rounded">
-                        <option value="morning">Matin (9h-12h)</option>
-                        <option value="afternoon">Après-midi (13h-16h)</option>
+                      <select
+                        value={halfDayPeriod}
+                        onChange={e => setHalfDayPeriod(e.target.value as any)}
+                        className="w-full p-2 border rounded"
+                      >
+                        <option value="morning" disabled={isRangeReserved(getHalfDayRange('morning'))}>
+                          Matin (9h-12h) {isRangeReserved(getHalfDayRange('morning')) && ' (réservé)'}
+                        </option>
+                        <option value="afternoon" disabled={isRangeReserved(getHalfDayRange('afternoon'))}>
+                          Après-midi (13h-16h) {isRangeReserved(getHalfDayRange('afternoon')) && ' (réservé)'}
+                        </option>
                       </select>
                     </div>
                   )}
 
-                  <div className="space-y-2">
+                  {/* <div className="space-y-2">
                     <label className="font-medium">Date</label>
                     <input
                       type="date"
@@ -855,6 +843,29 @@ const isHourDisabled = (hour: string): boolean => {
                       min={new Date().toISOString().split('T')[0]}
                       className="w-full p-2 border rounded"
                     />
+                  </div> */}
+                  // 3. Affichage d'une icône si la journée est réservée (juste après le champ date)
+                  <div className="space-y-2">
+                    <label className="font-medium">Date</label>
+                    <input
+                      type="date"
+                      value={dateReservation}
+                      onChange={e => {
+                        setDateReservation(e.target.value)
+                        setSelectedHours([])
+                      }}
+                      min={new Date().toISOString().split('T')[0]}
+                      className="w-full p-2 border rounded"
+                    />
+                    {isRangeReserved(getFullDayRange()) && (
+                      <div className="flex items-center text-red-600 mt-1">
+                        <svg className="w-4 h-4 mr-1" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
+                          <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="2" fill="none"/>
+                          <path stroke="currentColor" strokeWidth="2" d="M9 12l2 2l4 -4" />
+                        </svg>
+                        Journée déjà réservée
+                      </div>
+                    )}
                   </div>
 
                   {modeReservation === 'hour' && dateReservation && (
