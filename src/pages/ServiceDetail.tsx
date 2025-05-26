@@ -177,22 +177,43 @@ const getReservationType = (id) => {
   return id;
 };
 
-// Ajout de vérifications de plage réservée pour demi-journée et journée complète
+// Fonction pour vérifier si une plage est réservée
+const isRangeReserved = (range: string): boolean => {
+  return reservedPeriods.some(reservedRange => {
+    // Convertir les plages en dates pour comparaison
+    const extractDates = (rangeStr: string) => {
+      const match = rangeStr.match(/\["(.+?)","(.+?)"\)/);
+      return match ? [new Date(match[1]), new Date(match[2])] : [null, null];
+    };
 
-const getHalfDayRange = (period) => {
+    const [reservedStart, reservedEnd] = extractDates(reservedRange);
+    const [checkStart, checkEnd] = extractDates(range);
+
+    if (!reservedStart || !reservedEnd || !checkStart || !checkEnd) return false;
+
+    // Vérifier si les plages se chevauchent
+    return (
+      (checkStart >= reservedStart && checkStart < reservedEnd) ||
+      (checkEnd > reservedStart && checkEnd <= reservedEnd) ||
+      (checkStart <= reservedStart && checkEnd >= reservedEnd)
+    );
+  });
+};
+
+// Fonctions pour générer les plages de temps
+const getHalfDayRange = (period: 'morning' | 'afternoon'): string => {
   if (!dateReservation) return '';
   return period === 'morning'
-    ? `[${dateReservation}T09:00:00+00:00,${dateReservation}T12:00:00+00:00)`
-    : `[${dateReservation}T13:00:00+00:00,${dateReservation}T16:00:00+00:00)`;
+    ? `["${dateReservation} 09:00:00+00","${dateReservation} 12:00:00+00")`
+    : `["${dateReservation} 13:00:00+00","${dateReservation} 16:00:00+00")`;
 };
 
-const getFullDayRange = () => {
+const getFullDayRange = (): string => {
   if (!dateReservation) return '';
-  return `[${dateReservation}T09:00:00+00:00,${dateReservation}T16:00:00+00:00)`;
+  return `["${dateReservation} 09:00:00+00","${dateReservation} 16:00:00+00")`;
 };
 
-const isRangeReserved = (range) => reservedPeriods.includes(range);
-
+// Vérifications des réservations existantes
 const isMorningReserved = isRangeReserved(getHalfDayRange('morning'));
 const isAfternoonReserved = isRangeReserved(getHalfDayRange('afternoon'));
 const isFullDayReserved = isRangeReserved(getFullDayRange());
@@ -240,18 +261,36 @@ useEffect(() => {
   fetchReservedPeriods()
 }, [dateReservation, id])
 
-const isHourDisabled = (hour: string): boolean => {
-  // Génère la période au format de la base : [YYYY-MM-DD HH:MM:SS+00,YYYY-MM-DD HH:MM:SS+00)
-  const start = `${dateReservation} ${hour}:00+00`
-  const endHour = String(Number(hour.split(':')[0]) + 1).padStart(2, '0')
-  const end = `${dateReservation} ${endHour}:00:00+00`
-  const rangeToCheck = `[${start},${end})`
+// const isHourDisabled = (hour: string): boolean => {
+//   // Génère la période au format de la base : [YYYY-MM-DD HH:MM:SS+00,YYYY-MM-DD HH:MM:SS+00)
+//   const start = `${dateReservation} ${hour}:00+00`
+//   const endHour = String(Number(hour.split(':')[0]) + 1).padStart(2, '0')
+//   const end = `${dateReservation} ${endHour}:00:00+00`
+//   const rangeToCheck = `[${start},${end})`
 
-  // Vérification stricte de l'inclusion
-  const match = reservedPeriods.includes(rangeToCheck)
-  // console.log('Vérification de la plage :', rangeToCheck, '=>', match)
-  return match
-}
+//   // Vérification stricte de l'inclusion
+//   const match = reservedPeriods.includes(rangeToCheck)
+//   // console.log('Vérification de la plage :', rangeToCheck, '=>', match)
+//   return match
+// }
+// Fonction pour vérifier si une heure est réservée
+const isHourDisabled = (hour: string): boolean => {
+  if (!dateReservation) return false;
+  
+  const start = `${dateReservation} ${hour}:00+00`;
+  const endHour = String(Number(hour.split(':')[0]) + 1).padStart(2, '0');
+  const end = `${dateReservation} ${endHour}:00:00+00`;
+  const rangeToCheck = `["${start}","${end}")`;
+  
+  return isRangeReserved(rangeToCheck);
+};
+
+// Logique pour désactiver les options selon les règles
+const isFullDayOptionDisabled = isFullDayReserved;
+const isHalfDayOptionDisabled = (period: 'morning' | 'afternoon') => {
+  if (isFullDayReserved) return true; // Si journée complète réservée, désactiver toutes les demi-journées
+  return period === 'morning' ? isMorningReserved : isAfternoonReserved;
+};
   const calculPrix = () => {
     const base = parseFloat(service.price.replace(',', '.'))
     if (id === 'coworking-space') {
@@ -326,11 +365,23 @@ const isHourDisabled = (hour: string): boolean => {
                   <h3 className="font-semibold text-lg">Réserver</h3>
                   <div className="space-y-2">
                     <label className="font-medium">Type</label>
-                    <select value={modeReservation} onChange={e => setModeReservation(e.target.value as any)} className="w-full p-2 border rounded">
+                    <select 
+                      value={modeReservation} 
+                      onChange={e => setModeReservation(e.target.value as any)} 
+                      className="w-full p-2 border rounded"
+                    >
                       <option value="hour">À l'heure</option>
-                      <option value="halfDay">Demi-journée</option>
-                      <option value="fullDay" disabled={isRangeReserved(getFullDayRange())}>
-                        Journée complète{isRangeReserved(getFullDayRange()) && ' (réservée)'}
+                      <option 
+                        value="halfDay" 
+                        disabled={isFullDayReserved} // Désactiver si journée complète réservée
+                      >
+                        Demi-journée {isFullDayReserved && '(indisponible)'}
+                      </option>
+                      <option 
+                        value="fullDay" 
+                        disabled={isFullDayReserved}
+                      >
+                        Journée complète {isFullDayReserved && '(réservée)'}
                       </option>
                     </select>
                   </div>
@@ -340,6 +391,7 @@ const isHourDisabled = (hour: string): boolean => {
                       La journée entière est déjà réservée à cette date.
                     </div>
                   )}
+                  {/* Pour la sélection de demi-journée */}
                   {modeReservation === 'halfDay' && (
                     <div className="space-y-2">
                       <label className="font-medium">Matin ou Après-midi</label>
@@ -348,11 +400,17 @@ const isHourDisabled = (hour: string): boolean => {
                         onChange={e => setHalfDayPeriod(e.target.value as any)}
                         className="w-full p-2 border rounded"
                       >
-                        <option value="morning" disabled={isRangeReserved(getHalfDayRange('morning'))}>
-                          Matin (9h-12h) {isRangeReserved(getHalfDayRange('morning')) && ' (indisponible)'}
+                        <option 
+                          value="morning" 
+                          disabled={isHalfDayOptionDisabled('morning')}
+                        >
+                          Matin (9h-12h) {isHalfDayOptionDisabled('morning') && '(indisponible)'}
                         </option>
-                        <option value="afternoon" disabled={isRangeReserved(getHalfDayRange('afternoon'))}>
-                          Après-midi (13h-16h) {isRangeReserved(getHalfDayRange('afternoon')) && ' (indisponible)'}
+                        <option 
+                          value="afternoon" 
+                          disabled={isHalfDayOptionDisabled('afternoon')}
+                        >
+                          Après-midi (13h-16h) {isHalfDayOptionDisabled('afternoon') && '(indisponible)'}
                         </option>
                       </select>
                     </div>
@@ -392,22 +450,30 @@ const isHourDisabled = (hour: string): boolean => {
                     </div>
                   )}
 
-                  <Button
-                    className="w-full bg-lysco-turquoise"
-                    disabled={
-                      !dateReservation ||
-                      (modeReservation === 'hour' && selectedHours.length === 0) ||
-                      (modeReservation === 'halfDay' && ((halfDayPeriod === 'morning' && isMorningReserved) || (halfDayPeriod === 'afternoon' && isAfternoonReserved))) ||
-                      (modeReservation === 'fullDay' && isFullDayReserved)
-                    }
-                    onClick={() => {
-                      const label = `${service.title} — ${modeReservation}${modeReservation === 'halfDay' ? ` (${halfDayPeriod})` : ''} — ${dateReservation} ${selectedHours.join(', ')}`
-                      addItem({ id: `${id}-${dateReservation}`, title: label, price: calculPrix(), quantity: 1 })
-                      toast({ title: 'Ajouté au panier', description: label })
-                    }}
-                  >
-                    <ShoppingCart className="h-4 w-4 mr-2" /> Ajouter au panier
-                  </Button>
+                  {/* Pour le bouton d'ajout au panier */}
+<Button
+  className="w-full bg-lysco-turquoise"
+  disabled={
+    !dateReservation ||
+    (modeReservation === 'hour' && selectedHours.length === 0) ||
+    (modeReservation === 'halfDay' && isHalfDayOptionDisabled(halfDayPeriod)) ||
+    (modeReservation === 'fullDay' && isFullDayReserved)
+  }
+  onClick={() => {
+    const label = `${service.title} — ${modeReservation}${
+      modeReservation === 'halfDay' ? ` (${halfDayPeriod})` : ''
+    } — ${dateReservation} ${selectedHours.join(', ')}`;
+    addItem({ 
+      id: `${id}-${dateReservation}`, 
+      title: label, 
+      price: calculPrix(), 
+      quantity: 1 
+    });
+    toast({ title: 'Ajouté au panier', description: label });
+  }}
+>
+  <ShoppingCart className="h-4 w-4 mr-2" /> Ajouter au panier
+</Button>
 
                   <div className="pt-4 border-t">
                     <div className="flex items-center justify-center gap-2 text-sm text-gray-600">
