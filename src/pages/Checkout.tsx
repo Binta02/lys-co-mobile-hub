@@ -278,7 +278,6 @@ const handleSubmit = async (data: FormValues) => {
       if (confirmError) throw new Error("Échec de paiement de l'abonnement");
     }
 
-    // 📦 Insérer dans la base de données
     for (const item of items) {
       const baseInsert = {
         user_id: userId!,
@@ -301,29 +300,34 @@ const handleSubmit = async (data: FormValues) => {
         if (error) console.error('Erreur ajout domiciliation:', error);
 
       } else if (item.id.includes('location-bureau') || item.id.includes('formation-room') || item.id.includes('coworking-space')) {
-        const parts = item.id.split('-');
-        const date = parts[parts.length - 1];
+        const dateMatch = item.id.match(/\d{4}-\d{2}-\d{2}/);
+        const date = dateMatch ? dateMatch[0] : null;
         const timeMatches = item.title.match(/\d{2}:\d{2}/g);
         let start = '09:00', end = '16:00';
+
         if (timeMatches?.length === 1) {
           start = timeMatches[0];
           end = String(Number(start.split(':')[0]) + 1).padStart(2, '0') + ':00';
-        }
-        if (timeMatches?.length > 1) {
+        } else if (timeMatches?.length > 1) {
           start = timeMatches[0];
           end = timeMatches[timeMatches.length - 1];
           end = String(Number(end.split(':')[0]) + 1).padStart(2, '0') + ':00';
         }
-        const period = `[${date}T${start}:00+00:00,${date}T${end}:00+00:00)`;
 
-        const { error } = await supabase.from('reservations').insert({
-          user_id: userId!,
-          reservation_type: item.id.split('-')[0],
-          reservation_date: date,
-          price: item.price,
-          period,
-        });
-        if (error) console.error('Erreur ajout réservation:', error);
+        if (date) {
+          const period = `[${date}T${start}:00+00:00,${date}T${end}:00+00:00)`;
+
+          const { error } = await supabase.from('reservations').insert({
+            user_id: userId!,
+            reservation_type: item.id.split('-')[0],
+            reservation_date: date,
+            price: item.price,
+            period,
+          });
+          if (error) console.error('Erreur ajout réservation:', error);
+        } else {
+          console.error('Date non extraite depuis item.id:', item.id);
+        }
 
       } else {
         const { error } = await supabase.from('user_services').insert({
@@ -346,7 +350,6 @@ const handleSubmit = async (data: FormValues) => {
     setIsProcessing(false);
   }
 };
-
 
   return (
   <div className="min-h-screen flex flex-col">
