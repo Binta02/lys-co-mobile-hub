@@ -659,7 +659,8 @@ const getReservationType = (id: string) => {
   if (id === 'location-bureau') return 'bureau'
   return id
 }
-// ...existing code...
+
+// ...existing imports et code...
 
 useEffect(() => {
   const fetchReservedPeriods = async () => {
@@ -683,8 +684,19 @@ useEffect(() => {
       console.error('Erreur récupération des réservations :', error)
       setReservedPeriods([])
     } else {
-      console.log('Plages réservées reçues de Supabase:', data)
-      const periods = data.map((r: any) => r.period)
+      // Uniformisation du format des périodes récupérées
+      const periods = data.map((r: any) => {
+        // Si period est au format JSON PostgreSQL : '["2025-05-28 09:00:00+00","2025-05-28 10:00:00+00")'
+        if (typeof r.period === 'string' && r.period.startsWith('["')) {
+          const match = r.period.match(/\["(.+?)","(.+?)"\)/)
+          if (match) {
+            // On remet au format utilisé dans le code : [start,end)
+            return `[${match[1]},${match[2]})`
+          }
+        }
+        // Sinon, on suppose que c'est déjà au bon format
+        return r.period
+      })
       console.log('Plages extraites :', periods)
       setReservedPeriods(periods)
     }
@@ -693,7 +705,19 @@ useEffect(() => {
   fetchReservedPeriods()
 }, [dateReservation, id])
 
-// ...existing code...
+const isHourDisabled = (hour: string): boolean => {
+  const start = `${dateReservation}T${hour}:00:00+00:00`
+  const endHour = String(Number(hour.split(':')[0]) + 1).padStart(2, '0')
+  const end = `${dateReservation}T${endHour}:00:00+00:00`
+  const rangeToCheck = `[${start},${end})`
+
+  // Vérification stricte de l'inclusion
+  const match = reservedPeriods.includes(rangeToCheck)
+  console.log('Vérification de la plage :', rangeToCheck, '=>', match)
+  return match
+}
+
+// ...reste du code inchangé...
 // useEffect(() => {
 //   const fetchReservedPeriods = async () => {
 //     console.log('Début récupération des plages réservées')
@@ -702,12 +726,14 @@ useEffect(() => {
 //       return
 //     }
 
-//     console.log('Requête Supabase avec:', { reservation_type: id, reservation_date: dateReservation })
+//     const reservationType = getReservationType(id)
+
+//     console.log('Requête Supabase avec:', { reservation_type: reservationType, reservation_date: dateReservation })
 
 //     const { data, error } = await supabase
 //       .from('reservations')
 //       .select('period')
-//       .eq('reservation_type', id)
+//       .eq('reservation_type', reservationType)
 //       .eq('reservation_date', dateReservation)
 
 //     if (error) {
@@ -723,20 +749,6 @@ useEffect(() => {
  
 //   fetchReservedPeriods()
 // }, [dateReservation, id])
-
-
-const isHourDisabled = (hour: string): boolean => {
-  const start = `${dateReservation}T${hour}:00:00+00:00`
-  const endHour = String(Number(hour.split(':')[0]) + 1).padStart(2, '0')
-  const end = `${dateReservation}T${endHour}:00:00+00:00`
-  const rangeToCheck = `[${start},${end})`
-
-  console.log('Vérification de la plage :', rangeToCheck)
-  const match = reservedPeriods.includes(rangeToCheck)
-  console.log(`Résultat pour ${rangeToCheck} :`, match)
-
-  return match
-}
 
 
   const calculPrix = () => {
