@@ -318,7 +318,7 @@ const isHourDisabled = (hour: string): boolean => {
 
 // Logique pour désactiver les options selon les règles
 const isFullDayOptionDisabled = isFullDayReserved;
-const isHalfDayOptionDisabled = (period: 'morning' | 'afternoon') => {
+const isHalfDayOptionDisabled = (period: 'morning'|'afternoon') => {
   const disabled = isFullDayReserved || (period === 'morning' ? isMorningReserved : isAfternoonReserved);
   console.log('[isHalfDayOptionDisabled]', period, ':', disabled);
   return disabled;
