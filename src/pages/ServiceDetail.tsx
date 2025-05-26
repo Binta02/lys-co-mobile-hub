@@ -652,24 +652,6 @@ const ServiceDetail: React.FC = () => {
   const [refreshReviews, setRefreshReviews] = useState(false)
   const [activeTab, setActiveTab] = useState<'description'|'reviews'>('description')
 
-  // useEffect(() => {
-  //   const fetchReservedPeriods = async () => {
-  //     if (!dateReservation || !id) return
-  //     const { data, error } = await supabase
-  //       .from('reservations')
-  //       .select('period')
-  //       .eq('reservation_type', id)
-  //       .eq('reservation_date', dateReservation)
-  //     if (!error && data) {
-  //       const periods = data.map(r => r.period as string)
-  //       setReservedPeriods(periods)
-  //     } else {
-  //       setReservedPeriods([])
-  //     }
-  //   }
-  //   fetchReservedPeriods()
-  // }, [dateReservation, id])
-
 useEffect(() => {
   const fetchReservedPeriods = async () => {
     console.log('Début récupération des plages réservées')
