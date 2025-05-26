@@ -333,7 +333,6 @@ const handleSubmit = async (data: FormValues) => {
       if (confirmError) throw new Error("Échec de paiement de l'abonnement");
     }
 
-    // 📦 Insérer dans la base de données
     for (const item of items) {
       const baseInsert = {
         user_id: userId!,
@@ -373,15 +372,16 @@ const handleSubmit = async (data: FormValues) => {
         if (date) {
           const startISO = `${date}T${start}:00+00:00`;
           const endISO = `${date}T${end}:00+00:00`;
-          const period = `[${startISO},${endISO})`;
+          const period = `${startISO},${endISO}`;
 
-          const { error } = await supabase.from('reservations').insert({
-            user_id: userId!,
-            reservation_type: item.id.split('-')[0],
-            reservation_date: date,
-            price: item.price,
-            period: period,
+          const { error } = await supabase.rpc('insert_reservation' as any, {
+            user_id_input: userId!,
+            reservation_type_input: item.id.split('-')[0],
+            reservation_date_input: date,
+            price_input: item.price,
+            period_input: period
           });
+
           if (error) console.error('Erreur ajout réservation:', error);
         } else {
           console.error('Date non extraite depuis item.id:', item.id);
@@ -408,6 +408,8 @@ const handleSubmit = async (data: FormValues) => {
     setIsProcessing(false);
   }
 };
+
+
 
 
 
