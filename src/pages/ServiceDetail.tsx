@@ -233,7 +233,7 @@ useEffect(() => {
     const { data, error } = await supabase
       .from('reservations')
       .select('period')
-      .eq('reservation_type', reservationType)
+      .like('reservation_type', `${reservationType}%`)
       .eq('reservation_date', dateReservation)
 
     if (error) {
