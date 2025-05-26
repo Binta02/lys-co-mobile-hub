@@ -249,7 +249,10 @@ const isMorningReserved = isRangeReserved(getHalfDayRange('morning'));
 console.log('[isMorningReserved]', isMorningReserved);
 const isAfternoonReserved = isRangeReserved(getHalfDayRange('afternoon'));
 console.log('[isAfternoonReserved]', isAfternoonReserved);
-const isFullDayReserved = isRangeReserved(getFullDayRange());
+// const isFullDayReserved = isRangeReserved(getFullDayRange());
+// Full day est réservé uniquement si matin et après-midi le sont tous les deux
+const isFullDayReserved = isMorningReserved && isAfternoonReserved;
+
 console.log('[isFullDayReserved]', isFullDayReserved);
 
 useEffect(() => {
