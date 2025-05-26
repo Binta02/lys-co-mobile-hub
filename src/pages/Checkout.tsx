@@ -186,6 +186,13 @@ const handleSubmit = async (data: FormValues) => {
         oneTimeItems,
         subscriptionItems,
         userId,
+        clientInfo: {
+          firstName: data.firstName,
+          lastName: data.lastName,
+          address: data.address,
+          siretNumber: data.siretNumber,
+          },
+          total,
       }),
     });
 
