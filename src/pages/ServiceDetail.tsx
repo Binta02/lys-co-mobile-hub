@@ -179,7 +179,8 @@ const getReservationType = (id) => {
 
 // Fonction pour vérifier si une plage est réservée
 const isRangeReserved = (range: string): boolean => {
-  return reservedPeriods.some(reservedRange => {
+  const result = reservedPeriods.some(reservedRange => {
+    console.log('[isRangeReserved] Test:', { reservedRange, range });
     // Convertir les plages en dates pour comparaison
     const extractDates = (rangeStr: string) => {
       const match = rangeStr.match(/\["(.+?)","(.+?)"\)/);
@@ -198,68 +199,121 @@ const isRangeReserved = (range: string): boolean => {
       (checkStart <= reservedStart && checkEnd >= reservedEnd)
     );
   });
+    console.log('[isRangeReserved] Résultat pour', range, ':', result);
+  return result;
 };
 
 // Fonctions pour générer les plages de temps
 const getHalfDayRange = (period: 'morning' | 'afternoon'): string => {
   if (!dateReservation) return '';
-  return period === 'morning'
+  const range = period === 'morning'
     ? `[${dateReservation} 09:00:00+00,${dateReservation} 12:00:00+00)`
     : `[${dateReservation} 13:00:00+00,${dateReservation} 16:00:00+00)`;
+  console.log('[getHalfDayRange]', period, ':', range);
+  return range;
+
 };
 
 const getFullDayRange = (): string => {
   if (!dateReservation) return '';
-  return `[${dateReservation} 09:00:00+00,${dateReservation} 16:00:00+00)`;
+  const range = `[${dateReservation} 09:00:00+00,${dateReservation} 16:00:00+00)`;
+  console.log('[getFullDayRange] :', range);
+  return range;
+
 };
 
 // Vérifications des réservations existantes
 const isMorningReserved = isRangeReserved(getHalfDayRange('morning'));
+console.log('[isMorningReserved]', isMorningReserved);
 const isAfternoonReserved = isRangeReserved(getHalfDayRange('afternoon'));
+console.log('[isAfternoonReserved]', isAfternoonReserved);
 const isFullDayReserved = isRangeReserved(getFullDayRange());
+console.log('[isFullDayReserved]', isFullDayReserved);
 
 useEffect(() => {
   const fetchReservedPeriods = async () => {
-    console.log('Début récupération des plages réservées')
+    console.log('Début récupération des plages réservées');
     if (!dateReservation || !id) {
-      console.log('Aucune date ou ID fourni, annulation de la requête')
-      return
+      console.log('Aucune date ou ID fourni, annulation de la requête');
+      return;
     }
 
-    const reservationType = getReservationType(id)
+    const reservationType = getReservationType(id);
 
-    console.log('Requête Supabase avec:', { reservation_type: reservationType, reservation_date: dateReservation })
+    console.log('Requête Supabase avec:', { reservation_type: reservationType, reservation_date: dateReservation });
 
     const { data, error } = await supabase
       .from('reservations')
       .select('period')
       .like('reservation_type', `${reservationType}%`)
-      .eq('reservation_date', dateReservation)
+      .eq('reservation_date', dateReservation);
 
     if (error) {
-      console.error('Erreur récupération des réservations :', error)
-      setReservedPeriods([])
+      console.error('Erreur récupération des réservations :', error);
+      setReservedPeriods([]);
     } else {
       // Uniformisation du format des périodes récupérées
       const periods = data.map((r: any) => {
-        // Si period est au format JSON PostgreSQL : '["2025-05-28 09:00:00+00","2025-05-28 10:00:00+00")'
         if (typeof r.period === 'string' && r.period.startsWith('["')) {
-          const match = r.period.match(/\["(.+?)","(.+?)"\)/)
+          const match = r.period.match(/\["(.+?)","(.+?)"\)/);
           if (match) {
-            // On remet au format utilisé dans le code : [start,end)
-            return `[${match[1]},${match[2]})`
+            const formatted = `[${match[1]},${match[2]})`;
+            console.log('[fetchReservedPeriods] Formaté:', formatted);
+            return formatted;
           }
         }
-        // Sinon, on suppose que c'est déjà au bon format
-        return r.period
-      })
-      console.log('Plages extraites :', periods)
-      setReservedPeriods(periods)
+        console.log('[fetchReservedPeriods] Déjà formaté:', r.period);
+        return r.period;
+      });
+      console.log('Plages extraites :', periods);
+      setReservedPeriods(periods);
     }
-  }
+  };
+
+  fetchReservedPeriods();
+}, [dateReservation, id]);
+// useEffect(() => {
+//   const fetchReservedPeriods = async () => {
+//     console.log('Début récupération des plages réservées')
+//     if (!dateReservation || !id) {
+//       console.log('Aucune date ou ID fourni, annulation de la requête')
+//       return
+//     }
+
+//     const reservationType = getReservationType(id)
+
+//     console.log('Requête Supabase avec:', { reservation_type: reservationType, reservation_date: dateReservation })
+
+//     const { data, error } = await supabase
+//       .from('reservations')
+//       .select('period')
+//       .like('reservation_type', `${reservationType}%`)
+//       .eq('reservation_date', dateReservation)
+
+//     if (error) {
+//       console.error('Erreur récupération des réservations :', error)
+//       setReservedPeriods([])
+//     } else {
+//       // Uniformisation du format des périodes récupérées
+//       const periods = data.map((r: any) => {
+//         // Si period est au format JSON PostgreSQL : '["2025-05-28 09:00:00+00","2025-05-28 10:00:00+00")'
+//         if (typeof r.period === 'string' && r.period.startsWith('["')) {
+//           const match = r.period.match(/\["(.+?)","(.+?)"\)/)
+//           if (match) {
+//             // On remet au format utilisé dans le code : [start,end)
+//             return `[${match[1]},${match[2]})`
+//           }
+//         }
+//         // Sinon, on suppose que c'est déjà au bon format
+//         return r.period
+//       })
+//       console.log('Plages extraites :', periods)
+//       setReservedPeriods(periods)
+//     }
+//   }
  
-  fetchReservedPeriods()
-}, [dateReservation, id])
+//   fetchReservedPeriods()
+// }, [dateReservation, id])
 
 // const isHourDisabled = (hour: string): boolean => {
 //   // Génère la période au format de la base : [YYYY-MM-DD HH:MM:SS+00,YYYY-MM-DD HH:MM:SS+00)
@@ -274,21 +328,30 @@ useEffect(() => {
 //   return match
 // }
 // Fonction pour vérifier si une heure est réservée
+// Pour la désactivation des heures
 const isHourDisabled = (hour: string): boolean => {
   if (!dateReservation) return false;
   const start = `${dateReservation} ${hour}:00+00`;
   const endHour = String(Number(hour.split(':')[0]) + 1).padStart(2, '0');
   const end = `${dateReservation} ${endHour}:00:00+00`;
   const rangeToCheck = `[${start},${end})`;
-  return isRangeReserved(rangeToCheck);
+  const disabled = isRangeReserved(rangeToCheck);
+  console.log('[isHourDisabled]', hour, rangeToCheck, '=>', disabled);
+  return disabled;
 };
+
 
 // Logique pour désactiver les options selon les règles
 const isFullDayOptionDisabled = isFullDayReserved;
 const isHalfDayOptionDisabled = (period: 'morning' | 'afternoon') => {
-  if (isFullDayReserved) return true; // Si journée complète réservée, désactiver toutes les demi-journées
-  return period === 'morning' ? isMorningReserved : isAfternoonReserved;
+  const disabled = isFullDayReserved || (period === 'morning' ? isMorningReserved : isAfternoonReserved);
+  console.log('[isHalfDayOptionDisabled]', period, ':', disabled);
+  return disabled;
 };
+
+// Pour la désactivation de la journée complète
+console.log('[isFullDayOptionDisabled]', isFullDayReserved);
+
   const calculPrix = () => {
     const base = parseFloat(service.price.replace(',', '.'))
     if (id === 'coworking-space') {
