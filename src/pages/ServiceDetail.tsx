@@ -183,9 +183,10 @@ const isRangeReserved = (range: string): boolean => {
     console.log('[isRangeReserved] Test:', { reservedRange, range });
     // Convertir les plages en dates pour comparaison
     const extractDates = (rangeStr: string) => {
-      const match = rangeStr.match(/\["(.+?)","(.+?)"\)/);
-      return match ? [new Date(match[1]), new Date(match[2])] : [null, null];
-    };
+  // Pour [2025-05-28 09:00:00+00,2025-05-28 16:00:00+00)
+  const match = rangeStr.match(/\[(.+?),(.+?)\)/);
+  return match ? [new Date(match[1].trim()), new Date(match[2].trim())] : [null, null];
+};
 
     const [reservedStart, reservedEnd] = extractDates(reservedRange);
     const [checkStart, checkEnd] = extractDates(range);
