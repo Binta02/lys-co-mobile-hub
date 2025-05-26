@@ -267,6 +267,8 @@ const handleSubmit = async (data: FormValues) => {
   setIsProcessing(true);
   if (!stripe || !elements) return;
 
+  console.log('Début de handleSubmit');
+
   const card = elements.getElement(CardElement);
   if (!card) return;
 
@@ -301,6 +303,8 @@ const handleSubmit = async (data: FormValues) => {
       return;
     }
 
+    console.log('Payment method créé:', paymentMethod);
+
     const response = await fetch('https://mon-backend-node.vercel.app/api/create-payment-intent', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -319,6 +323,8 @@ const handleSubmit = async (data: FormValues) => {
     } = await response.json();
 
     if (!response.ok) throw new Error('Erreur du backend');
+
+    console.log('Client secrets:', { oneTimePaymentIntentClientSecret, subscriptionClientSecret });
 
     if (oneTimePaymentIntentClientSecret) {
       const { error: confirmError } = await stripe.confirmCardPayment(oneTimePaymentIntentClientSecret, {
@@ -341,8 +347,10 @@ const handleSubmit = async (data: FormValues) => {
         status: 'active',
       };
 
+      console.log('Traitement item:', item);
+
       if (item.id.includes('domiciliation')) {
-        const { error } = await supabase.from('user_domiciliations').insert({
+        const insertData = {
           ...baseInsert,
           address: data.address,
           duration: item.title.includes('1 an') ? '12mois' :
@@ -351,7 +359,9 @@ const handleSubmit = async (data: FormValues) => {
           plan_type: item.title.includes('micro') ? 'micro' :
                      item.title.includes('entreprise') ? 'entreprise' :
                      item.title.includes('association') ? 'association' : null,
-        });
+        };
+        console.log('Insertion domiciliation:', insertData);
+        const { error } = await supabase.from('user_domiciliations').insert(insertData);
         if (error) console.error('Erreur ajout domiciliation:', error);
 
       } else if (item.id.includes('location-bureau') || item.id.includes('formation-room') || item.id.includes('coworking-space')) {
@@ -374,24 +384,30 @@ const handleSubmit = async (data: FormValues) => {
           const endISO = `${date}T${end}:00+00:00`;
           const period = `"[\"${startISO}\",\"${endISO}\")"`;
 
-          const { error } = await supabase.from('reservations').insert({
+          const reservationType = item.id.includes('coworking') ? 'coworking' : item.id.split('-')[0];
+
+          const insertData = {
             user_id: userId!,
-            reservation_type: item.id.split('-')[0],
+            reservation_type: reservationType,
             reservation_date: date,
             price: item.price,
             period
-          });
+          };
+          console.log('Insertion réservation:', insertData);
 
+          const { error } = await supabase.from('reservations').insert(insertData);
           if (error) console.error('Erreur ajout réservation:', error);
         } else {
           console.error('Date non extraite depuis item.id:', item.id);
         }
 
       } else {
-        const { error } = await supabase.from('user_services').insert({
+        const insertData = {
           ...baseInsert,
           category: 'commande',
-        });
+        };
+        console.log('Insertion service:', insertData);
+        const { error } = await supabase.from('user_services').insert(insertData);
         if (error) console.error('Erreur ajout service:', error);
       }
     }
@@ -403,7 +419,7 @@ const handleSubmit = async (data: FormValues) => {
       },
     });
   } catch (err) {
-    console.error(err);
+    console.error('Erreur dans handleSubmit:', err);
   } finally {
     setIsProcessing(false);
   }
