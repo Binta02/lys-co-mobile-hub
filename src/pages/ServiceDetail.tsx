@@ -148,85 +148,161 @@ const reservationPrices: ReservationPrices = {
   'location-bureau': { halfDay: 125, fullDay: 250 },
 }
 
-const HOURS = ['09:00','10:00','11:00','12:00','13:00','14:00','15:00','16:00'];
+const HOURS = ['09:00','10:00','11:00','12:00','13:00','14:00','15:00','16:00']
 
 const ServiceDetail: React.FC = () => {
-  const { addItem } = useCart();
-  const { id } = useParams<{ id: string }>();
-  const { toast } = useToast();
-  const service = useMemo(() => id ? serviceData[id] : serviceData['coworking-space'], [id]);
+  const { addItem } = useCart()
+  const { id } = useParams<{id:string}>()
+  const { toast } = useToast()
 
-  const [modeReservation, setModeReservation] = useState<'hour'|'halfDay'|'fullDay'>('hour');
-  const [dateReservation, setDateReservation] = useState('');
-  const [selectedHours, setSelectedHours] = useState<string[]>([]);
-  const [halfDayPeriod, setHalfDayPeriod] = useState<'morning'|'afternoon'>('morning');
-  const [reservedPeriods, setReservedPeriods] = useState<string[]>([]);
+  const service = useMemo(() => {
+    return id ? serviceData[id] : serviceData['coworking-space']
+  }, [id])
 
-  const getReservationType = (id: string) => {
-    if (id === 'coworking-space') return 'coworking';
-    if (id === 'formation-room') return 'formation';
-    if (id === 'location-bureau') return 'bureau';
-    return id;
-  };
+  const [modeReservation, setModeReservation] = useState<'hour'|'halfDay'|'fullDay'>('hour')
+  const [dateReservation, setDateReservation] = useState('')
+  const [selectedHours, setSelectedHours] = useState<string[]>([])
+  const [halfDayPeriod, setHalfDayPeriod] = useState<'morning'|'afternoon'>('morning')
+  const [reservedPeriods, setReservedPeriods] = useState<string[]>([])
+  const [reviews, setReviews] = useState<any[]>([])
+  const [loadingReviews, setLoadingReviews] = useState(true)
+  const [refreshReviews, setRefreshReviews] = useState(false)
+  const [activeTab, setActiveTab] = useState<'description'|'reviews'>('description')
 
-  const getHalfDayRange = (period: 'morning'|'afternoon') => {
-    return dateReservation ? `[${dateReservation}T${period === 'morning' ? '09:00:00' : '13:00:00'}+00:00,${dateReservation}T${period === 'morning' ? '12:00:00' : '16:00:00'}+00:00)` : '';
-  };
+// ...existing code...
+const getReservationType = (id) => {
+  if (id === 'coworking-space') return 'coworking';
+  if (id === 'formation-room') return 'formation';
+  if (id === 'location-bureau') return 'bureau';
+  return id;
+};
 
-  const getFullDayRange = () => {
-    return dateReservation ? `[${dateReservation}T09:00:00+00:00,${dateReservation}T16:00:00+00:00)` : '';
-  };
+// Ajout de vérifications de plage réservée pour demi-journée et journée complète
 
-  const isRangeReserved = (range: string) => reservedPeriods.includes(range);
-  const isMorningReserved = isRangeReserved(getHalfDayRange('morning'));
-  const isAfternoonReserved = isRangeReserved(getHalfDayRange('afternoon'));
-  const isFullDayReserved = isRangeReserved(getFullDayRange());
+const getHalfDayRange = (period) => {
+  if (!dateReservation) return '';
+  return period === 'morning'
+    ? `[${dateReservation}T09:00:00+00:00,${dateReservation}T12:00:00+00:00)`
+    : `[${dateReservation}T13:00:00+00:00,${dateReservation}T16:00:00+00:00)`;
+};
 
-  useEffect(() => {
-    const fetchReserved = async () => {
-      if (!dateReservation || !id) return;
-      const { data } = await supabase
-        .from('reservations')
-        .select('period')
-        .eq('reservation_type', getReservationType(id))
-        .eq('reservation_date', dateReservation);
-      const periods = data?.map(r => (r.period as string).replace(/[\"\[\]]/g, ''))?.map(p => `[${p.split(',')[0]},${p.split(',')[1]})`) || [];
-      setReservedPeriods(periods);
-    };
-    fetchReserved();
-  }, [dateReservation, id]);
+const getFullDayRange = () => {
+  if (!dateReservation) return '';
+  return `[${dateReservation}T09:00:00+00:00,${dateReservation}T16:00:00+00:00)`;
+};
 
-  const isHourDisabled = (hour: string) => {
-    const start = `${dateReservation} ${hour}:00+00`;
-    const endHour = String(Number(hour.split(':')[0]) + 1).padStart(2, '0');
-    const end = `${dateReservation} ${endHour}:00:00+00`;
-    return reservedPeriods.includes(`[${start},${end})`);
-  };
+const isRangeReserved = (range) => reservedPeriods.includes(range);
 
-  const toggleHour = (hour: string) => {
-    setSelectedHours(s => s.includes(hour) ? s.filter(h => h !== hour) : [...s, hour]);
-  };
+const isMorningReserved = isRangeReserved(getHalfDayRange('morning'));
+const isAfternoonReserved = isRangeReserved(getHalfDayRange('afternoon'));
+const isFullDayReserved = isRangeReserved(getFullDayRange());
 
+useEffect(() => {
+  const fetchReservedPeriods = async () => {
+    console.log('Début récupération des plages réservées')
+    if (!dateReservation || !id) {
+      console.log('Aucune date ou ID fourni, annulation de la requête')
+      return
+    }
+
+    const reservationType = getReservationType(id)
+
+    console.log('Requête Supabase avec:', { reservation_type: reservationType, reservation_date: dateReservation })
+
+    const { data, error } = await supabase
+      .from('reservations')
+      .select('period')
+      .eq('reservation_type', reservationType)
+      .eq('reservation_date', dateReservation)
+
+    if (error) {
+      console.error('Erreur récupération des réservations :', error)
+      setReservedPeriods([])
+    } else {
+      // Uniformisation du format des périodes récupérées
+      const periods = data.map((r: any) => {
+        // Si period est au format JSON PostgreSQL : '["2025-05-28 09:00:00+00","2025-05-28 10:00:00+00")'
+        if (typeof r.period === 'string' && r.period.startsWith('["')) {
+          const match = r.period.match(/\["(.+?)","(.+?)"\)/)
+          if (match) {
+            // On remet au format utilisé dans le code : [start,end)
+            return `[${match[1]},${match[2]})`
+          }
+        }
+        // Sinon, on suppose que c'est déjà au bon format
+        return r.period
+      })
+      console.log('Plages extraites :', periods)
+      setReservedPeriods(periods)
+    }
+  }
+ 
+  fetchReservedPeriods()
+}, [dateReservation, id])
+
+const isHourDisabled = (hour: string): boolean => {
+  // Génère la période au format de la base : [YYYY-MM-DD HH:MM:SS+00,YYYY-MM-DD HH:MM:SS+00)
+  const start = `${dateReservation} ${hour}:00+00`
+  const endHour = String(Number(hour.split(':')[0]) + 1).padStart(2, '0')
+  const end = `${dateReservation} ${endHour}:00:00+00`
+  const rangeToCheck = `[${start},${end})`
+
+  // Vérification stricte de l'inclusion
+  const match = reservedPeriods.includes(rangeToCheck)
+  // console.log('Vérification de la plage :', rangeToCheck, '=>', match)
+  return match
+}
   const calculPrix = () => {
-    if (!id) return 0;
-    if (id === 'coworking-space') return (selectedHours.length || 1) * reservationPrices[id].hour;
+    const base = parseFloat(service.price.replace(',', '.'))
+    if (id === 'coworking-space') {
+      return (selectedHours.length || 1) * reservationPrices[id].hour
+    }
     if (id === 'formation-room') {
-      if (modeReservation === 'hour') return (selectedHours.length || 1) * reservationPrices[id].hour;
-      if (modeReservation === 'halfDay') return reservationPrices[id].halfDay;
-      if (modeReservation === 'fullDay') return reservationPrices[id].fullDay;
+      if (modeReservation === 'hour') return (selectedHours.length || 1) * reservationPrices[id].hour
+      if (modeReservation === 'halfDay') return reservationPrices[id].halfDay
+      if (modeReservation === 'fullDay') return reservationPrices[id].fullDay
     }
     if (id === 'location-bureau') {
-      if (modeReservation === 'halfDay') return reservationPrices[id].halfDay;
-      if (modeReservation === 'fullDay') return reservationPrices[id].fullDay;
+      if (modeReservation === 'halfDay') return reservationPrices[id].halfDay
+      if (modeReservation === 'fullDay') return reservationPrices[id].fullDay
     }
-    return parseFloat(service.price.replace(',', '.'));
-  };
+    return base
+  }
 
-  const handleAddToCart = () => {
-    const label = `${service.title} — ${modeReservation}${modeReservation === 'halfDay' ? ` (${halfDayPeriod})` : ''} — ${dateReservation} ${selectedHours.join(', ')}`;
-    addItem({ id: `${id}-${dateReservation}`, title: label, price: calculPrix(), quantity: 1 });
-    toast({ title: 'Ajouté au panier', description: label });
-  };
+  const toggleHour = (hour: string) => {
+    setSelectedHours(s =>
+      s.includes(hour) ? s.filter(h => h !== hour) : [...s, hour]
+    )
+  }
+
+  const getRange = (start: string, end: string) => `[${start},${end})`
+
+  const isRangeOverlapping = (range: string): boolean => {
+    return reservedPeriods.some(existing => existing === range)
+  }
+
+  const generateRange = (): string => {
+    if (!dateReservation) return ''
+    if (modeReservation === 'hour') {
+      if (!selectedHours.length) return ''
+      const start = `${dateReservation}T${selectedHours[0]}:00+00:00`
+      const endHour = Number(selectedHours[0].split(':')[0]) + 1
+      const end = `${dateReservation}T${String(endHour).padStart(2, '0')}:00+00:00`
+      return getRange(start, end)
+    }
+    if (modeReservation === 'halfDay') {
+      const start = `${dateReservation}T${halfDayPeriod === 'morning' ? '09:00:00' : '13:00:00'}+00:00`
+      const end = `${dateReservation}T${halfDayPeriod === 'morning' ? '12:00:00' : '16:00:00'}+00:00`
+      return getRange(start, end)
+    }
+    if (modeReservation === 'fullDay') {
+      return getRange(`${dateReservation}T09:00:00+00:00`, `${dateReservation}T16:00:00+00:00`)
+    }
+    return ''
+  }
+
+  const currentRange = generateRange()
+  const isReserved = currentRange && isRangeOverlapping(currentRange)
 
   return (
     <div className="min-h-screen flex flex-col">
@@ -235,81 +311,129 @@ const ServiceDetail: React.FC = () => {
         <div className="container mx-auto px-4">
           <div className="bg-white rounded-lg shadow-md p-6 mb-8">
             <h1 className="text-3xl font-bold mb-6 text-center">{service.title}</h1>
+
             <div className="grid md:grid-cols-2 gap-8">
               <div className="space-y-6">
-                <div className="text-3xl font-semibold text-lysco-turquoise">{calculPrix().toFixed(2)} €</div>
-                <p className="text-sm text-gray-500">Hors taxes</p>
+                <div className="flex items-center justify-between">
+                  <div>
+                    <div className="text-3xl font-semibold text-lysco-turquoise">{calculPrix().toFixed(2)} €</div>
+                    {service.priceUnit && <span className="text-gray-500">{service.priceUnit}</span>}
+                    <p className="text-sm text-gray-500">Hors taxes</p>
+                  </div>
+                </div>
 
-                <div className="space-y-4">
-                  {(id === 'formation-room' || id === 'location-bureau') && (
-                    <>
-                      <label>Date</label>
-                      <input type="date" value={dateReservation} onChange={e => setDateReservation(e.target.value)} min={new Date().toISOString().split('T')[0]} className="w-full p-2 border rounded" />
-                      <label>Type</label>
-                      <select value={modeReservation} onChange={e => setModeReservation(e.target.value as any)} className="w-full p-2 border rounded">
-                        <option value="hour">À l'heure</option>
-                        <option value="halfDay">Demi-journée</option>
-                        <option value="fullDay" disabled={isFullDayReserved}>Journée complète{isFullDayReserved && ' (réservée)'}</option>
-                      </select>
-                      {modeReservation === 'halfDay' && (
-                        <>
-                          <label>Matin ou Après-midi</label>
-                          <select value={halfDayPeriod} onChange={e => setHalfDayPeriod(e.target.value as any)} className="w-full p-2 border rounded">
-                            <option value="morning" disabled={isMorningReserved}>Matin (9h-12h){isMorningReserved && ' (indisponible)'}</option>
-                            <option value="afternoon" disabled={isAfternoonReserved}>Après-midi (13h-16h){isAfternoonReserved && ' (indisponible)'}</option>
-                          </select>
-                        </>
-                      )}
-                    </>
+                <div className="mt-8 space-y-4 p-5 border border-gray-200 rounded-lg">
+                  <h3 className="font-semibold text-lg">Réserver</h3>
+                  <div className="space-y-2">
+                    <label className="font-medium">Type</label>
+                    <select value={modeReservation} onChange={e => setModeReservation(e.target.value as any)} className="w-full p-2 border rounded">
+                      <option value="hour">À l'heure</option>
+                      <option value="halfDay">Demi-journée</option>
+                      <option value="fullDay" disabled={isRangeReserved(getFullDayRange())}>
+                        Journée complète{isRangeReserved(getFullDayRange()) && ' (réservée)'}
+                      </option>
+                    </select>
+                  </div>
+
+                  {isRangeReserved(getFullDayRange()) && dateReservation && (
+                    <div className="mt-4 text-red-600 font-medium text-center">
+                      La journée entière est déjà réservée à cette date.
+                    </div>
                   )}
+                  {modeReservation === 'halfDay' && (
+                    <div className="space-y-2">
+                      <label className="font-medium">Matin ou Après-midi</label>
+                      <select
+                        value={halfDayPeriod}
+                        onChange={e => setHalfDayPeriod(e.target.value as any)}
+                        className="w-full p-2 border rounded"
+                      >
+                        <option value="morning" disabled={isRangeReserved(getHalfDayRange('morning'))}>
+                          Matin (9h-12h) {isRangeReserved(getHalfDayRange('morning')) && ' (indisponible)'}
+                        </option>
+                        <option value="afternoon" disabled={isRangeReserved(getHalfDayRange('afternoon'))}>
+                          Après-midi (13h-16h) {isRangeReserved(getHalfDayRange('afternoon')) && ' (indisponible)'}
+                        </option>
+                      </select>
+                    </div>
+                  )}
+                  <div className="space-y-2">
+                    <label className="font-medium">Date</label>
+                    <input
+                      type="date"
+                      value={dateReservation}
+                      onChange={e => {
+                        setDateReservation(e.target.value)
+                        setSelectedHours([]) // <-- Ajoute ceci pour vider la sélection
+                      }}
+                      min={new Date().toISOString().split('T')[0]}
+                      className="w-full p-2 border rounded"
+                    />
+                  </div>
 
-                  {id === 'coworking-space' && (
-                    <>
-                      <label>Date</label>
-                      <input type="date" value={dateReservation} onChange={e => setDateReservation(e.target.value)} min={new Date().toISOString().split('T')[0]} className="w-full p-2 border rounded" />
-                      <p>Heures disponibles :</p>
+                  {modeReservation === 'hour' && dateReservation && (
+                    <div>
+                      <p className="font-medium mb-2">Heures disponibles :</p>
                       <div className="grid grid-cols-4 gap-2">
-                        {HOURS.map(hour => (
-                          <button
-                            key={hour}
-                            disabled={isHourDisabled(hour)}
-                            onClick={() => toggleHour(hour)}
-                            className={`p-2 border rounded text-sm ${selectedHours.includes(hour) ? 'bg-green-100 text-green-800' : 'hover:bg-gray-100'}`}
-                          >
-                            {hour}
-                          </button>
-                        ))}
+                        {HOURS.map(hour => {
+                          const isDisabled = isHourDisabled(hour)
+                          return (
+                            <button
+                              key={hour}
+                              disabled={isDisabled}
+                              onClick={() => toggleHour(hour)}
+                              className={`p-2 border rounded text-sm ${selectedHours.includes(hour) ? 'bg-green-100 text-green-800' : 'hover:bg-gray-100'}`}
+                            >
+                              {hour}
+                            </button>
+                          )
+                        })}
                       </div>
-                    </>
+                    </div>
                   )}
 
                   <Button
                     className="w-full bg-lysco-turquoise"
                     disabled={
                       !dateReservation ||
-                      (id === 'coworking-space' && selectedHours.length === 0) ||
-                      ((id === 'formation-room' || id === 'location-bureau') && (
-                        (modeReservation === 'halfDay' && ((halfDayPeriod === 'morning' && isMorningReserved) || (halfDayPeriod === 'afternoon' && isAfternoonReserved))) ||
-                        (modeReservation === 'fullDay' && isFullDayReserved)
-                      ))
+                      (modeReservation === 'hour' && selectedHours.length === 0) ||
+                      (modeReservation === 'halfDay' && ((halfDayPeriod === 'morning' && isMorningReserved) || (halfDayPeriod === 'afternoon' && isAfternoonReserved))) ||
+                      (modeReservation === 'fullDay' && isFullDayReserved)
                     }
-                    onClick={handleAddToCart}
+                    onClick={() => {
+                      const label = `${service.title} — ${modeReservation}${modeReservation === 'halfDay' ? ` (${halfDayPeriod})` : ''} — ${dateReservation} ${selectedHours.join(', ')}`
+                      addItem({ id: `${id}-${dateReservation}`, title: label, price: calculPrix(), quantity: 1 })
+                      toast({ title: 'Ajouté au panier', description: label })
+                    }}
                   >
                     <ShoppingCart className="h-4 w-4 mr-2" /> Ajouter au panier
                   </Button>
+
+                  <div className="pt-4 border-t">
+                    <div className="flex items-center justify-center gap-2 text-sm text-gray-600">
+                      <Lock className="h-4 w-4" />
+                      <span>PAIEMENT SÉCURISÉ GARANTI</span>
+                    </div>
+                  </div>
                 </div>
               </div>
 
               <div className="bg-gray-50 p-6 rounded-lg">
-                <Tabs defaultValue="description" className="w-full">
+                <Tabs
+                  defaultValue="description"
+                  onValueChange={(value) => setActiveTab(value as 'description' | 'reviews')}
+                  className="w-full"
+                >
                   <TabsContent value="description">
                     <h2 className="text-xl font-semibold mb-4">Description</h2>
-                    <p className="whitespace-pre-line">{service.description}</p>
-                    {service.note && <p className="mt-4 italic text-gray-600">{service.note}</p>}
+                    <div className="prose max-w-none">
+                      <p className="whitespace-pre-line">{service.description}</p>
+                      {service.note && <p className="mt-4 italic text-gray-600">{service.note}</p>}
+                    </div>
                   </TabsContent>
                   <TabsContent value="reviews">
-                    <ReviewsList reviews={[]} isLoading={false} />
-                    <ReviewForm productId={id!} productName={service.title} onReviewSubmitted={() => {}} />
+                    <ReviewsList reviews={reviews} isLoading={loadingReviews} />
+                    <ReviewForm productId={id!} productName={service.title} onReviewSubmitted={() => setRefreshReviews(r => !r)} />
                   </TabsContent>
                 </Tabs>
               </div>
@@ -322,7 +446,7 @@ const ServiceDetail: React.FC = () => {
       <Footer />
       <Toaster />
     </div>
-  );
-};
+  )
+}
 
-export default ServiceDetail;
+export default ServiceDetail
