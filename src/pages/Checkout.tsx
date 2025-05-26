@@ -120,6 +120,94 @@ useEffect(() => {
   getSession();
 }, []);
 
+// const handleSubmit = async (data: FormValues) => {
+//   setIsProcessing(true);
+//   if (!stripe || !elements) return;
+
+//   const card = elements.getElement(CardElement);
+//   if (!card) return;
+
+//   const oneTimeItems = items
+//     .filter(item => !subscriptionProductIds.includes(item.id))
+//     .map(item => ({
+//       amount: Math.round((item.price) * 100), // montant en centimes
+//       quantity: item.quantity,
+//     }));
+
+//   const subscriptionItems = items
+//     .filter(item => subscriptionProductIds.includes(item.id))
+//     .map(item => {
+//       const priceId = getPriceIdFromProductId(item.id);
+//       if (!priceId) throw new Error(`Price ID manquant pour ${item.id}`);
+//       return { price: priceId, quantity: item.quantity };
+//     });
+
+//   try {
+//     const { error: paymentError, paymentMethod } = await stripe.createPaymentMethod({
+//       type: 'card',
+//       card,
+//       billing_details: {
+//         email: data.email,
+//         name: `${data.firstName} ${data.lastName}`,
+//       },
+//     });
+
+//     if (paymentError || !paymentMethod) {
+//       console.error(paymentError);
+//       setIsProcessing(false);
+//       return;
+//     }
+
+//     const response = await fetch('https://mon-backend-node.vercel.app/api/create-payment-intent', {
+//       method: 'POST',
+//       headers: { 'Content-Type': 'application/json' },
+//       body: JSON.stringify({
+//         email: data.email,
+//         paymentMethodId: paymentMethod.id,
+//         oneTimeItems,
+//         subscriptionItems,
+//         userId, // Ajout de l'ID utilisateur
+//       }),
+//     });
+
+//     const {
+//       oneTimePaymentIntentClientSecret,
+//       subscriptionClientSecret,
+//     } = await response.json();
+
+//     if (!response.ok) throw new Error('Erreur du backend');
+
+//     // Paiement unique
+//     if (oneTimePaymentIntentClientSecret) {
+//       const { error: confirmError } = await stripe.confirmCardPayment(oneTimePaymentIntentClientSecret, {
+//         payment_method: paymentMethod.id,
+//         receipt_email: data.email,
+        
+//       });
+//       // console.log("Paiement ponctuel envoyé :", oneTimeItems);
+//       if (confirmError) throw new Error('Échec du paiement unique');
+//     }
+
+//     // Abonnement
+//     if (subscriptionClientSecret) {
+//       const { error: confirmError } = await stripe.confirmCardPayment(subscriptionClientSecret);
+//       if (confirmError) throw new Error("Échec de paiement de l'abonnement");
+//     }
+
+//     clearCart();
+//     navigate('/confirmation', {
+//       state: {
+//         order: { items, subtotal, tax, total, clientInfo: data },
+//       },
+//     });
+
+//   } catch (err) {
+//     console.error(err);
+//   } finally {
+//     setIsProcessing(false);
+//   }
+// };
+
 const handleSubmit = async (data: FormValues) => {
   setIsProcessing(true);
   if (!stripe || !elements) return;
@@ -130,7 +218,7 @@ const handleSubmit = async (data: FormValues) => {
   const oneTimeItems = items
     .filter(item => !subscriptionProductIds.includes(item.id))
     .map(item => ({
-      amount: Math.round((item.price) * 100), // montant en centimes
+      amount: Math.round(item.price * 100),
       quantity: item.quantity,
     }));
 
@@ -166,7 +254,7 @@ const handleSubmit = async (data: FormValues) => {
         paymentMethodId: paymentMethod.id,
         oneTimeItems,
         subscriptionItems,
-        userId, // Ajout de l'ID utilisateur
+        userId,
       }),
     });
 
@@ -177,21 +265,73 @@ const handleSubmit = async (data: FormValues) => {
 
     if (!response.ok) throw new Error('Erreur du backend');
 
-    // Paiement unique
     if (oneTimePaymentIntentClientSecret) {
       const { error: confirmError } = await stripe.confirmCardPayment(oneTimePaymentIntentClientSecret, {
         payment_method: paymentMethod.id,
         receipt_email: data.email,
-        
       });
-      // console.log("Paiement ponctuel envoyé :", oneTimeItems);
       if (confirmError) throw new Error('Échec du paiement unique');
     }
 
-    // Abonnement
     if (subscriptionClientSecret) {
       const { error: confirmError } = await stripe.confirmCardPayment(subscriptionClientSecret);
       if (confirmError) throw new Error("Échec de paiement de l'abonnement");
+    }
+
+    // 📦 Insérer dans la base de données
+    for (const item of items) {
+      const baseInsert = {
+        user_id: userId!,
+        name: item.title,
+        price: item.price,
+        status: 'active',
+      };
+
+      if (item.id.includes('domiciliation')) {
+        const { error } = await supabase.from('user_domiciliations').insert({
+          ...baseInsert,
+          address: data.address,
+          duration: item.title.includes('1 an') ? '12mois' :
+                    item.title.includes('6 mois') ? '6mois' :
+                    item.title.includes('3 mois') ? '3mois' : null,
+          plan_type: item.title.includes('micro') ? 'micro' :
+                     item.title.includes('entreprise') ? 'entreprise' :
+                     item.title.includes('association') ? 'association' : null,
+        });
+        if (error) console.error('Erreur ajout domiciliation:', error);
+
+      } else if (item.id.includes('location-bureau') || item.id.includes('formation-room') || item.id.includes('coworking-space')) {
+        const parts = item.id.split('-');
+        const date = parts[parts.length - 1];
+        const timeMatches = item.title.match(/\d{2}:\d{2}/g);
+        let start = '09:00', end = '16:00';
+        if (timeMatches?.length === 1) {
+          start = timeMatches[0];
+          end = String(Number(start.split(':')[0]) + 1).padStart(2, '0') + ':00';
+        }
+        if (timeMatches?.length > 1) {
+          start = timeMatches[0];
+          end = timeMatches[timeMatches.length - 1];
+          end = String(Number(end.split(':')[0]) + 1).padStart(2, '0') + ':00';
+        }
+        const period = `[${date}T${start}:00+00:00,${date}T${end}:00+00:00)`;
+
+        const { error } = await supabase.from('reservations').insert({
+          user_id: userId!,
+          reservation_type: item.id.split('-')[0],
+          reservation_date: date,
+          price: item.price,
+          period,
+        });
+        if (error) console.error('Erreur ajout réservation:', error);
+
+      } else {
+        const { error } = await supabase.from('user_services').insert({
+          ...baseInsert,
+          category: 'commande',
+        });
+        if (error) console.error('Erreur ajout service:', error);
+      }
     }
 
     clearCart();
@@ -200,16 +340,12 @@ const handleSubmit = async (data: FormValues) => {
         order: { items, subtotal, tax, total, clientInfo: data },
       },
     });
-
   } catch (err) {
     console.error(err);
   } finally {
     setIsProcessing(false);
   }
 };
-
-
-
 
 
   return (
