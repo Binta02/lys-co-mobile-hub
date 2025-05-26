@@ -696,7 +696,7 @@ useEffect(() => {
       setReservedPeriods(periods)
     }
   }
-
+ 
   fetchReservedPeriods()
 }, [dateReservation, id])
 
