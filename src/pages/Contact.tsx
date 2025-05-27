@@ -45,7 +45,7 @@ const Contact = () => {
     });
     
     try {
-      const response = await fetch('http://localhost:8000/send_mail.php', {
+      const response = await fetch('https://mon-backend-node.vercel.app/api/send-contact', {
         method: 'POST',
         body: formData,
       });
