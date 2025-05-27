@@ -97,7 +97,7 @@ function App() {
 
       </Routes>
       {/* Render FloatingCartButton if needed */}
-      <FloatingCartButton />
+      {isAuth && <FloatingCartButton />}
     
     </>
   );
