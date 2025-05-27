@@ -43,15 +43,8 @@ const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY);
 // console.log("ENV variables:", import.meta.env);
 
 function App() {
-  // const [isAuth, setIsAuth] = useState(false);
   const [session, setSession] = useState<Session | null>(null);
 
-  // useEffect(() => {
-  //   const token = localStorage.getItem('sb-utwuypfqugnhtucjfdhy-auth-token');
-  //   // console.log("Auth token found:", token);
-  //   setIsAuth(!!token);
-  // }, []);
-  
   useEffect(() => {
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       (_event, session) => setSession(session)
