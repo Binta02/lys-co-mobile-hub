@@ -1,4 +1,4 @@
-
+// app.tsx
 import React, { useState, useEffect } from 'react';
 import { Routes, Route } from 'react-router-dom';
 import Index from './pages/Index';
@@ -35,11 +35,11 @@ import Domiciliation3MoisMicroEntreprise from './pages/domiciliation/Domiciliati
 import PackDomicilie from './pages/domiciliation/PackDomicilie';
 import { Elements } from '@stripe/react-stripe-js'
 import { loadStripe } from '@stripe/stripe-js';
+import { FloatingCartButton } from '@/components/cart/FloatingCartButton';
 
 const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY);
 // console.log("Stripe public key loaded:", import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY);
 // console.log("ENV variables:", import.meta.env);
-
 
 function App() {
   const [isAuth, setIsAuth] = useState(false);
@@ -51,7 +51,7 @@ function App() {
   }, []);
 
   return (
-    
+    <>
       <Routes>
         <Route path="/" element={<Index />} />
         <Route path="/domiciliation" element={<Domiciliation />} />
@@ -96,7 +96,10 @@ function App() {
         <Route path="*" element={<NotFound />} />
 
       </Routes>
+      {/* Render FloatingCartButton if needed */}
+      <FloatingCartButton />
     
+    </>
   );
 }
 

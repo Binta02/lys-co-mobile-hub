@@ -1,0 +1,36 @@
+// src/components/cart/FloatingCartButton.tsx
+import React from 'react';
+import { Sheet, SheetTrigger } from '@/components/ui/sheet';
+import { Button } from '@/components/ui/button';
+import { ShoppingCart } from 'lucide-react';
+import { useCart } from '@/components/cart/CartContext';
+import { Badge } from '@/components/ui/badge';
+import { CartDrawer } from '@/components/cart/CartDrawer';
+
+export function FloatingCartButton() {
+  const { items } = useCart();
+
+  return (
+    <Sheet>
+      <SheetTrigger asChild>
+        {/*
+          md:hidden → on cache ce bouton dès qu’on dépasse la taille "md" (≥768px)
+        */}
+        <div className="fixed bottom-4 right-4 z-50 md:hidden">
+          <Button variant="outline" size="icon" className="relative">
+            <ShoppingCart className="h-5 w-5" />
+            {items.length > 0 && (
+              <Badge
+                variant="destructive"
+                className="absolute -top-1 -right-1 h-5 w-5 flex items-center justify-center p-0 text-xs"
+              >
+                {items.length}
+              </Badge>
+            )}
+          </Button>
+        </div>
+      </SheetTrigger>
+      <CartDrawer />
+    </Sheet>
+  );
+}
