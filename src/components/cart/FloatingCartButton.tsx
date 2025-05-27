@@ -16,7 +16,7 @@ export function FloatingCartButton() {
         {/*
           md:hidden → on cache ce bouton dès qu’on dépasse la taille "md" (≥768px)
         */}
-        <div className="fixed bottom-4 right-4 z-50 md:hidden">
+        <div className="fixed bottom-4 right-4 z-50">
           <Button variant="outline" size="icon" className="relative">
             <ShoppingCart className="h-5 w-5" />
             {items.length > 0 && (

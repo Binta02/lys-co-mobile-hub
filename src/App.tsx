@@ -36,18 +36,32 @@ import PackDomicilie from './pages/domiciliation/PackDomicilie';
 import { Elements } from '@stripe/react-stripe-js'
 import { loadStripe } from '@stripe/stripe-js';
 import { FloatingCartButton } from '@/components/cart/FloatingCartButton';
-
+import { supabase } from '@/integrations/supabase/client';
+import { Session } from '@supabase/supabase-js';
 const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY);
 // console.log("Stripe public key loaded:", import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY);
 // console.log("ENV variables:", import.meta.env);
 
 function App() {
-  const [isAuth, setIsAuth] = useState(false);
+  // const [isAuth, setIsAuth] = useState(false);
+  const [session, setSession] = useState<Session | null>(null);
 
+  // useEffect(() => {
+  //   const token = localStorage.getItem('sb-utwuypfqugnhtucjfdhy-auth-token');
+  //   // console.log("Auth token found:", token);
+  //   setIsAuth(!!token);
+  // }, []);
+  
   useEffect(() => {
-    const token = localStorage.getItem('sb-utwuypfqugnhtucjfdhy-auth-token');
-    // console.log("Auth token found:", token);
-    setIsAuth(!!token);
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(
+      (_event, session) => setSession(session)
+    );
+
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      setSession(session);
+    });
+
+    return () => subscription.unsubscribe();
   }, []);
 
   return (
@@ -97,7 +111,7 @@ function App() {
 
       </Routes>
       {/* Render FloatingCartButton if needed */}
-      {isAuth && <FloatingCartButton />}
+      {session && <FloatingCartButton />}
     
     </>
   );

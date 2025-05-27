@@ -159,7 +159,7 @@ const Navbar = () => {
             Contact
           </Link>
 
-          {session && <CartDrawer />}
+          {/* {session && <CartDrawer />} */}
 
           {session ? (
             <DropdownMenu>
