@@ -1,0 +1,18 @@
+{
+    "sourceFile": "android/gradle.properties",
+    "activeCommit": 0,
+    "commits": [
+        {
+            "activePatchIndex": 0,
+            "patches": [
+                {
+                    "date": 1748608707776,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n"
+                }
+            ],
+            "date": 1748608707776,
+            "name": "Commit-0",
+            "content": "# Project-wide Gradle settings.\n\n# IDE (e.g. Android Studio) users:\n# Gradle settings configured through the IDE *will override*\n# any settings specified in this file.\n\n# For more details on how to configure your build environment visit\n# http://www.gradle.org/docs/current/userguide/build_environment.html\n\n# Specifies the JVM arguments used for the daemon process.\n# The setting is particularly useful for tweaking memory settings.\norg.gradle.jvmargs=-Xmx1536m\n\n# When configured, Gradle will run in incubating parallel mode.\n# This option should only be used with decoupled projects. More details, visit\n# http://www.gradle.org/docs/current/userguide/multi_project_builds.html#sec:decoupled_projects\n# org.gradle.parallel=true\n\n# AndroidX package structure to make it clearer which packages are bundled with the\n# Android operating system, and which are packaged with your app's APK\n# https://developer.android.com/topic/libraries/support-library/androidx-rn\nandroid.useAndroidX=true\nMY_RELEASE_STORE_FILE=my-release-key.jks\nMY_RELEASE_KEY_ALIAS=my-key-alias\nMY_RELEASE_STORE_PASSWORD=monapplysandcobinta\nMY_RELEASE_KEY_PASSWORD=monapplysandcobinta\n"
+        }
+    ]
+}

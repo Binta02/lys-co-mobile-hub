@@ -1,0 +1,26 @@
+{
+    "sourceFile": "android/app/build.gradle",
+    "activeCommit": 0,
+    "commits": [
+        {
+            "activePatchIndex": 2,
+            "patches": [
+                {
+                    "date": 1748609127672,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n"
+                },
+                {
+                    "date": 1748609369476,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -62,4 +62,9 @@\n     }\n } catch(Exception e) {\n     logger.info(\"google-services.json not found, google-services plugin not applied. Push Notifications won't work\")\n }\n+bundle {\n+    storeArchive {\n+        enable = true\n+    }\n+}\n\\ No newline at end of file\n"
+                },
+                {
+                    "date": 1748609440557,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -62,9 +62,4 @@\n     }\n } catch(Exception e) {\n     logger.info(\"google-services.json not found, google-services plugin not applied. Push Notifications won't work\")\n }\n-bundle {\n-    storeArchive {\n-        enable = true\n-    }\n-}\n\\ No newline at end of file\n"
+                }
+            ],
+            "date": 1748609127672,
+            "name": "Commit-0",
+            "content": "apply plugin: 'com.android.application'\n\nandroid {\n    namespace \"com.lysco.app\"\n    compileSdk rootProject.ext.compileSdkVersion\n\n    defaultConfig {\n        applicationId \"com.lysco.app\"\n        minSdkVersion rootProject.ext.minSdkVersion\n        targetSdkVersion rootProject.ext.targetSdkVersion\n        versionCode 1\n        versionName \"1.0\"\n        testInstrumentationRunner \"androidx.test.runner.AndroidJUnitRunner\"\n        aaptOptions {\n            ignoreAssetsPattern '!.svn:!.git:!.ds_store:!*.scc:.*:!CVS:!thumbs.db:!picasa.ini:!*~'\n        }\n    }\n\n    signingConfigs {\n        release {\n            storeFile file(MY_RELEASE_STORE_FILE)\n            storePassword MY_RELEASE_STORE_PASSWORD\n            keyAlias MY_RELEASE_KEY_ALIAS\n            keyPassword MY_RELEASE_KEY_PASSWORD\n        }\n    }\n\n    buildTypes {\n        release {\n            signingConfig signingConfigs.release\n            shrinkResources false\n            minifyEnabled false\n            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'\n        }\n    }\n}\n\nrepositories {\n    flatDir {\n        dirs '../capacitor-cordova-android-plugins/src/main/libs', 'libs'\n    }\n}\n\ndependencies {\n    implementation fileTree(include: ['*.jar'], dir: 'libs')\n    implementation \"androidx.appcompat:appcompat:$androidxAppCompatVersion\"\n    implementation \"androidx.coordinatorlayout:coordinatorlayout:$androidxCoordinatorLayoutVersion\"\n    implementation \"androidx.core:core-splashscreen:$coreSplashScreenVersion\"\n    implementation project(':capacitor-android')\n    testImplementation \"junit:junit:$junitVersion\"\n    androidTestImplementation \"androidx.test.ext:junit:$androidxJunitVersion\"\n    androidTestImplementation \"androidx.test.espresso:espresso-core:$androidxEspressoCoreVersion\"\n    implementation project(':capacitor-cordova-android-plugins')\n}\n\napply from: 'capacitor.build.gradle'\n\ntry {\n    def servicesJSON = file('google-services.json')\n    if (servicesJSON.text) {\n        apply plugin: 'com.google.gms.google-services'\n    }\n} catch(Exception e) {\n    logger.info(\"google-services.json not found, google-services plugin not applied. Push Notifications won't work\")\n}\n"
+        }
+    ]
+}

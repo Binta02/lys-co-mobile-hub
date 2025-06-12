@@ -1,0 +1,18 @@
+{
+    "sourceFile": "src/components/services/ReviewsList.tsx",
+    "activeCommit": 0,
+    "commits": [
+        {
+            "activePatchIndex": 0,
+            "patches": [
+                {
+                    "date": 1749124653832,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n"
+                }
+            ],
+            "date": 1749124653832,
+            "name": "Commit-0",
+            "content": "\r\nimport React from 'react';\r\n\r\nexport interface ReviewsListProps {\r\n  reviews: any[];\r\n  isLoading: boolean;\r\n  currentUserId?: string | null;\r\n  onDeleteReview?: (reviewId: string) => Promise<void>;\r\n}\r\n\r\nconst ReviewsList = ({ reviews, isLoading, currentUserId, onDeleteReview }: ReviewsListProps) => {\r\n  if (isLoading) {\r\n    return <div>Chargement des avis...</div>;\r\n  }\r\n\r\n  if (reviews.length === 0) {\r\n    return <div className=\"text-gray-500 italic\">Aucun avis pour le moment.</div>;\r\n  }\r\n\r\n  return (\r\n    <div className=\"space-y-4 mt-4\">\r\n      {reviews.map((review, index) => (\r\n        <div key={index} className=\"border-b pb-4\">\r\n          {/* Affichage du prénom + nom de l’auteur */}\r\n          <p className=\"font-semibold text-gray-800\">{review.user_name}</p>\r\n          <div className=\"flex items-center gap-2\">\r\n            <div className=\"flex\">\r\n              {Array.from({ length: 5 }).map((_, i) => (\r\n                <svg \r\n                  key={i} \r\n                  className={`w-5 h-5 ${i < review.rating ? 'text-yellow-400' : 'text-gray-300'}`} \r\n                  fill=\"currentColor\"\r\n                  viewBox=\"0 0 20 20\"\r\n                >\r\n                  <path d=\"M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z\" />\r\n                </svg>\r\n              ))}\r\n            </div>\r\n            <span className=\"text-sm text-gray-600\">\r\n              {new Date(review.created_at).toLocaleDateString('fr-FR')}\r\n            </span>\r\n          </div>\r\n          <p className=\"mt-2\">{review.comment}</p>\r\n          \r\n          {/* Add delete button for user's own reviews */}\r\n          {currentUserId && review.user_id === currentUserId && onDeleteReview && (\r\n            <button \r\n              onClick={() => onDeleteReview(review.id)}\r\n              className=\"mt-2 text-sm text-red-500 hover:text-red-700\"\r\n            >\r\n              Supprimer\r\n            </button>\r\n          )}\r\n        </div>\r\n      ))}\r\n    </div>\r\n  );\r\n};\r\n\r\nexport default ReviewsList;\r\n"
+        }
+    ]
+}

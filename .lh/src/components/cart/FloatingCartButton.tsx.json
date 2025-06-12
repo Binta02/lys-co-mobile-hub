@@ -1,0 +1,26 @@
+{
+    "sourceFile": "src/components/cart/FloatingCartButton.tsx",
+    "activeCommit": 0,
+    "commits": [
+        {
+            "activePatchIndex": 2,
+            "patches": [
+                {
+                    "date": 1748344577864,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n"
+                },
+                {
+                    "date": 1748344681803,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -25,12 +25,13 @@\n             )}\r\n           </Button>\r\n         </div>\r\n       </SheetTrigger>\r\n-      <SheetContent\r\n+            <SheetContent\r\n         side=\"right\"\r\n         className=\"w-[400px] sm:w-[540px] flex flex-col\"\r\n       >\r\n+        <SheetTitle>Votre panier</SheetTitle>\r\n         <CartDrawer />\r\n       </SheetContent>\r\n     </Sheet>\r\n   );\r\n"
+                },
+                {
+                    "date": 1748344776790,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,6 +1,6 @@\n import React from \"react\";\r\n-import { Sheet, SheetTrigger, SheetContent } from \"@/components/ui/sheet\";\r\n+import { Sheet, SheetTrigger, SheetContent,SheetTitle } from \"@/components/ui/sheet\";\r\n import { Button } from \"@/components/ui/button\";\r\n import { ShoppingCart } from \"lucide-react\";\r\n import { useCart } from \"@/components/cart/CartContext\";\r\n import { Badge } from \"@/components/ui/badge\";\r\n"
+                }
+            ],
+            "date": 1748344577864,
+            "name": "Commit-0",
+            "content": "import React from 'react';\r\nimport { Sheet, SheetTrigger, SheetContent } from '@/components/ui/sheet';\r\nimport { Button } from '@/components/ui/button';\r\nimport { ShoppingCart } from 'lucide-react';\r\nimport { useCart } from '@/components/cart/CartContext';\r\nimport { Badge } from '@/components/ui/badge';\r\nimport { CartDrawer } from '@/components/cart/CartDrawer';\r\n\r\nexport function FloatingCartButton() {\r\n  const { items } = useCart();\r\n\r\n  return (\r\n    <Sheet>\r\n      <SheetTrigger asChild>\r\n        <div className=\"fixed bottom-4 right-4 z-50\">\r\n          <Button variant=\"outline\" size=\"icon\" className=\"relative\">\r\n            <ShoppingCart className=\"h-5 w-5\" />\r\n            {items.length > 0 && (\r\n              <Badge\r\n                variant=\"destructive\"\r\n                className=\"absolute -top-1 -right-1 h-5 w-5 flex items-center justify-center p-0 text-xs\"\r\n              >\r\n                {items.length}\r\n              </Badge>\r\n            )}\r\n          </Button>\r\n        </div>\r\n      </SheetTrigger>\r\n      <SheetContent side=\"right\" className=\"w-[400px] sm:w-[540px] flex flex-col\">\r\n        <CartDrawer />\r\n      </SheetContent>\r\n    </Sheet>\r\n  );\r\n}"
+        }
+    ]
+}

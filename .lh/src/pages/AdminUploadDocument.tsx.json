@@ -1,0 +1,22 @@
+{
+    "sourceFile": "src/pages/AdminUploadDocument.tsx",
+    "activeCommit": 0,
+    "commits": [
+        {
+            "activePatchIndex": 1,
+            "patches": [
+                {
+                    "date": 1749065660067,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n"
+                },
+                {
+                    "date": 1749065698577,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,7 +1,8 @@\n import React, { useState, useEffect } from \"react\";\r\n-import { supabase } from \"../lib/supabaseClient\";\r\n+import { supabase } from \"@/integrations/supabase/client\";\r\n \r\n+\r\n export default function AdminUploadDocument() {\r\n   const [clients, setClients] = useState<any[]>([]);\r\n   const [selectedClient, setSelectedClient] = useState<string | null>(null);\r\n   const [file, setFile] = useState<File | null>(null);\r\n"
+                }
+            ],
+            "date": 1749065660067,
+            "name": "Commit-0",
+            "content": "import React, { useState, useEffect } from 'react'\r\nimport { supabase } from '../lib/supabaseClient'\r\n\r\nexport default function AdminUploadDocument() {\r\n  const [clients, setClients] = useState<any[]>([])\r\n  const [selectedClient, setSelectedClient] = useState<string | null>(null)\r\n  const [file, setFile] = useState<File | null>(null)\r\n  const [uploading, setUploading] = useState(false)\r\n\r\n  useEffect(() => {\r\n    const fetchClients = async () => {\r\n      const { data, error } = await supabase.from('profiles').select('id, first_name, last_name, email')\r\n      if (error) console.error('Erreur chargement clients:', error)\r\n      else setClients(data || [])\r\n    }\r\n\r\n    fetchClients()\r\n  }, [])\r\n\r\n  const handleUpload = async () => {\r\n    if (!selectedClient || !file) {\r\n      alert(\"Sélectionnez un client et un fichier.\")\r\n      return\r\n    }\r\n\r\n    setUploading(true)\r\n\r\n    const filePath = `${selectedClient}/${Date.now()}_${file.name}`\r\n    const { data: storageData, error: storageError } = await supabase\r\n      .storage\r\n      .from('documents')\r\n      .upload(filePath, file)\r\n\r\n    if (storageError) {\r\n      console.error('Erreur upload fichier:', storageError)\r\n      setUploading(false)\r\n      return\r\n    }\r\n\r\n    const { data: urlData } = supabase\r\n      .storage\r\n      .from('documents')\r\n      .getPublicUrl(filePath)\r\n\r\n    const publicUrl = urlData.publicUrl\r\n\r\n    const { error: insertError } = await supabase\r\n      .from('user_documents')\r\n      .insert({\r\n        user_id: selectedClient,\r\n        file_url: publicUrl,\r\n        file_name: file.name\r\n      })\r\n\r\n    if (insertError) console.error('Erreur enregistrement document:', insertError)\r\n    else alert('Document envoyé avec succès !')\r\n\r\n    setUploading(false)\r\n    setFile(null)\r\n  }\r\n\r\n  return (\r\n    <div className=\"p-6 max-w-xl mx-auto bg-white rounded shadow\">\r\n      <h2 className=\"text-xl font-bold mb-4\">Uploader un document pour un client</h2>\r\n\r\n      <label className=\"block mb-2 font-medium\">Client :</label>\r\n      <select\r\n        onChange={(e) => setSelectedClient(e.target.value)}\r\n        className=\"mb-4 w-full p-2 border rounded\"\r\n      >\r\n        <option value=\"\">-- Sélectionner --</option>\r\n        {clients.map(client => (\r\n          <option key={client.id} value={client.id}>\r\n            {client.first_name} {client.last_name} ({client.email})\r\n          </option>\r\n        ))}\r\n      </select>\r\n\r\n      <input\r\n        type=\"file\"\r\n        onChange={(e) => setFile(e.target.files?.[0] || null)}\r\n        className=\"mb-4\"\r\n      />\r\n\r\n      <button\r\n        onClick={handleUpload}\r\n        disabled={uploading}\r\n        className=\"bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700\"\r\n      >\r\n        {uploading ? 'Envoi en cours...' : 'Envoyer le document'}\r\n      </button>\r\n    </div>\r\n  )\r\n}\r\n"
+        }
+    ]
+}

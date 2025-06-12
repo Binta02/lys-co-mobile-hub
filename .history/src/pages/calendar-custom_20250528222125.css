@@ -1,0 +1,84 @@
+/* src\pages\calendar-custom.css */
+.react-datepicker {
+  font-family: "Inter", sans-serif;
+  border-radius: 1rem;
+  border: 2px solid #00b4d8;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+}
+
+.react-datepicker__day--selected {
+  background-color: #00b4d8;
+  color: white;
+  font-weight: bold;
+  border-radius: 50%;
+}
+
+.react-datepicker__day--disabled {
+  color: #ccc;
+  text-decoration: line-through;
+}
+
+.react-datepicker__day:hover {
+  background-color: #caf0f8;
+  border-radius: 50%;
+  transition: 0.2s ease-in-out;
+}
+/* Couleurs principales */
+.react-datepicker__day--selected,
+.react-datepicker__day--keyboard-selected,
+.react-datepicker__day--in-selecting-range,
+.react-datepicker__day--in-range {
+  background-color: #7bdcb5;
+  color: white;
+}
+
+.react-datepicker__day--today {
+  border: 1px solid #f9429e;
+}
+
+/* Hover */
+.react-datepicker__day:hover {
+  background-color: #f9429e;
+  color: white;
+}
+
+/* Week-ends (samedi/dimanche) en rouge */
+.react-datepicker__day--weekend {
+  color: #f9429e !important;
+}
+
+/* Header */
+.react-datepicker__header {
+  background-color: #7bdcb5;
+  border-bottom: 1px solid #f9429e;
+}
+
+.react-datepicker__current-month,
+.react-datepicker-time__header,
+.react-datepicker-year-header {
+  color: white;
+}
+
+/* Flèches */
+.react-datepicker__navigation-icon::before {
+  border-color: white;
+}
+
+/* Conteneur général */
+.react-datepicker {
+  border: 1px solid #7bdcb5;
+  box-shadow: 0 4px 10px rgba(249, 66, 158, 0.2);
+  font-family: "Segoe UI", sans-serif;
+}
+/* Désactive les jours réservés */
+.react-datepicker__day--disabled {
+  color: #ccc !important;
+  background-color: #f9f9f9 !important;
+  cursor: not-allowed;
+  text-decoration: line-through;
+}
+
+/* Weekends en rose */
+.react-datepicker__day--weekend {
+  color: #f9429e !important;
+}
