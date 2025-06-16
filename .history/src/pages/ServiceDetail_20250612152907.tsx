@@ -758,9 +758,8 @@ const ServiceDetail: React.FC = () => {
                             d.toLocaleDateString("fr-CA");
                           const selectedDay = localISO(date);
 
-                          // Désactive dimanches
+                          // Désactive samedis/dimanches
                           if (day === 0) return false;
-                          // || day === 6 desactiver les samedis
 
                           // Désactive si la date est dans les fullDayDates
                           if (

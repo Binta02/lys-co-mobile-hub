@@ -60,6 +60,32 @@ const formSchema = z.object({
 });
 
 type FormValues = z.infer<typeof formSchema>;
+
+// select options pour les pays
+// const CountrySelect = ({ field }: { field: any }) => {
+//   const [options, setOptions] = useState<{ value: string; label: string }[]>(
+//     []
+//   );
+
+//   useEffect(() => {
+//     const countryObj = countries.getNames("fr", { select: "official" });
+//     const countryArr = Object.entries(countryObj).map(([code, label]) => ({
+//       value: code,
+//       label: label,
+//     }));
+//     setOptions(countryArr);
+//   }, []);
+
+//   return (
+//     <Select
+//       options={options}
+//       onChange={(option) => field.onChange(option?.value)}
+//       onBlur={field.onBlur}
+//       value={options.find((o) => o.value === field.value)}
+//       className="text-sm"
+//     />
+//   );
+// };
 const CountrySelect = ({ field }: { field: any }) => {
   const [options, setOptions] = useState<{ value: string; label: string }[]>(
     []
@@ -77,10 +103,10 @@ const CountrySelect = ({ field }: { field: any }) => {
   const customStyles = {
     control: (base: any, state: any) => ({
       ...base,
-      borderColor: state.isFocused ? "#5cb9bc" : "#5cb9bf", // Rose flashy en focus
-      boxShadow: state.isFocused ? "0 0 0 1px #5cb9bc" : "none",
+      borderColor: state.isFocused ? "#f9429e" : "#d1d5db", // Rose flashy en focus
+      boxShadow: state.isFocused ? "0 0 0 1px #f9429e" : "none",
       "&:hover": {
-        borderColor: "#5cb9bc",
+        borderColor: "#f9429e",
       },
       padding: "2px",
       borderRadius: "0.5rem",
@@ -89,9 +115,9 @@ const CountrySelect = ({ field }: { field: any }) => {
     option: (base: any, state: any) => ({
       ...base,
       backgroundColor: state.isFocused
-        ? "#f9429e" // turquoise en hover
+        ? "#5cb9bc" // turquoise en hover
         : "white",
-      color: state.isSelected ? "#5cb9bc" : "#111827", // texte foncé ou blanc si sélectionné
+      color: state.isSelected ? "#f9429e" : "#111827", // texte foncé ou blanc si sélectionné
       fontSize: "0.875rem",
     }),
     menu: (base: any) => ({
@@ -226,6 +252,10 @@ const Checkout = () => {
             name: `${data.firstName} ${data.lastName}`,
           },
         });
+      // if (pmError || !paymentMethod) {
+      //   console.error("Erreur création PaymentMethod :", pmError);
+      //   return;
+      // }
       if (pmError || !paymentMethod) {
         console.error("Erreur création PaymentMethod :", pmError);
         toast.error(
@@ -304,6 +334,10 @@ const Checkout = () => {
             receipt_email: data.email,
           }
         );
+        // if (confirmErr) {
+        //   console.error(`Échec paiement item #${index}:`, confirmErr);
+        //   throw new Error("Échec paiement one-time");
+        // }
         if (confirmErr) {
           console.error(`Échec paiement item #${index}:`, confirmErr);
           toast.error(confirmErr?.message || "Échec paiement one-time.");
@@ -316,6 +350,10 @@ const Checkout = () => {
         const { error: subErr } = await stripe.confirmCardPayment(
           subscriptionClientSecret
         );
+        // if (subErr) {
+        //   console.error("Échec paiement abonnement:", subErr);
+        //   throw new Error("Échec paiement abonnement");
+        // }
         if (subErr) {
           console.error("Échec paiement abonnement:", subErr);
           toast.error(subErr?.message || "Échec paiement abonnement.");
@@ -509,6 +547,18 @@ const Checkout = () => {
                           Entrez l'adresse de facturation qui correspond à votre
                           moyen de paiement.
                         </p>
+
+                        {/* <FormField
+                          control={form.control}
+                          name="country"
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel>Pays / Région</FormLabel>
+                              <FormControl>
+                                <Input value="France" disabled {...field} />
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem> */}
                         <FormField
                           control={form.control}
                           name="country"

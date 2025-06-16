@@ -77,10 +77,10 @@ const CountrySelect = ({ field }: { field: any }) => {
   const customStyles = {
     control: (base: any, state: any) => ({
       ...base,
-      borderColor: state.isFocused ? "#5cb9bc" : "#5cb9bf", // Rose flashy en focus
-      boxShadow: state.isFocused ? "0 0 0 1px #5cb9bc" : "none",
+      borderColor: state.isFocused ? "#d1d5db" : "#f9429e", // Rose flashy en focus
+      boxShadow: state.isFocused ? "0 0 0 1px #f9429e" : "none",
       "&:hover": {
-        borderColor: "#5cb9bc",
+        borderColor: "#f9429e",
       },
       padding: "2px",
       borderRadius: "0.5rem",
@@ -89,9 +89,9 @@ const CountrySelect = ({ field }: { field: any }) => {
     option: (base: any, state: any) => ({
       ...base,
       backgroundColor: state.isFocused
-        ? "#f9429e" // turquoise en hover
+        ? "#5cb9bc" // turquoise en hover
         : "white",
-      color: state.isSelected ? "#5cb9bc" : "#111827", // texte foncé ou blanc si sélectionné
+      color: state.isSelected ? "#f9429e" : "#111827", // texte foncé ou blanc si sélectionné
       fontSize: "0.875rem",
     }),
     menu: (base: any) => ({

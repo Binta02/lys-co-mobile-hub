@@ -91,7 +91,7 @@ const CountrySelect = ({ field }: { field: any }) => {
       backgroundColor: state.isFocused
         ? "#f9429e" // turquoise en hover
         : "white",
-      color: state.isSelected ? "#5cb9bc" : "#111827", // texte foncé ou blanc si sélectionné
+      color: state.isSelected ? "#f9429e" : "#111827", // texte foncé ou blanc si sélectionné
       fontSize: "0.875rem",
     }),
     menu: (base: any) => ({

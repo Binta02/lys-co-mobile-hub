@@ -5,13 +5,18 @@ import Footer from "@/components/Footer";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-// import { Label } from "@/components/ui/label";
+import { Label } from "@/components/ui/label";
 import { useCart } from "@/components/cart/CartContext";
-import { toast, Toaster } from "sonner";
-import Select from "react-select";
-import countries from "i18n-iso-countries";
-import fr from "i18n-iso-countries/langs/fr.json";
-// import { Check, CreditCard } from "lucide-react";
+import { toast } from "sonner";
+// Ajout du type CartItem avec la propriété optionnelle 'period'
+type CartItem = {
+  id: string;
+  title: string;
+  price: number;
+  quantity: number;
+  period?: string; // Ajout de la propriété optionnelle period
+};
+import { Check, CreditCard } from "lucide-react";
 import {
   Form,
   FormControl,
@@ -23,20 +28,10 @@ import {
 import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-// import { Textarea } from "@/components/ui/textarea";
+import { Textarea } from "@/components/ui/textarea";
 import { supabase } from "@/integrations/supabase/client";
 import { CardElement, useStripe, useElements } from "@stripe/react-stripe-js";
 
-countries.registerLocale(fr); // ou en, es, etc.
-
-// Ajout du type CartItem avec la propriété optionnelle 'period'
-type CartItem = {
-  id: string;
-  title: string;
-  price: number;
-  quantity: number;
-  period?: string; // Ajout de la propriété optionnelle period
-};
 const formSchema = z.object({
   email: z.string().email({ message: "Email invalide" }),
   firstName: z.string().min(2, { message: "Prénom requis" }),
@@ -60,58 +55,6 @@ const formSchema = z.object({
 });
 
 type FormValues = z.infer<typeof formSchema>;
-const CountrySelect = ({ field }: { field: any }) => {
-  const [options, setOptions] = useState<{ value: string; label: string }[]>(
-    []
-  );
-
-  useEffect(() => {
-    const countryObj = countries.getNames("fr", { select: "official" });
-    const countryArr = Object.entries(countryObj).map(([code, label]) => ({
-      value: code,
-      label: label,
-    }));
-    setOptions(countryArr);
-  }, []);
-
-  const customStyles = {
-    control: (base: any, state: any) => ({
-      ...base,
-      borderColor: state.isFocused ? "#5cb9bc" : "#5cb9bf", // Rose flashy en focus
-      boxShadow: state.isFocused ? "0 0 0 1px #5cb9bc" : "none",
-      "&:hover": {
-        borderColor: "#5cb9bc",
-      },
-      padding: "2px",
-      borderRadius: "0.5rem",
-      fontSize: "0.875rem",
-    }),
-    option: (base: any, state: any) => ({
-      ...base,
-      backgroundColor: state.isFocused
-        ? "#f9429e" // turquoise en hover
-        : "white",
-      color: state.isSelected ? "#5cb9bc" : "#111827", // texte foncé ou blanc si sélectionné
-      fontSize: "0.875rem",
-    }),
-    menu: (base: any) => ({
-      ...base,
-      fontSize: "0.875rem",
-    }),
-  };
-
-  return (
-    <Select
-      options={options}
-      onChange={(option) => field.onChange(option?.value)}
-      onBlur={field.onBlur}
-      value={options.find((o) => o.value === field.value)}
-      styles={customStyles}
-      placeholder="Sélectionnez un pays"
-      isSearchable
-    />
-  );
-};
 
 const Checkout = () => {
   const stripe = useStripe();
@@ -226,6 +169,10 @@ const Checkout = () => {
             name: `${data.firstName} ${data.lastName}`,
           },
         });
+      // if (pmError || !paymentMethod) {
+      //   console.error("Erreur création PaymentMethod :", pmError);
+      //   return;
+      // }
       if (pmError || !paymentMethod) {
         console.error("Erreur création PaymentMethod :", pmError);
         toast.error(
@@ -304,6 +251,10 @@ const Checkout = () => {
             receipt_email: data.email,
           }
         );
+        // if (confirmErr) {
+        //   console.error(`Échec paiement item #${index}:`, confirmErr);
+        //   throw new Error("Échec paiement one-time");
+        // }
         if (confirmErr) {
           console.error(`Échec paiement item #${index}:`, confirmErr);
           toast.error(confirmErr?.message || "Échec paiement one-time.");
@@ -316,6 +267,10 @@ const Checkout = () => {
         const { error: subErr } = await stripe.confirmCardPayment(
           subscriptionClientSecret
         );
+        // if (subErr) {
+        //   console.error("Échec paiement abonnement:", subErr);
+        //   throw new Error("Échec paiement abonnement");
+        // }
         if (subErr) {
           console.error("Échec paiement abonnement:", subErr);
           toast.error(subErr?.message || "Échec paiement abonnement.");
@@ -509,6 +464,7 @@ const Checkout = () => {
                           Entrez l'adresse de facturation qui correspond à votre
                           moyen de paiement.
                         </p>
+
                         <FormField
                           control={form.control}
                           name="country"
@@ -516,7 +472,7 @@ const Checkout = () => {
                             <FormItem>
                               <FormLabel>Pays / Région</FormLabel>
                               <FormControl>
-                                <CountrySelect field={field} />
+                                <Input value="France" disabled {...field} />
                               </FormControl>
                               <FormMessage />
                             </FormItem>

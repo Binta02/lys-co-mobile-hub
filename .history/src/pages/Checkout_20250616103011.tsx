@@ -80,7 +80,7 @@ const CountrySelect = ({ field }: { field: any }) => {
       borderColor: state.isFocused ? "#5cb9bc" : "#5cb9bf", // Rose flashy en focus
       boxShadow: state.isFocused ? "0 0 0 1px #5cb9bc" : "none",
       "&:hover": {
-        borderColor: "#5cb9bc",
+        borderColor: "#f9429e",
       },
       padding: "2px",
       borderRadius: "0.5rem",
@@ -91,7 +91,7 @@ const CountrySelect = ({ field }: { field: any }) => {
       backgroundColor: state.isFocused
         ? "#f9429e" // turquoise en hover
         : "white",
-      color: state.isSelected ? "#5cb9bc" : "#111827", // texte foncé ou blanc si sélectionné
+      color: state.isSelected ? "#f9429e" : "#111827", // texte foncé ou blanc si sélectionné
       fontSize: "0.875rem",
     }),
     menu: (base: any) => ({
