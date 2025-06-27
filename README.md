@@ -80,3 +80,7 @@ echo 'eval "$(/opt/homebrew/bin/brew shellenv)"' >> ~/.bash_profile
 # 2. Recharge immédiatement la configuration pour que brew soit disponible tout de suite
 eval "$(/opt/homebrew/bin/brew shellenv)"
 
+L’application Lys & Co accompagne les entrepreneures et créateurs de projet à structurer, enrichir et diffuser leur présence en ligne, tout en centralisant tous vos services premium (coaching, formations, réservations…). Grâce à une interface intuitive et à un écosystème complet, pilotez votre stratégie de contenu, réservez vos séances personnalisées et accédez à vos formations où que vous soyez.
+
+
+
