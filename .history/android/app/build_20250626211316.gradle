@@ -29,10 +29,10 @@ android {
         release {
             signingConfig signingConfigs.release
             // Active la suppression des ressources inutilisées
-            shrinkResources true
-            minifyEnabled true
-            // Utilise les règles ProGuard optimisées par défaut et votre fichier de configuration
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        shrinkResources true
+            shrinkResources false
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
 }
