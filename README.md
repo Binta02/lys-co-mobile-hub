@@ -73,3 +73,10 @@ To connect a domain, navigate to Project > Settings > Domains and click Connect 
 Read more here: [Setting up a custom domain](https://docs.lovable.dev/tips-tricks/custom-domain#step-by-step-guide)
 
 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+
+# 1. Ajoute la ligne nécessaire à ~/.bash_profile
+echo 'eval "$(/opt/homebrew/bin/brew shellenv)"' >> ~/.bash_profile
+
+# 2. Recharge immédiatement la configuration pour que brew soit disponible tout de suite
+eval "$(/opt/homebrew/bin/brew shellenv)"
+
