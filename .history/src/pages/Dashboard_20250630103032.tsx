@@ -15,6 +15,8 @@ import { fr } from "date-fns/locale";
 import { Calendar, User, ShoppingCart, List, FileText } from "lucide-react";
 import { humanizeReservationType } from "@/utils/humanize";
 import AdminDashboard from "./AdminDashboard";
+import type { Tables } from "@/integrations/supabase/types"; // adapte le chemin à ton projet
+type UserProfile = Tables<"profiles">;
 
 const Dashboard: React.FC = () => {
   const navigate = useNavigate();
@@ -113,11 +115,6 @@ const Dashboard: React.FC = () => {
     fetchReservations();
   }, [profile]);
 
-  useEffect(() => {
-    if (profile?.deleted_at) {
-      navigate("/reactiver-mon-compte");
-    }
-  }, [profile]);
   const handleDeleteAccount = async () => {
     const confirm = window.confirm(
       "⚠️ Voulez-vous vraiment supprimer votre compte ? Il sera désactivé pendant 30 jours."
@@ -132,6 +129,9 @@ const Dashboard: React.FC = () => {
       console.log("❌ Données utilisateur manquantes :", profile);
       return;
     }
+
+    console.log("🟡 Envoi des données à l’API…");
+
     try {
       const res = await fetch(
         "https://mon-backend-node.vercel.app/api/disable-account",
@@ -143,10 +143,12 @@ const Dashboard: React.FC = () => {
             email: profile.email,
             first_name: profile.first_name,
             last_name: profile.last_name,
-            frontendUrl: window.location.origin, // 🔥 c’est ici
           }),
         }
       );
+
+      console.log("📡 Réponse reçue :", res.status);
+
       if (!res.ok) {
         console.error("❌ Erreur API :", await res.text());
         toast({
@@ -156,16 +158,13 @@ const Dashboard: React.FC = () => {
         });
         return;
       }
+
+      console.log("✅ Désactivation réussie, redirection en cours…");
+
       toast({
         title: "Compte désactivé",
         description: "Un e-mail de confirmation vous a été envoyé.",
       });
-
-      // ✅ Déconnexion
-      const { error } = await supabase.auth.signOut();
-      if (error) {
-        console.error("❌ Erreur de déconnexion :", error.message);
-      }
 
       navigate("/login");
     } catch (error) {
@@ -430,6 +429,18 @@ const Dashboard: React.FC = () => {
       </div>
     );
   }
+  // if (profile?.deleted_at) {
+  //   return (
+  //     <div className="p-6 bg-yellow-100 border-l-4 border-yellow-500 text-yellow-700">
+  //       <h2 className="font-bold mb-2">⚠️ Compte désactivé</h2>
+  //       <p>
+  //         Votre compte a été désactivé. Il sera supprimé définitivement dans 30
+  //         jours.
+  //       </p>
+  //       <p>Contactez-nous si vous souhaitez le réactiver.</p>
+  //     </div>
+  //   );
+  // }
 
   return (
     <div className="flex flex-col min-h-screen">

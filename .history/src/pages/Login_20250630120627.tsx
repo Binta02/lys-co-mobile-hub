@@ -26,7 +26,6 @@ import {
   FormItem,
   FormMessage,
 } from "@/components/ui/form";
-
 // Vérification de la session utilisateur
 
 const loginSchema = z.object({
@@ -40,7 +39,6 @@ type LoginFormValues = z.infer<typeof loginSchema>;
 
 const Login: React.FC = () => {
   const [showPassword, setShowPassword] = useState(false);
-  const [accountDisabledMessage, setAccountDisabledMessage] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
@@ -112,9 +110,9 @@ const Login: React.FC = () => {
 
   const handleLogin = async (values: LoginFormValues) => {
     setIsLoading(true);
-    setAccountDisabledMessage(""); // reset au cas où
 
     try {
+      // 1. Connexion avec Supabase
       const { data: signInData, error: signInError } =
         await supabase.auth.signInWithPassword({
           email: values.email,
@@ -129,6 +127,7 @@ const Login: React.FC = () => {
       }
 
       const user = signInData?.user;
+
       if (!user) {
         toast.error("Erreur", {
           description: "Utilisateur introuvable après connexion.",
@@ -136,6 +135,7 @@ const Login: React.FC = () => {
         return;
       }
 
+      // 2. Vérifier si le compte est désactivé
       const { data: profileData, error: profileError } = await supabase
         .from("profiles")
         .select("deleted_at")
@@ -150,17 +150,17 @@ const Login: React.FC = () => {
       }
 
       if (profileData?.deleted_at) {
-        setAccountDisabledMessage(
-          "Votre compte a été désactivé. Contactez le support ou utilisez le lien de réactivation."
-        );
+        toast.error("Votre compte est désactivé.");
         await supabase.auth.signOut();
         return;
       }
 
+      // 3. Connexion réussie
       toast.success("Connexion réussie", {
         description: "Bienvenue sur Lys&Co !",
       });
 
+      // 4. Redirection
       if (redirectUrl) {
         navigate(redirectUrl);
       } else {
@@ -174,36 +174,70 @@ const Login: React.FC = () => {
     }
   };
 
-  const handleResetPassword = async () => {
-    const email = form.getValues("email");
-    if (!email) {
-      toast.error("Email requis", {
-        description:
-          "Veuillez entrer votre email pour réinitialiser votre mot de passe",
-      });
-      return;
-    }
+  const handleLogin = async (values: LoginFormValues) => {
+    setIsLoading(true);
 
     try {
-      setIsLoading(true);
-      const { error } = await supabase.auth.resetPasswordForEmail(email, {
-        redirectTo: `${window.location.origin}/reset-password`,
-      });
+      // 1. Connexion avec Supabase
+      const { data: signInData, error: signInError } =
+        await supabase.auth.signInWithPassword({
+          email: values.email,
+          password: values.password,
+        });
 
-      if (error) {
-        toast.error("Erreur", {
-          description: error.message,
+      if (signInError) {
+        toast.error("Erreur de connexion", {
+          description: signInError.message,
         });
         return;
       }
 
-      toast.success("Email envoyé", {
-        description:
-          "Veuillez vérifier votre boîte mail pour réinitialiser votre mot de passe",
+      const user = signInData?.user;
+
+      if (!user) {
+        toast.error("Erreur", {
+          description: "Utilisateur introuvable après connexion.",
+        });
+        return;
+      }
+
+      // 2. Vérifier si le compte est désactivé
+      const { data: profileData, error: profileError } = await supabase
+        .from("profiles")
+        .select("deleted_at")
+        .eq("id", user.id)
+        .single();
+
+      if (profileError) {
+        toast.error("Erreur", {
+          description: "Impossible de vérifier l'état du compte.",
+        });
+        return;
+      }
+
+      if (profileData?.deleted_at) {
+        toast.error("Compte désactivé", {
+          description:
+            "Votre compte a été désactivé. Veuillez contacter le support ou utiliser le lien de réactivation si disponible.",
+        });
+        await supabase.auth.signOut();
+        return;
+      }
+
+      // 3. Connexion réussie
+      toast.success("Connexion réussie", {
+        description: "Bienvenue sur Lys&Co !",
       });
-    } catch (error) {
-      console.error("Reset password error:", error);
-      toast.error("Une erreur inattendue est survenue");
+
+      // 4. Redirection
+      if (redirectUrl) {
+        navigate(redirectUrl);
+      } else {
+        navigate("/dashboard");
+      }
+    } catch (err) {
+      console.error("Login error:", err);
+      toast.error("Une erreur inattendue est survenue.");
     } finally {
       setIsLoading(false);
     }
@@ -292,12 +326,6 @@ const Login: React.FC = () => {
                     </FormItem>
                   )}
                 />
-                {accountDisabledMessage && (
-                  <div className="text-red-600 text-sm font-medium text-center">
-                    {accountDisabledMessage}
-                  </div>
-                )}
-
                 <Button
                   type="submit"
                   className="w-full bg-lysco-turquoise hover:bg-opacity-90"

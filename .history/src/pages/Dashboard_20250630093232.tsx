@@ -112,67 +112,41 @@ const Dashboard: React.FC = () => {
     };
     fetchReservations();
   }, [profile]);
-
-  useEffect(() => {
-    if (profile?.deleted_at) {
-      navigate("/reactiver-mon-compte");
-    }
-  }, [profile]);
   const handleDeleteAccount = async () => {
     const confirm = window.confirm(
-      "⚠️ Voulez-vous vraiment supprimer votre compte ? Il sera désactivé pendant 30 jours."
+      "⚠️ Êtes-vous sûr de vouloir supprimer définitivement votre compte ?"
     );
+    if (!confirm || !profile?.id) return;
 
-    if (!confirm) {
-      console.log("❌ Annulation de l'utilisateur.");
-      return;
-    }
-
-    if (!profile?.id || !profile?.email) {
-      console.log("❌ Données utilisateur manquantes :", profile);
-      return;
-    }
     try {
       const res = await fetch(
-        "https://mon-backend-node.vercel.app/api/disable-account",
+        "https://mon-backend-node.vercel.app/api/delete-account",
         {
           method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            id: profile.id,
-            email: profile.email,
-            first_name: profile.first_name,
-            last_name: profile.last_name,
-            frontendUrl: window.location.origin, // 🔥 c’est ici
-          }),
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ userId: profile.id }),
         }
       );
-      if (!res.ok) {
-        console.error("❌ Erreur API :", await res.text());
-        toast({
-          title: "Erreur",
-          description: "Une erreur est survenue lors de la désactivation.",
-          variant: "destructive",
-        });
-        return;
+
+      const data = await res.json();
+
+      if (!res.ok || !data.success) {
+        throw new Error(data.error || "Erreur inconnue");
       }
+
       toast({
-        title: "Compte désactivé",
-        description: "Un e-mail de confirmation vous a été envoyé.",
+        title: "Compte supprimé",
+        description: "Votre compte a été supprimé avec succès.",
       });
 
-      // ✅ Déconnexion
-      const { error } = await supabase.auth.signOut();
-      if (error) {
-        console.error("❌ Erreur de déconnexion :", error.message);
-      }
-
       navigate("/login");
-    } catch (error) {
-      console.error("❌ Erreur réseau :", error);
+    } catch (error: any) {
+      console.error("Erreur suppression :", error.message);
       toast({
-        title: "Erreur réseau",
-        description: "Impossible de contacter le serveur.",
+        title: "Erreur",
+        description: error.message || "Impossible de supprimer votre compte.",
         variant: "destructive",
       });
     }

@@ -26,7 +26,6 @@ import {
   FormItem,
   FormMessage,
 } from "@/components/ui/form";
-
 // Vérification de la session utilisateur
 
 const loginSchema = z.object({
@@ -35,12 +34,22 @@ const loginSchema = z.object({
     .string()
     .min(6, "Le mot de passe doit contenir au moins 6 caractères"),
 });
+const { data: profileData } = await supabase
+  .from("profiles")
+  .select("deleted_at")
+  .eq("id", data.user.id)
+  .single();
+
+if (profileData?.deleted_at) {
+  toast.error("Votre compte est désactivé.");
+  await supabase.auth.signOut();
+  return;
+}
 
 type LoginFormValues = z.infer<typeof loginSchema>;
 
 const Login: React.FC = () => {
   const [showPassword, setShowPassword] = useState(false);
-  const [accountDisabledMessage, setAccountDisabledMessage] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
@@ -74,101 +83,37 @@ const Login: React.FC = () => {
     checkSession();
   }, [navigate, redirectUrl]);
 
-  // const handleLogin = async (values: LoginFormValues) => {
-  //   setIsLoading(true);
-
-  //   try {
-  //     const { data, error } = await supabase.auth.signInWithPassword({
-  //       email: values.email,
-  //       password: values.password,
-  //     });
-
-  //     if (error) {
-  //       toast.error("Erreur de connexion", {
-  //         description: error.message,
-  //       });
-  //       return;
-  //     }
-
-  //     if (data.user) {
-  //       toast.success("Connexion réussie", {
-  //         description: "Bienvenue sur Lys&Co!",
-  //       });
-
-  //       // Redirection après connexion réussie
-  //       if (redirectUrl) {
-  //         navigate(redirectUrl);
-  //       } else {
-  //         navigate("/dashboard");
-  //       }
-  //     }
-  //   } catch (error) {
-  //     console.error("Login error:", error);
-  //     toast.error("Une erreur inattendue est survenue");
-  //   } finally {
-  //     setIsLoading(false);
-  //   }
-  // };
-
   const handleLogin = async (values: LoginFormValues) => {
     setIsLoading(true);
-    setAccountDisabledMessage(""); // reset au cas où
 
     try {
-      const { data: signInData, error: signInError } =
-        await supabase.auth.signInWithPassword({
-          email: values.email,
-          password: values.password,
-        });
-
-      if (signInError) {
-        toast.error("Erreur de connexion", {
-          description: signInError.message,
-        });
-        return;
-      }
-
-      const user = signInData?.user;
-      if (!user) {
-        toast.error("Erreur", {
-          description: "Utilisateur introuvable après connexion.",
-        });
-        return;
-      }
-
-      const { data: profileData, error: profileError } = await supabase
-        .from("profiles")
-        .select("deleted_at")
-        .eq("id", user.id)
-        .single();
-
-      if (profileError) {
-        toast.error("Erreur", {
-          description: "Impossible de vérifier l'état du compte.",
-        });
-        return;
-      }
-
-      if (profileData?.deleted_at) {
-        setAccountDisabledMessage(
-          "Votre compte a été désactivé. Contactez le support ou utilisez le lien de réactivation."
-        );
-        await supabase.auth.signOut();
-        return;
-      }
-
-      toast.success("Connexion réussie", {
-        description: "Bienvenue sur Lys&Co !",
+      const { data, error } = await supabase.auth.signInWithPassword({
+        email: values.email,
+        password: values.password,
       });
 
-      if (redirectUrl) {
-        navigate(redirectUrl);
-      } else {
-        navigate("/dashboard");
+      if (error) {
+        toast.error("Erreur de connexion", {
+          description: error.message,
+        });
+        return;
       }
-    } catch (err) {
-      console.error("Login error:", err);
-      toast.error("Une erreur inattendue est survenue.");
+
+      if (data.user) {
+        toast.success("Connexion réussie", {
+          description: "Bienvenue sur Lys&Co!",
+        });
+
+        // Redirection après connexion réussie
+        if (redirectUrl) {
+          navigate(redirectUrl);
+        } else {
+          navigate("/dashboard");
+        }
+      }
+    } catch (error) {
+      console.error("Login error:", error);
+      toast.error("Une erreur inattendue est survenue");
     } finally {
       setIsLoading(false);
     }
@@ -292,12 +237,6 @@ const Login: React.FC = () => {
                     </FormItem>
                   )}
                 />
-                {accountDisabledMessage && (
-                  <div className="text-red-600 text-sm font-medium text-center">
-                    {accountDisabledMessage}
-                  </div>
-                )}
-
                 <Button
                   type="submit"
                   className="w-full bg-lysco-turquoise hover:bg-opacity-90"

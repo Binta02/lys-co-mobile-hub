@@ -132,6 +132,9 @@ const Dashboard: React.FC = () => {
       console.log("❌ Données utilisateur manquantes :", profile);
       return;
     }
+
+    console.log("🟡 Envoi des données à l’API…");
+
     try {
       const res = await fetch(
         "https://mon-backend-node.vercel.app/api/disable-account",
@@ -147,6 +150,9 @@ const Dashboard: React.FC = () => {
           }),
         }
       );
+
+      console.log("📡 Réponse reçue :", res.status);
+
       if (!res.ok) {
         console.error("❌ Erreur API :", await res.text());
         toast({
@@ -156,6 +162,9 @@ const Dashboard: React.FC = () => {
         });
         return;
       }
+
+      console.log("✅ Désactivation réussie, déconnexion en cours…");
+
       toast({
         title: "Compte désactivé",
         description: "Un e-mail de confirmation vous a été envoyé.",

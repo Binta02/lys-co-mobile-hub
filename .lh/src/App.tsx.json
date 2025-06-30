@@ -3,11 +3,15 @@
     "activeCommit": 0,
     "commits": [
         {
-            "activePatchIndex": 0,
+            "activePatchIndex": 1,
             "patches": [
                 {
                     "date": 1748535879312,
                     "content": "Index: \n===================================================================\n--- \n+++ \n"
+                },
+                {
+                    "date": 1751282522001,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -37,8 +37,10 @@\n import { loadStripe } from \"@stripe/stripe-js\";\r\n import { FloatingCartButton } from \"@/components/cart/FloatingCartButton\";\r\n import { supabase } from \"@/integrations/supabase/client\";\r\n import { Session } from \"@supabase/supabase-js\";\r\n+import ReactiverMonCompte from \"./pages/reactiver-mon-compte\"; // ⚠️ à adapter selon l’emplacement du fichier\r\n+\r\n const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY);\r\n // console.log(\"Stripe public key loaded:\", import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY);\r\n // console.log(\"ENV variables:\", import.meta.env);\r\n \r\n@@ -123,8 +125,9 @@\n         <Route\r\n           path=\"/communication/media-training\"\r\n           element={<CommunicationMediaTraining />}\r\n         />\r\n+        <Route path=\"/reactiver-mon-compte\" element={<ReactiverMonCompte />} />\r\n         <Route path=\"/communication/packs\" element={<CommunicationPacks />} />\r\n         <Route path=\"/services/:id\" element={<ServiceDetail />} />\r\n         <Route path=\"/confirmation\" element={<Confirmation />} />\r\n         <Route path=\"/demande-devis\" element={<DemandeDevis />} />\r\n"
                 }
             ],
             "date": 1748535879312,

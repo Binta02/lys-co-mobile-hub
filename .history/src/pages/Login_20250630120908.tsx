@@ -26,6 +26,7 @@ import {
   FormItem,
   FormMessage,
 } from "@/components/ui/form";
+const [accountDisabledMessage, setAccountDisabledMessage] = useState("");
 
 // Vérification de la session utilisateur
 
@@ -40,7 +41,6 @@ type LoginFormValues = z.infer<typeof loginSchema>;
 
 const Login: React.FC = () => {
   const [showPassword, setShowPassword] = useState(false);
-  const [accountDisabledMessage, setAccountDisabledMessage] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
@@ -297,6 +297,13 @@ const Login: React.FC = () => {
                     {accountDisabledMessage}
                   </div>
                 )}
+                <Button
+                  type="submit"
+                  className="w-full bg-lysco-turquoise hover:bg-opacity-90"
+                  disabled={isLoading}
+                >
+                  {isLoading ? "Connexion en cours..." : "Se connecter"}
+                </Button>
 
                 <Button
                   type="submit"

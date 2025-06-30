@@ -26,7 +26,6 @@ import {
   FormItem,
   FormMessage,
 } from "@/components/ui/form";
-
 // Vérification de la session utilisateur
 
 const loginSchema = z.object({
@@ -40,7 +39,6 @@ type LoginFormValues = z.infer<typeof loginSchema>;
 
 const Login: React.FC = () => {
   const [showPassword, setShowPassword] = useState(false);
-  const [accountDisabledMessage, setAccountDisabledMessage] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
@@ -112,9 +110,9 @@ const Login: React.FC = () => {
 
   const handleLogin = async (values: LoginFormValues) => {
     setIsLoading(true);
-    setAccountDisabledMessage(""); // reset au cas où
 
     try {
+      // 1. Connexion avec Supabase
       const { data: signInData, error: signInError } =
         await supabase.auth.signInWithPassword({
           email: values.email,
@@ -129,6 +127,7 @@ const Login: React.FC = () => {
       }
 
       const user = signInData?.user;
+
       if (!user) {
         toast.error("Erreur", {
           description: "Utilisateur introuvable après connexion.",
@@ -136,6 +135,7 @@ const Login: React.FC = () => {
         return;
       }
 
+      // 2. Vérifier si le compte est désactivé
       const { data: profileData, error: profileError } = await supabase
         .from("profiles")
         .select("deleted_at")
@@ -150,17 +150,17 @@ const Login: React.FC = () => {
       }
 
       if (profileData?.deleted_at) {
-        setAccountDisabledMessage(
-          "Votre compte a été désactivé. Contactez le support ou utilisez le lien de réactivation."
-        );
+        toast.error("Votre compte est désactivé.");
         await supabase.auth.signOut();
         return;
       }
 
+      // 3. Connexion réussie
       toast.success("Connexion réussie", {
         description: "Bienvenue sur Lys&Co !",
       });
 
+      // 4. Redirection
       if (redirectUrl) {
         navigate(redirectUrl);
       } else {
@@ -292,12 +292,6 @@ const Login: React.FC = () => {
                     </FormItem>
                   )}
                 />
-                {accountDisabledMessage && (
-                  <div className="text-red-600 text-sm font-medium text-center">
-                    {accountDisabledMessage}
-                  </div>
-                )}
-
                 <Button
                   type="submit"
                   className="w-full bg-lysco-turquoise hover:bg-opacity-90"

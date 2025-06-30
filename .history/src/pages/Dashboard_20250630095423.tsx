@@ -15,6 +15,7 @@ import { fr } from "date-fns/locale";
 import { Calendar, User, ShoppingCart, List, FileText } from "lucide-react";
 import { humanizeReservationType } from "@/utils/humanize";
 import AdminDashboard from "./AdminDashboard";
+type UserProfile = Tables<"profiles">;
 
 const Dashboard: React.FC = () => {
   const navigate = useNavigate();
@@ -113,69 +114,37 @@ const Dashboard: React.FC = () => {
     fetchReservations();
   }, [profile]);
 
-  useEffect(() => {
-    if (profile?.deleted_at) {
-      navigate("/reactiver-mon-compte");
-    }
-  }, [profile]);
   const handleDeleteAccount = async () => {
     const confirm = window.confirm(
-      "⚠️ Voulez-vous vraiment supprimer votre compte ? Il sera désactivé pendant 30 jours."
+      "⚠️ Voulez-vous vraiment supprimer votre compte ? Il sera désactivé pendant 30 jours avant suppression définitive."
     );
 
-    if (!confirm) {
-      console.log("❌ Annulation de l'utilisateur.");
-      return;
-    }
+    if (!confirm || !profile?.id) return;
 
-    if (!profile?.id || !profile?.email) {
-      console.log("❌ Données utilisateur manquantes :", profile);
-      return;
-    }
-    try {
-      const res = await fetch(
-        "https://mon-backend-node.vercel.app/api/disable-account",
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            id: profile.id,
-            email: profile.email,
-            first_name: profile.first_name,
-            last_name: profile.last_name,
-            frontendUrl: window.location.origin, // 🔥 c’est ici
-          }),
-        }
-      );
-      if (!res.ok) {
-        console.error("❌ Erreur API :", await res.text());
-        toast({
-          title: "Erreur",
-          description: "Une erreur est survenue lors de la désactivation.",
-          variant: "destructive",
-        });
-        return;
-      }
+    const now = new Date().toISOString();
+
+    const { error } = await supabase
+      .from("profiles")
+      .update({ deleted_at: now })
+      .eq("id", profile.id);
+
+    if (error) {
+      console.error("Erreur suppression :", error);
       toast({
-        title: "Compte désactivé",
-        description: "Un e-mail de confirmation vous a été envoyé.",
-      });
-
-      // ✅ Déconnexion
-      const { error } = await supabase.auth.signOut();
-      if (error) {
-        console.error("❌ Erreur de déconnexion :", error.message);
-      }
-
-      navigate("/login");
-    } catch (error) {
-      console.error("❌ Erreur réseau :", error);
-      toast({
-        title: "Erreur réseau",
-        description: "Impossible de contacter le serveur.",
+        title: "Erreur",
+        description:
+          "Une erreur est survenue lors de la désactivation du compte.",
         variant: "destructive",
       });
+      return;
     }
+
+    toast({
+      title: "Compte désactivé",
+      description: "Votre compte sera supprimé définitivement dans 30 jours.",
+    });
+
+    navigate("/login");
   };
 
   const canCancel = (reservationDate: string, startTime: string) => {
@@ -427,6 +396,18 @@ const Dashboard: React.FC = () => {
           />
         </main>
         <Footer />
+      </div>
+    );
+  }
+  if (profile?.deleted_at) {
+    return (
+      <div className="p-6 bg-yellow-100 border-l-4 border-yellow-500 text-yellow-700">
+        <h2 className="font-bold mb-2">⚠️ Compte désactivé</h2>
+        <p>
+          Votre compte a été désactivé. Il sera supprimé définitivement dans 30
+          jours.
+        </p>
+        <p>Contactez-nous si vous souhaitez le réactiver.</p>
       </div>
     );
   }

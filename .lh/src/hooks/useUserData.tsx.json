@@ -3,7 +3,7 @@
     "activeCommit": 0,
     "commits": [
         {
-            "activePatchIndex": 1,
+            "activePatchIndex": 2,
             "patches": [
                 {
                     "date": 1748370250224,
@@ -12,6 +12,10 @@
                 {
                     "date": 1749127234757,
                     "content": "Index: \n===================================================================\n--- \n+++ \n@@ -208,9 +208,9 @@\n           }))\r\n         );\r\n       } else {\r\n         // Loggez que nous n'avons pas trouvé de services\r\n-        console.log(\"Aucun service trouvé pour cet utilisateur\");\r\n+        // console.log(\"Aucun service trouvé pour cet utilisateur\");\r\n         setUserServices([]);\r\n       }\r\n \r\n       // Pour les fonctionnalités qui ne sont pas encore implémentées dans la base de données,\r\n"
+                },
+                {
+                    "date": 1751276741532,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -9,8 +9,9 @@\n   last_name: string;\r\n   created_at: string;\r\n   company_name?: string;\r\n   phone?: string;\r\n+  deleted_at?: string | null; // Date when the user was deleted, if applicable\r\n }\r\n \r\n export interface UserDomiciliation {\r\n   id?: string;\r\n"
                 }
             ],
             "date": 1748370250224,
