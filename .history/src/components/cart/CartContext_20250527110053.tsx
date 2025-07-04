@@ -1,3 +1,4 @@
+
 import React, { createContext, useContext, useEffect, useState } from "react";
 
 export interface CartItem {
@@ -52,7 +53,9 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
       removeItem(id);
     } else {
       setItems((prev) =>
-        prev.map((item) => (item.id === id ? { ...item, quantity } : item))
+        prev.map((item) =>
+          item.id === id ? { ...item, quantity } : item
+        )
       );
     }
   };
@@ -63,30 +66,16 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
   };
 
   // Calcul des différents montants
-  const subtotal = items.reduce(
-    (acc, item) => acc + item.price * item.quantity,
-    0
-  );
-
+  const subtotal = items.reduce((acc, item) => acc + item.price * item.quantity, 0);
+  
   // Calcul de la TVA (20% en France)
-  const tax = subtotal * 0.2;
-
+  const tax = subtotal * 0.2; 
+  
   // Total incluant les taxes
   const total = subtotal + tax;
 
   return (
-    <CartContext.Provider
-      value={{
-        items,
-        addItem,
-        removeItem,
-        updateQuantity,
-        clearCart,
-        total,
-        subtotal,
-        tax,
-      }}
-    >
+    <CartContext.Provider value={{ items, addItem, removeItem, updateQuantity, clearCart, total, subtotal, tax }}>
       {children}
     </CartContext.Provider>
   );
